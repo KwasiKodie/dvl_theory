@@ -33,7 +33,7 @@ class AppBottomNavigation extends StatelessWidget {
 
         if (currentRoute == selectedRoute) return;
 
-        Navigator.pushReplacementNamed(context, selectedRoute);
+        Navigator.pushNamed(context, selectedRoute);
       },
       destinations: items.map((item) {
         return NavigationDestination(

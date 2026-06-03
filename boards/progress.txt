@@ -1,0 +1,596 @@
+// ===========================
+// core/storage/hive_boxes.dart
+// ===========================
+class HiveBoxes {
+  static const attempts = 'attempts_box';
+  static const stats = 'stats_box';
+  static const category = 'category_box';
+  static const wrong = 'wrong_box';
+  static const mastery = 'mastery_box';
+  static const review = 'review_box';
+  static const readiness = 'readiness_box';
+  static const streak = 'streak_box';
+}
+
+
+// ===========================
+// lib/features/progress/data/models/question_attempt_model.dart
+// ===========================
+import 'package:hive/hive.dart';
+
+@HiveType(typeId: 1)
+class QuestionAttemptModel {
+  @HiveField(0)
+  String id;
+  @HiveField(1)
+  int questionId;
+  @HiveField(2)
+  String category;
+  @HiveField(3)
+  String selectedAnswer;
+  @HiveField(4)
+  String correctAnswer;
+  @HiveField(5)
+  bool isCorrect;
+  @HiveField(6)
+  int timeTaken;
+  @HiveField(7)
+  DateTime date;
+  @HiveField(8)
+  String testType;
+
+  QuestionAttemptModel({
+    required this.id,
+    required this.questionId,
+    required this.category,
+    required this.selectedAnswer,
+    required this.correctAnswer,
+    required this.isCorrect,
+    required this.timeTaken,
+    required this.date,
+    required this.testType,
+  });
+}
+
+
+// ===========================
+// features/progress/domain/services/progress_engine.dart
+// ===========================
+import '../../../../core/storage/hive_boxes.dart';
+import 'package:hive/hive.dart';
+
+class ProgressEngine {
+  final Box attemptsBox = Hive.box(HiveBoxes.attempts);
+  final Box categoryBox = Hive.box(HiveBoxes.category);
+  final Box statsBox = Hive.box(HiveBoxes.stats);
+  final Box wrongBox = Hive.box(HiveBoxes.wrong);
+  final Box masteryBox = Hive.box(HiveBoxes.mastery);
+  final Box reviewBox = Hive.box(HiveBoxes.review);
+  final Box streakBox = Hive.box(HiveBoxes.streak);
+
+  String _getCategoryStatus(double accuracy) {
+    if (accuracy <= 50) return "Weak";
+    if (accuracy <= 75) return "Improving";
+    if (accuracy <= 90) return "Good";
+    return "Mastered";
+  }
+
+  void recordAttempt(Map<String, dynamic> attempt) {
+    attemptsBox.add(attempt);
+
+    _updateStats(attempt);
+    _updateCategory(attempt);
+    _updateWrongAnswers(attempt);
+    _updateMastery(attempt);
+    _updateSpacedRepetition(attempt);
+    _updateStreak();
+  }
+
+  void _updateStats(Map attempt) {
+    final stats =
+        statsBox.get('stats') ??
+        {
+          "totalQuestionsAnswered": 0,
+          "totalCorrectAnswers": 0,
+          "totalIncorrectAnswers": 0,
+          "totalTime": 0, // for average response time
+        };
+
+    stats["totalQuestionsAnswered"] += 1;
+
+    if (attempt["isCorrect"]) {
+      stats["totalCorrectAnswers"] += 1;
+    } else {
+      stats["totalIncorrectAnswers"] += 1;
+    }
+
+    stats["totalTime"] += attempt["timeTaken"] ?? 0;
+
+    // 🔥 Derived metrics
+    final total = stats["totalQuestionsAnswered"];
+    final correct = stats["totalCorrectAnswers"];
+
+    stats["accuracy"] = total > 0 ? (correct / total) * 100 : 0;
+
+    stats["averageResponseTime"] = total > 0 ? stats["totalTime"] / total : 0;
+
+    statsBox.put('stats', stats);
+  }
+
+  void _updateCategory(Map attempt) {
+    final String category = attempt["category"];
+    final bool isCorrect = attempt["isCorrect"];
+    final int timeTaken = attempt["timeTaken"] ?? 0;
+
+    final existing =
+        categoryBox.get(category) ??
+        {"attempted": 0, "correct": 0, "incorrect": 0, "totalTime": 0};
+
+    existing["attempted"] += 1;
+
+    if (isCorrect) {
+      existing["correct"] += 1;
+    } else {
+      existing["incorrect"] += 1;
+    }
+
+    existing["totalTime"] += timeTaken;
+
+    // 🔥 Derived metrics
+    int attempted = existing["attempted"];
+    int correct = existing["correct"];
+
+    double accuracy = attempted > 0 ? (correct / attempted) * 100 : 0;
+
+    existing["accuracy"] = accuracy;
+
+    existing["averageTime"] = attempted > 0
+        ? existing["totalTime"] / attempted
+        : 0;
+
+    existing["status"] = _getCategoryStatus(accuracy);
+
+    categoryBox.put(category, existing);
+  }
+
+  // =====================================================
+  // ❌ WRONG ANSWER SYSTEM
+  // =====================================================
+  void _updateWrongAnswers(Map attempt) {
+    final int questionId = attempt["questionId"];
+    final bool isCorrect = attempt["isCorrect"];
+
+    final existing = wrongBox.get(questionId);
+
+    if (!isCorrect) {
+      if (existing == null) {
+        wrongBox.put(questionId, {
+          "questionId": questionId,
+          "category": attempt["category"],
+          "wrongCount": 1,
+          "lastAttempt": DateTime.now(),
+          "resolved": false,
+        });
+      } else {
+        existing["wrongCount"] += 1;
+        existing["lastAttempt"] = DateTime.now();
+        existing["resolved"] = false;
+        wrongBox.put(questionId, existing);
+      }
+    } else {
+      // mark resolved if exists
+      if (existing != null) {
+        existing["resolved"] = true;
+        wrongBox.put(questionId, existing);
+      }
+    }
+  }
+
+  // =====================================================
+  // 🧠 MASTERY SYSTEM
+  // =====================================================
+  void _updateMastery(Map attempt) {
+    final int questionId = attempt["questionId"];
+    final bool isCorrect = attempt["isCorrect"];
+
+    final existing =
+        masteryBox.get(questionId) ??
+        {
+          "correct": 0,
+          "incorrect": 0,
+          "masteryScore": 0.0,
+          "level": "Beginner",
+        };
+
+    if (isCorrect) {
+      existing["correct"] += 1;
+    } else {
+      existing["incorrect"] += 1;
+    }
+
+    int correct = existing["correct"];
+    int incorrect = existing["incorrect"];
+
+    double score = correct / (correct + incorrect);
+
+    existing["masteryScore"] = score;
+    existing["level"] = _getMasteryLevel(score);
+
+    masteryBox.put(questionId, existing);
+  }
+
+  String _getMasteryLevel(double score) {
+    if (score < 0.3) return "Beginner";
+    if (score < 0.5) return "Learning";
+    if (score < 0.7) return "Improving";
+    if (score < 0.9) return "Proficient";
+    return "Mastered";
+  }
+
+  // =====================================================
+  // 🔁 SPACED REPETITION ENGINE
+  // =====================================================
+  void _updateSpacedRepetition(Map attempt) {
+    final int questionId = attempt["questionId"];
+    final bool isCorrect = attempt["isCorrect"];
+
+    final existing =
+        reviewBox.get(questionId) ?? {"level": 0, "nextReview": DateTime.now()};
+
+    int level = existing["level"];
+
+    if (!isCorrect) {
+      level = 0;
+    } else {
+      level += 1;
+    }
+
+    DateTime nextReview;
+
+    switch (level) {
+      case 0:
+        nextReview = DateTime.now(); // immediate
+        break;
+      case 1:
+        nextReview = DateTime.now().add(const Duration(days: 1));
+        break;
+      case 2:
+        nextReview = DateTime.now().add(const Duration(days: 3));
+        break;
+      case 3:
+        nextReview = DateTime.now().add(const Duration(days: 7));
+        break;
+      default:
+        nextReview = DateTime.now().add(const Duration(days: 30));
+    }
+
+    reviewBox.put(questionId, {
+      "level": level,
+      "nextReview": nextReview,
+      "lastReviewed": DateTime.now(),
+    });
+  }
+
+  // =====================================================
+  // 🔥 STREAK SYSTEM
+  // =====================================================
+  void _updateStreak() {
+    final today = DateTime.now();
+    final streak =
+        streakBox.get('streak') ??
+        {"current": 0, "longest": 0, "lastDate": null};
+
+    DateTime? lastDate = streak["lastDate"] != null
+        ? DateTime.parse(streak["lastDate"])
+        : null;
+
+    if (lastDate == null) {
+      streak["current"] = 1;
+    } else {
+      final difference = today.difference(lastDate).inDays;
+
+      if (difference == 0) {
+        // same day → do nothing
+      } else if (difference == 1) {
+        streak["current"] += 1;
+      } else {
+        streak["current"] = 1; // reset
+      }
+    }
+
+    if (streak["current"] > streak["longest"]) {
+      streak["longest"] = streak["current"];
+    }
+
+    streak["lastDate"] = today.toIso8601String();
+
+    streakBox.put('streak', streak);
+  }
+}
+
+
+// ===========================
+// features/progress/domain/services/category_service.dart
+// ===========================
+import 'package:hive/hive.dart';
+import '../../../../core/storage/hive_boxes.dart';
+
+class CategoryService {
+  final Box categoryBox = Hive.box(HiveBoxes.category);
+
+  List<Map<String, dynamic>> getCategoryStats() {
+    return categoryBox.keys.map((key) {
+      final data = categoryBox.get(key);
+
+      int attempted = data["attempted"];
+      int correct = data["correct"];
+
+      double accuracy = (correct / attempted) * 100;
+
+      return {"category": key, "accuracy": accuracy};
+    }).toList();
+  }
+}
+
+// ===========================
+// features/progress/presentation/screens/progress_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/category_tile.dart';
+import '../../domain/services/category_service.dart';
+
+class ProgressScreen extends StatelessWidget {
+  const ProgressScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final categoryService = CategoryService();
+    final categories = categoryService.getCategoryStats();
+
+    final media = MediaQuery.of(context);
+    final height = media.size.height;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 3),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(top: height * 0.03),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'ALL TOPICS',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: theme.colorScheme.onBackground,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              _buildOverallCard(context),
+
+              const SizedBox(height: 12),
+
+              Expanded(
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final item = categories[index];
+
+                    return CategoryTile(
+                      title: item['category'].toString(),
+                      progress: item['accuracy'] as double,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOverallCard(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      color: theme.colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(
+          'Overall Progress',
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+            color: theme.colorScheme.onSurface,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/progress/presentation/widgets/category_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class CategoryTile extends StatelessWidget {
+  final String title;
+  final double progress;
+
+  const CategoryTile({super.key, required this.title, required this.progress});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Row(
+        children: [
+          _buildIcon(),
+
+          const SizedBox(width: 12),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+
+                const SizedBox(height: 6),
+
+                LinearProgressIndicator(
+                  value: progress / 100,
+                  minHeight: 6,
+                  backgroundColor: Colors.grey.shade300,
+                  color: Colors.grey.shade700,
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(width: 10),
+
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: _getColor(progress).withOpacity(0.2),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              "${progress.toInt()}%",
+              style: TextStyle(color: _getColor(progress)),
+            ),
+          ),
+
+          const Icon(Icons.chevron_right),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIcon() {
+    return const CircleAvatar(child: Icon(Icons.traffic));
+  }
+
+  Color _getColor(double p) {
+    if (p < 50) return Colors.red;
+    if (p < 75) return Colors.orange;
+    return Colors.green;
+  }
+}
+
+// ===========================
+// features/practice/domain/services/adaptive_practice_service.dart
+// ===========================
+import 'package:hive/hive.dart';
+import '../../../../features/practice/data/models/question_model.dart';
+import '../../../../core/storage/hive_boxes.dart';
+
+class AdaptivePracticeService {
+  final Box categoryBox = Hive.box(HiveBoxes.category);
+  final Box wrongBox = Hive.box(HiveBoxes.wrong);
+  final Box masteryBox = Hive.box(HiveBoxes.mastery);
+  final Box reviewBox = Hive.box(HiveBoxes.review);
+
+  List<QuestionModel> generateSession(List<QuestionModel> allQuestions) {
+    // 🔴 1. Weak categories
+    final weakCategories = categoryBox.keys.where((key) {
+      final data = categoryBox.get(key);
+      return (data["accuracy"] ?? 0) < 50;
+    }).toSet();
+
+    // 🟡 2. Improving categories
+    final improvingCategories = categoryBox.keys.where((key) {
+      final data = categoryBox.get(key);
+      final acc = data["accuracy"] ?? 0;
+      return acc >= 50 && acc < 75;
+    }).toSet();
+
+    // 🟢 3. Strong categories
+    final strongCategories = categoryBox.keys.where((key) {
+      final data = categoryBox.get(key);
+      return (data["accuracy"] ?? 0) >= 75;
+    }).toSet();
+
+    // 🔁 4. Spaced repetition due
+    final now = DateTime.now();
+    final dueReviews = reviewBox.values
+        .where((r) => r["nextReview"].isBefore(now))
+        .map((r) => r["questionId"])
+        .toSet();
+
+    // ❌ 5. Wrong answers
+    final wrongQuestions = wrongBox.values
+        .where((w) => w["resolved"] == false)
+        .map((w) => w["questionId"])
+        .toSet();
+
+    // 🧠 6. Low mastery
+    final lowMastery = masteryBox.keys.where((id) {
+      final m = masteryBox.get(id);
+      return (m["masteryScore"] ?? 0) < 0.5;
+    }).toSet();
+
+    // =====================================================
+    // 🎯 FINAL SELECTION
+    // =====================================================
+
+    final weak = allQuestions
+        .where(
+          (q) =>
+              weakCategories.contains(q.category) ||
+              wrongQuestions.contains(q.id) ||
+              lowMastery.contains(q.id),
+        )
+        .toList();
+
+    final improving = allQuestions
+        .where((q) => improvingCategories.contains(q.category))
+        .toList();
+
+    final strong = allQuestions
+        .where((q) => strongCategories.contains(q.category))
+        .toList();
+
+    final review = allQuestions
+        .where((q) => dueReviews.contains(q.id))
+        .toList();
+
+    // 🎯 Weighted selection
+    return [
+      ...review.take(3), // 🔁 spaced repetition first
+      ...weak.take(5), // 🔴 weak focus
+      ...improving.take(2),
+      ...strong.take(1),
+    ];
+  }
+}
+
+// ===========================
+// features/analytics/domain/services/readiness_service.dart
+// ===========================
+class ReadinessService {
+  double calculate(double accuracy, double mastery, int streak) {
+    return (accuracy * 0.5) + (mastery * 0.3) + (streak * 0.2);
+  }
+}
+
+// ===========================
+// features/analytics/domain/services/readiness_service.dart
+// ===========================

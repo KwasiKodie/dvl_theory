@@ -5,6 +5,7 @@ import 'core/navigation/route_names.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_controller.dart';
 import 'core/theme/theme_mode_storage.dart';
+import 'core/storage/hive_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +13,8 @@ Future<void> main() async {
   final themeController = ThemeController(storage: ThemeModeStorage());
 
   await themeController.initialize();
+
+  await HiveService.init();
 
   AppRouter.themeController = themeController;
 

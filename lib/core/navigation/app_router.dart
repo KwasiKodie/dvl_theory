@@ -14,6 +14,8 @@ import '../../features/profile/presentation/screens/help_support_screen.dart';
 import '../../features/profile/presentation/screens/about_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen_controller.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/progress/presentation/screens/progress_screen.dart';
+import '../../features/practice/presentation/screens/practice_screen.dart';
 import '../theme/theme_controller.dart';
 
 class AppRouter {
@@ -29,6 +31,9 @@ class AppRouter {
       case RouteNames.home:
         return RouteTransitions.fadeSlide(const HomeScreen());
 
+      case RouteNames.practice:
+        return RouteTransitions.fadeSlide(const PracticeScreen());
+
       case RouteNames.settings:
         final controller = themeController;
 
@@ -42,6 +47,9 @@ class AppRouter {
 
       case RouteNames.profile:
         return RouteTransitions.fadeSlide(const ProfileScreen());
+
+      case RouteNames.progress:
+        return RouteTransitions.fadeSlide(const ProgressScreen());
 
       case RouteNames.account:
         return RouteTransitions.fadeSlide(const AccountScreen());

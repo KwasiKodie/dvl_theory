@@ -1,0 +1,3888 @@
+[
+  {
+    "question_number": 1,
+    "question": "Look at the Tyre Identification Number shown in the picture below and determine when the Tyre was manufactured.",
+    "options": {
+      "a": "Manufactured during the fifth day of the first month of 2007",
+      "b": "Manufactured during the fifth month of 2007",
+      "c": "Manufactured during the fifty-first week of 2007",
+      "d": "The period cannot be determined from the information provided.",
+      "e": "Manufactured during the fifty-first day of 2007"
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_1_img_1.jpeg",
+    "page": 1,
+    "category": "Vehicle Handling",
+    "explanation": "The tyre code ends in 5107, meaning it was manufactured in the 51st week of 2007, which identifies its production date."
+  },
+  {
+    "question_number": 2,
+    "question": "Which warning light is shown below?",
+    "options": {
+      "a": "Secured resistant system",
+      "b": "Security restraint system",
+      "c": "Secondary restraint system",
+      "d": "Smart restart system"
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_1_img_4.jpeg",
+    "page": 1,
+    "category": "Vehicle Handling",
+    "explanation": "This warning light indicates a Supplementary Restraint System (SRS) fault, usually involving airbags or seat-belt pretensioners that require inspection."
+  },
+  {
+    "question_number": 3,
+    "question": "The indicator shown below reveals a problem to the engine or to the fuel emissions and required the car to be serviced. What is the name of this indicator?",
+    "options": {
+      "a": "On-board diagnostics indicator",
+      "b": "Fuel emissions indicator",
+      "c": "None of the above",
+      "d": "ABS indicator"
+    },
+    "correct_answer": "a",
+    "image": "assets/images/questions/page_1_img_2.jpeg",
+    "page": 1,
+    "category": "Vehicle Handling",
+    "explanation": "This is the On-Board Diagnostics (OBD) or Check Engine warning light, indicating a fault in the engine or emissions system."
+  },
+  {
+    "question_number": 4,
+    "question": "Which of the following can be operated with the switch shown below?",
+    "options": {
+      "a": "Emergency lights",
+      "b": "Brake lights",
+      "c": "Parking lights and head lamps",
+      "d": "Fog lights"
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_1_img_3.jpeg",
+    "page": 1,
+    "category": "Vehicle Handling",
+    "explanation": "The rotary switch controls the vehicle's exterior lighting system, allowing the driver to select parking lights and headlights as needed."
+  },
+  {
+    "question_number": 5,
+    "question": "You come across this road sign while driving. What interpretation will you give to it?",
+    "options": {
+      "a": "Steep hill 10% upwards",
+      "b": "Steep hill ahead",
+      "c": "Gentle hill upwards",
+      "d": "Steep hill upwards"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_2_img_1.jpeg",
+    "page": 2,
+    "category": "Road Signs",
+    "explanation": "This triangular warning sign indicates a steep uphill gradient ahead, alerting drivers to prepare for reduced speed and engine strain."
+  },
+  {
+    "question_number": 6,
+    "question": "What does this sign mean?",
+    "options": {
+      "a": "End of prohibition",
+      "b": "End of Express way",
+      "c": "Motorway not accessible",
+      "d": "Motorway closed for repairs"
+    },
+    "correct_answer": "b",
+    "image": "assets/images/questions/page_2_img_2.jpeg",
+    "page": 2,
+    "category": "Road Signs",
+    "explanation": "The sign shows a motorway symbol crossed by a red diagonal line, indicating the motorway or expressway has ended."
+  },
+  {
+    "question_number": 7,
+    "question": "The Driving Mirror shown in the picture below is the:",
+    "options": {
+      "a": "Driving Mirror",
+      "b": "Rear View Mirror",
+      "c": "Side View Mirror",
+      "d": "Back View Mirror"
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_2_img_3.jpeg",
+    "page": 2,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows an exterior mirror mounted on the vehicle's side, used to monitor traffic beside and behind.."
+  },
+  {
+    "question_number": 8,
+    "question": "A flashing green light means:",
+    "options": {
+      "a": "This is a pedestrian-controlled traffic light.",
+      "b": "You can continue through the intersection as long as it's clear.",
+      "c": "This light simply warns you that you are entering an intersection",
+      "d": "None of the above"
+    },
+    "correct_answer": "b",
+    "image": "assets/images/questions/page_2_img_4.jpeg",
+    "page": 2,
+    "category": "Traffic Rules",
+    "explanation": "A flashing green light permits drivers to proceed through the intersection, provided the way is clear and it is safe."
+  },
+  {
+    "question_number": 9,
+    "question": "What is the name of the sign shown below?",
+    "options": {
+      "a": "End of motorway",
+      "b": "End of highway",
+      "c": "Beginning of highway",
+      "d": "Beginning of Motorway"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_3_img_1.jpeg",
+    "page": 3,
+    "category": "Road Signs",
+    "explanation": "The blue sign with a motorway symbol indicates the start of a motorway, where motorway regulations begin to apply."
+  },
+  {
+    "question_number": 10,
+    "question": "What is the basic function of the vehicle part shown below?",
+    "options": {
+      "a": "It cools the radiator cap",
+      "b": "It cools the radiator value",
+      "c": "It cools the radiator horse",
+      "d": "It cools the radiator content"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_3_img_2.jpeg",
+    "page": 3,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows a radiator cooling fan. It draws air through the radiator to cool the engine coolant effectively."
+  },
+  {
+    "question_number": 11,
+    "question": "What is the vehicle part shown below use for?",
+    "options": {
+      "a": "For holding reserved water",
+      "b": "For holding transmission oil",
+      "c": "For holding grease",
+      "d": "For holding brake fluid"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_3_img_3.jpeg",
+    "page": 3,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows a brake fluid reservoir, which stores hydraulic fluid needed for effective braking system operation."
+  },
+  {
+    "question_number": 12,
+    "question": "The hand brake is also known as the",
+    "options": {
+      "a": "Emergency brake",
+      "b": "Service brake",
+      "c": "Causal brake",
+      "d": "Stopping brake"
+    },
+    "correct_answer": "a",
+    "image": "assets/images/questions/page_3_img_4.jpeg",
+    "page": 3,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows a hand brake lever, commonly called the emergency brake, used to secure a parked vehicle."
+  },
+  {
+    "question_number": 13,
+    "question": "The image shown below is known as?",
+    "options": {
+      "a": "Starter",
+      "b": "Spark fuse",
+      "c": "Charger",
+      "d": "Fuse"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_4_img_1.jpeg",
+    "page": 4,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows automotive blade fuses, which protect electrical circuits from overloads and short circuits."
+  },
+  {
+    "question_number": 14,
+    "question": "The image shown below is known as?",
+    "options": {
+      "a": "Fuel tank",
+      "b": "Radiation chamber",
+      "c": "Oil holder",
+      "d": "Radiator"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_4_img_2.jpeg",
+    "page": 4,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows a radiator, which dissipates heat from engine coolant to help prevent engine overheating."
+  },
+  {
+    "question_number": 15,
+    "question": "What is the name of the vehicle part shown below?",
+    "options": {
+      "a": "Shock absorber",
+      "b": "Tire rod",
+      "c": "Ball joint",
+      "d": "Stabilizer bar"
+    },
+    "correct_answer": "a",
+    "image": "assets/images/questions/page_4_img_3.jpeg",
+    "page": 4,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows a shock absorber, a suspension component that reduces bouncing and helps tyre contact with the road."
+  },
+  {
+    "question_number": 16,
+    "question": "If you intend to go straight in a roundabout, you must not do one of the following.",
+    "options": {
+      "a": "Approach the roundabout in the right lane",
+      "b": "Maintain the right lane",
+      "c": "Never signal until you approach the first exist",
+      "d": "Never signal until you pass the first exist"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_4_img_4.jpeg",
+    "page": 4,
+    "category": "Traffic Rules",
+    "explanation": "Signal right after passing the first exit to inform other road users that you intend to leave the roundabout safely."
+  },
+  {
+    "question_number": 17,
+    "question": "Which of the following places listed, will you find the road sign indicated below?",
+    "options": {
+      "a": "On a School's compound",
+      "b": "Close to a School",
+      "c": "At the rear of a school bus",
+      "d": "Around playing grounds"
+    },
+    "correct_answer": "b",
+    "image": "assets/images/questions/page_5_img_1.jpeg",
+    "page": 5,
+    "category": "Road Signs",
+    "explanation": "This warning sign indicates a school crossing or school zone ahead, where children may be crossing the road."
+  },
+  {
+    "question_number": 18,
+    "question": "The Road sign indicated here is a prohibition sign. What interpretation will you give to it?",
+    "options": {
+      "a": "No entry for vehicles in both directions",
+      "b": "Give Way Ahead",
+      "c": "Roundabout ahead",
+      "d": "No entry for all vehicular traffic"
+    },
+    "correct_answer": "a",
+    "image": "assets/images/questions/page_5_img_2.jpeg",
+    "page": 5,
+    "category": "Road Signs",
+    "explanation": "This circular sign with a red border and white center prohibits vehicle entry from either direction beyond the sign."
+  },
+  {
+    "question_number": 19,
+    "question": "On the instrument panel of a vehicle you will find the light indicated below. What does it depicts?",
+    "options": {
+      "a": "Fuel indicated",
+      "b": "Battery Indicator",
+      "c": "Inside Light",
+      "d": "Oil indicator"
+    },
+    "correct_answer": "b",
+    "image": "assets/images/questions/page_5_img_3.jpeg",
+    "page": 5,
+    "category": "Vehicle Handling",
+    "explanation": "The battery symbol indicates a charging system or battery fault, warning the driver to check the vehicle's electrical system."
+  },
+  {
+    "question_number": 20,
+    "question": "What does the road sign shown below mean?",
+    "options": {
+      "a": "Speed ramps ahead",
+      "b": "Uneven road",
+      "c": "Narrow Bridge",
+      "d": "Level crossing"
+    },
+    "correct_answer": "b",
+    "image": "assets/images/questions/page_5_img_4.jpeg",
+    "page": 5,
+    "category": "Road Signs",
+    "explanation": "This triangular warning sign indicates an uneven road ahead, alerting drivers to reduce speed and prepare for bumps."
+  },
+  {
+    "question_number": 21,
+    "question": "The steering control style shown in the picture is known as:",
+    "options": {
+      "a": "Safe steering control.",
+      "b": "Quarter to three O' Clock.",
+      "c": "Push and pull.",
+      "d": "All the above."
+    },
+    "correct_answer": "b",
+    "image": "assets/images/questions/page_6_img_1.jpeg",
+    "page": 6,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows hands positioned at approximately the 9 and 3 o'clock positions, providing balanced control and effective steering response"
+  },
+  {
+    "question_number": 22,
+    "question": "The item shown in the picture below is known as the;",
+    "options": {
+      "a": "Tyre rod",
+      "b": "Tyre redial",
+      "c": "Rim",
+      "d": "Wheel Nuts"
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_6_img_2.jpeg",
+    "page": 6,
+    "category": "Vehicle Handling",
+    "explanation": "The pictured component is an alloy wheel rim, not a tyre rod, radial tyre, or wheel nuts. It forms the wheel's outer structure."
+  },
+  {
+    "question_number": 23,
+    "question": "In the process of braking, when you depress the clutch pedal first the vehicle is likely to",
+    "options": {
+      "a": "Roll back",
+      "b": "Gather speed",
+      "c": "Stop in time",
+      "d": "Do all the above"
+    },
+    "correct_answer": "b",
+    "image": "assets/images/questions/page_6_img_3.jpeg",
+    "page": 6,
+    "category": "Vehicle Handling",
+    "explanation": "Pressing the clutch first removes engine braking, allowing the vehicle to gather speed before the brakes slow it effectively."
+  },
+  {
+    "question_number": 24,
+    "question": "Which of these can result in a driver falling asleep behind the steering wheel?",
+    "options": {
+      "a": "Driving in a tired and drowsy state",
+      "b": "Driving in a tired, drowsy or drunk state",
+      "c": "All the above are correct",
+      "d": "Driving immediately after a good sleep"
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_6_img_4.jpeg",
+    "page": 6,
+    "category": "Hazard Awareness",
+    "explanation": "Fatigue, drowsiness, and alcohol impair alertness the concentration, increasing the risk of falling asleep while driving."
+  },
+  {
+    "question_number": 25,
+    "question": "A flashing green light means:",
+    "options": {
+      "a": "This is a pedestrian-controlled traffic light.",
+      "b": "You can continue through the intersection as long as it's clear.",
+      "c": "This light simply warns you that you are entering an intersection",
+      "d": "None of the above"
+    },
+    "correct_answer": "b",
+    "image": "assets/images/questions/page_7_img_1.jpeg",
+    "page": 7,
+    "category": "Traffic Rules",
+    "explanation": "A flashing green light allows drivers to proceed through the intersection, provided the road ahead is clear and safe."
+  },
+  {
+    "question_number": 26,
+    "question": "What is type of road sign is shown in the picture below?",
+    "options": {
+      "a": "Warning sign",
+      "b": "Washing bay ahead",
+      "c": "Quayside",
+      "d": "Prohibition sign"
+    },
+    "correct_answer": "a",
+    "image": "assets/images/questions/page_7_img_2.jpeg",
+    "page": 7,
+    "category": "Road Signs",
+    "explanation": "The triangular red-bordered sign (Warning sign) warns drivers of danger ahead, showing a quayside or steep drop near water"
+  },
+  {
+    "question_number": 27,
+    "question": "What does the sign shown below mean?",
+    "options": {
+      "a": "Warning sign",
+      "b": "Washing bay ahead",
+      "c": "Quayside",
+      "d": "Prohibition sign"
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_7_img_2.jpeg",
+    "page": 7,
+    "category": "Road Signs",
+    "explanation": "This sign warns of a quayside or riverbank ahead, where a vehicle could accidentally enter deep water."
+  },
+  {
+    "question_number": 28,
+    "question": "The item pointed to is used to open:",
+    "options": {
+      "a": "The fuel tank.",
+      "b": "The radiator.",
+      "c": "The Booth",
+      "d": "The Bonnet"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_7_img_3.jpeg",
+    "page": 7,
+    "category": "Vehicle Handling",
+    "explanation": "The symbol shows a car with an open front hood, indicating the bonnet release used to access the engine compartment."
+  },
+  {
+    "question_number": 29,
+    "question": "What does the sign shown below mean?",
+    "options": {
+      "a": "Real danger",
+      "b": "Falling rocks",
+      "c": "Other dangers",
+      "d": "Accident zone"
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_8_img_1.jpeg",
+    "page": 8,
+    "category": "Road Signs",
+    "explanation": "This warning sign indicates other dangers ahead that are not covered by specific warning signs. Proceed with caution."
+  },
+  {
+    "question_number": 30,
+    "question": "What is the basic function of the vehicle part shown in the picture below?",
+    "options": {
+      "a": "It is the starting point for combustion in your engine",
+      "b": "It stores battery power for use by your engine",
+      "c": "It reduces fuel consumption",
+      "d": "It redistributes excess power to prevent the vehicle from getting burnt"
+    },
+    "correct_answer": "a",
+    "image": "assets/images/questions/page_8_img_2.jpeg",
+    "page": 8,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows a spark plug, which creates the electrical spark that ignites the air-fuel mixture in the engine."
+  },
+  {
+    "question_number": 31,
+    "question": "The vehicle part shown below is known as:",
+    "options": {
+      "a": "Radiator belt",
+      "b": "Air belt",
+      "c": "Fan belt",
+      "d": "Safety belt"
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_8_img_3.jpeg",
+    "page": 8,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows a fan belt (drive belt), which transfers engine power to components such as the alternator and fan"
+  },
+  {
+    "question_number": 32,
+    "question": "You are the driver of the blue car. Of the four hazards marked, which one is most likely to require you to take urgent action?",
+    "options": {
+      "a": "The person hitching a lift (marked A)",
+      "b": "The child on the other side of the road (marked B)",
+      "c": "The parked car that is partially obscured from your view (marked D)",
+      "d": "The parked car (marked C)"
+    },
+    "correct_answer": "b",
+    "image": "assets/images/questions/page_8_img_4.jpeg",
+    "page": 8,
+    "category": "Hazard Awareness",
+    "explanation": "Children can behave unpredictably and may suddenly run into the road. They require immediate attention and readiness to stop"
+  },
+  {
+    "question_number": 33,
+    "question": "What type of driver is shown in the picture below?",
+    "options": {
+      "a": "Aggressive behaviour",
+      "b": "All the above",
+      "c": "Helpful behaviour",
+      "d": "Friendly behaviour"
+    },
+    "correct_answer": "b",
+    "image": "assets/images/questions/page_9_img_1.jpeg",
+    "page": 9,
+    "category": "Safe Driving",
+    "explanation": "The driver appears angry and confrontational, showing aggressive behaviour that can distract others and increase crash risk."
+  },
+  {
+    "question_number": 34,
+    "question": "Which of the following will result in the type of tire worn out shown below?",
+    "options": {
+      "a": "Frequent overtaking and speeding.",
+      "b": "All the above.",
+      "c": "Improper alignment of the tires.",
+      "d": "The road surface and the make of tire on the vehicle."
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_9_img_2.jpeg",
+    "page": 9,
+    "category": "Vehicle Handling",
+    "explanation": "The tyre shows uneven wear on one side, a common sign of wheel misalignment that causes improper road contact."
+  },
+  {
+    "question_number": 35,
+    "question": "What action is expected from other drivers and riders when the notice below is displayed?",
+    "options": {
+      "a": "Following vehicles should approach cautiously",
+      "b": "Lead vehicles should approach cautiously",
+      "c": "Lead vehicles should overtake immediately",
+      "d": "Following vehicles should overtake immediately"
+    },
+    "correct_answer": "a",
+    "image": "assets/images/questions/page_9_img_3.jpeg",
+    "page": 9,
+    "category": "Hazard Awareness",
+    "explanation": "The 'Baby on Board' notice reminds following drivers to keep a safe distance and approach the vehicle cautiously."
+  },
+  {
+    "question_number": 36,
+    "question": "Which of these road signs will mean end of dual carriageway?",
+    "options": {
+      "a": "assets/images/questions/page_10_img_1.jpeg",
+      "b": "assets/images/questions/page_10_img_2.jpeg",
+      "c": "assets/images/questions/page_10_img_3.jpeg",
+      "d": "assets/images/questions/page_10_img_4.jpeg"
+    },
+    "correct_answer": "a",
+    "image": "assets/images/questions/page_10_img_1.jpeg",
+    "page": 10,
+    "category": "Road Signs",
+    "explanation": "Sign A shows two carriageways merging into one, warning drivers that the dual carriageway is ending ahead"
+  },
+  {
+    "question_number": 37,
+    "question": "What do you do when this indicator light on the panel (Dash Board) lits?",
+    "options": {
+      "a": "Check the doors, they might not be properly closed",
+      "b": "Check the fuel level. You may be running out of fuel",
+      "c": "Check the engine temperature and the brake fluid",
+      "d": "Check the level of your vehicle's engine oil"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_10_img_5.jpeg",
+    "page": 10,
+    "category": "Vehicle Handling",
+    "explanation": "This oil-can warning light indicates low engine oil pressure or level. Check the engine oil immediately to prevent damage."
+  },
+  {
+    "question_number": 38,
+    "question": "You come across this road sign while driving. What interpretation will you give?",
+    "options": {
+      "a": "Deviation of Road",
+      "b": "Sharp deviation of Road",
+      "c": "Sharp deviation of Road to the left",
+      "d": "Keep to the right"
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_11_img_1.jpeg",
+    "page": 11,
+    "category": "Road Signs",
+    "explanation": "The chevron arrows point left, warning drivers of a sharp road deviation or bend to the left ahead."
+  },
+  {
+    "question_number": 39,
+    "question": "What does this instrument panel light mean when lit?",
+    "options": {
+      "a": "Low fuel level",
+      "b": "Ignition light",
+      "c": "Handbrake off",
+      "d": "Faulty Brakes"
+    },
+    "correct_answer": "a",
+    "image": "assets/images/questions/page_11_img_2.jpeg",
+    "page": 11,
+    "category": "Vehicle Handling",
+    "explanation": "This warning light indicates low fuel level, alerting the driver to refuel soon to avoid running out."
+  },
+  {
+    "question_number": 40,
+    "question": "The switch shown below when pressed will operate which of the following?",
+    "options": {
+      "a": "The wiper",
+      "b": "A and B only",
+      "c": "The hazard lights",
+      "d": "The windscreen washer"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_11_img_3.jpeg",
+    "page": 11,
+    "category": "Vehicle Handling",
+    "explanation": "The switch symbol shows water spraying onto the windscreen, indicating it operates the windscreen washer system."
+  },
+  {
+    "question_number": 41,
+    "question": "What does this instrument panel light mean when lit?",
+    "options": {
+      "a": "The gear is in park position",
+      "b": "The gear is in  neutral position",
+      "c": "The Handbrake is off or released",
+      "d": "The Handbrake is on or pulled"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_11_img_4.jpeg",
+    "page": 11,
+    "category": "Vehicle Handling",
+    "explanation": "The illuminated P symbol indicates the parking brake (handbrake) is engaged and should be released before driving."
+  },
+  {
+    "question_number": 42,
+    "question": "What type of crossing light is shown below?",
+    "options": {
+      "a": "The Pelican Crossing",
+      "b": "The Pegasus Crossing",
+      "c": "The Toucan Crossing",
+      "d": "The Puffin Crossing"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_12_img_1.jpeg",
+    "page": 12,
+    "category": "Pedestrian Crossings",
+    "explanation": "The signal shows a Puffin crossing display, where sensors detect pedestrians and adjust crossing time for safer movement"
+  },
+  {
+    "question_number": 43,
+    "question": "Which of the following will result in the type of tire worn out shown below?",
+    "options": {
+      "a": "Frequent overtaking and speeding.",
+      "b": "The road surface and the make of tire on the vehicle.",
+      "c": "Improper alignment of the tires.",
+      "d": "All the above."
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_12_img_2.jpeg",
+    "page": 12,
+    "category": "Vehicle Handling",
+    "explanation": "The tyre shows wear on one side only, a classic sign of wheel misalignment causing uneven tyre-road contact."
+  },
+  {
+    "question_number": 44,
+    "question": "A damaged seat belt will still function when:",
+    "options": {
+      "a": "Pulled at once with force",
+      "b": "Pulled slowly",
+      "c": "The brakes are applied harshly",
+      "d": "None of the above"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_12_img_3.jpeg",
+    "page": 12,
+    "category": "Safe Driving",
+    "explanation": "A damaged seat belt cannot be relied upon to operate correctly in a collision and should be replaced immediately."
+  },
+  {
+    "question_number": 45,
+    "question": "The marks on the windscreen shown below are as a result of:",
+    "options": {
+      "a": "Using dish soap to wash the windscreen",
+      "b": "Frequent driving in the rain",
+      "c": "Driving on dirty roads",
+      "d": "Using damaged wipers"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_12_img_4.jpeg",
+    "page": 12,
+    "category": "Vehicle Handling",
+    "explanation": "The curved streaks on the windscreen are typical scratches caused by worn or damaged wiper blades dragging across the glass."
+  },
+  {
+    "question_number": 46,
+    "question": "A flashing amber light means",
+    "options": {
+      "a": "Stop, and wait for the light to turn green.",
+      "b": "Stop, and proceed when it is safe to do so",
+      "c": "The flashing amber light simply indicates an uncontrolled intersection.",
+      "d": "Slow down to check for oncoming traffic and proceed when it is safe."
+    },
+    "correct_answer": "c",
+    "image": "assets/images/questions/page_13_img_1.jpeg",
+    "page": 13,
+    "category": "Traffic Rules",
+    "explanation": "A flashing amber light warns that normal signal control is not operating. Drivers must treat the junction with extra caution"
+  },
+  {
+    "question_number": 47,
+    "question": "What does the sign shown below mean?",
+    "options": {
+      "a": "Roundabout ahead",
+      "b": "No entry to commercial vehicles",
+      "c": "No entry to good carrying vehicles",
+      "d": "No entry to all vehicles"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_13_img_2.jpeg",
+    "page": 13,
+    "category": "Road Signs",
+    "explanation": "This red circular sign with a white horizontal bar means all vehicles are prohibited from entering."
+  },
+  {
+    "question_number": 48,
+    "question": "At this intersection the car marked O has stopped and the car marked A is approaching. Which of them has the right of way to drive on?",
+    "options": {
+      "a": "The car marked O has the right of way because its on the left",
+      "b": "The car marked A has the right of way because its on the right",
+      "c": "None of them has right of way.",
+      "d": "The car marked O has the right of way because it arrived at the intersection first"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_13_img_3.jpeg",
+    "page": 13,
+    "category": "Traffic Rules",
+    "explanation": "At an uncontrolled intersection, the vehicle that arriced first may proceed first when it is safe and other drivers yield."
+  },
+  {
+    "question_number": 49,
+    "question": "In stormy conditions, it is important to:",
+    "options": {
+      "a": "Slow down! It takes longer to stop or adjust in wet weather.",
+      "b": "Stay toward the middle lanes - water tends to pool in the outside lanes.",
+      "c": "Drive in the tracks of a car ahead of you.",
+      "d": "A,B and C"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_14_img_1.jpeg",
+    "page": 14,
+    "category": "Hazard Awareness",
+    "explanation": "Heavy rain reduces visibility and tyre grip. Slowing down, avoiding pooled water, and following established tyre tracks improve safety."
+  },
+  {
+    "question_number": 50,
+    "question": "What is the basic function of the vehicle part shown below?",
+    "options": {
+      "a": "It filters the water that goes into the engine",
+      "b": "It cleans the fuel system",
+      "c": "It cleans the vapour from the radiator",
+      "d": "It cleans the air that goes into the engine"
+    },
+    "correct_answer": "d",
+    "image": "assets/images/questions/page_14_img_2.jpeg",
+    "page": 14,
+    "category": "Vehicle Handling",
+    "explanation": "The image shows an air filter, which removes dust and debris from incoming air before it enters the engine."
+  },
+  {
+    "question_number": 51,
+    "question": "Which of these is required of any driver who displays the Trade Licence Plate on his vehicle?",
+    "options": {
+      "a": "He must not drive above 50 Km/h",
+      "b": "He must not carry more than one passenger",
+      "c": "He must do all the above",
+      "d": "He must display his log book on the vehicle"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 14,
+    "category": "Traffic Rules",
+    "explanation": "Vehicles using trade plates (such as DV or DP plates) are strictly restricted in the number of passengers they can carry."
+  },
+  {
+    "question_number": 52,
+    "question": "You start to feel tired while driving. What should you do?",
+    "options": {
+      "a": "Increase your speed slightly",
+      "b": "Decrease you speed slightly",
+      "c": "Pull over at a safe place to rest",
+      "d": "Find a less busy route"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 14,
+    "category": "Vehicle Handling",
+    "explanation": "Fatigue slows reactions; stop safely and rest before continuing."
+  },
+  {
+    "question_number": 53,
+    "question": "You are driving past a line of parked cars. You notice a ball bouncing into the road ahead. What should you do?",
+    "options": {
+      "a": "Stop  and wave  the children across to fetch their ball",
+      "b": "Continue driving at the same speed and sound your horn",
+      "c": "Continue driving at the same speed and flash your headlight",
+      "d": "Slow down and be prepared to stop"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 14,
+    "category": "Hazard Awareness",
+    "explanation": "A child may follow the ball, so slow and prepare to stop."
+  },
+  {
+    "question_number": 54,
+    "question": "You are driving on a motorway. The car ahead shows its hazard lights for a short time. This tells you that;",
+    "options": {
+      "a": "The driver wants you to overtake",
+      "b": "The other car is going to change lanes",
+      "c": "There is a police speed check ahead",
+      "d": "Traffic ahead is slowing or stopping suddenly"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 15,
+    "category": "Motorway Rules",
+    "explanation": "When a car ahead briefly flashes its hazard lights on a motorway, it warns you of an upcoming hazard, incident, or queuing traffic."
+  },
+  {
+    "question_number": 55,
+    "question": "You are driving a friends children home from school. They are all over 14 years old. Who is responsible for making sure they wear their seat belts?",
+    "options": {
+      "a": "An adult passenger",
+      "b": "The children",
+      "c": "Your friend",
+      "d": "You, the driver"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 15,
+    "category": "Safe driving",
+    "explanation": "It is the drivers legal responsibility to ensure all passengers wear their seat belts."
+  },
+  {
+    "question_number": 56,
+    "question": "You are approaching a busy junction with several lanes. At the last moment you realized you are in the wrong lane. What should you do?",
+    "options": {
+      "a": "Continue in that lane",
+      "b": "Force your way across",
+      "c": "Use arm signals to cut across",
+      "d": "Stop until the area has cleared"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 15,
+    "category": "Hazard Awareness",
+    "explanation": "Continue safely rather than forcing across traffic at the last moment."
+  },
+  {
+    "question_number": 57,
+    "question": "When driving in fog you should use;",
+    "options": {
+      "a": "Sidelights",
+      "b": "Full beam headlight",
+      "c": "Dipped headlights",
+      "d": "Hazard lights"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 15,
+    "category": "Hazard Awareness",
+    "explanation": "High beams project bright, straight-ahead light that reflects off tiny water droplets in the fog, creating a blinding glare."
+  },
+  {
+    "question_number": 58,
+    "question": "Some two wayroads are divided into three lanes. Why are these particularly dangerous?",
+    "options": {
+      "a": "Traffic in both directions can use the middle lane to overtake",
+      "b": "Traffic can travel faster in poor weather conditions",
+      "c": "Traffic uses the middle lane for emergencies only",
+      "d": "Traffic can overtake on the left"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 15,
+    "category": "Hazard Awareness",
+    "explanation": "Shared overtaking space increases conflict risk between opposing traffic."
+  },
+  {
+    "question_number": 59,
+    "question": "To correct a rear-wheel skid you should;",
+    "options": {
+      "a": "Not steer at all",
+      "b": "Steer away from it",
+      "c": "Apply your handbrake",
+      "d": "Steer into it"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 15,
+    "category": "Emergency Procedures",
+    "explanation": "You steer into a rear-wheel skid (oversteer) to align the front wheels with the actual path of the sliding vehicle."
+  },
+  {
+    "question_number": 60,
+    "question": "Warning signs are always indicated with the following;",
+    "options": {
+      "a": "Blue colour background with red circular boundaries",
+      "b": "Green colour background with white rectangular boundaries",
+      "c": "Blue black naval colour background with yellow square boundaries",
+      "d": "White colour background with red triangular boundaries"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 15,
+    "category": "Road Signs",
+    "explanation": "Warning signs are usually triangular to alert drivers before reaching hazards."
+  },
+  {
+    "question_number": 61,
+    "question": "Are passengers allowed to ride in a vehicle that is being towed?",
+    "options": {
+      "a": "Yes if they are over fourteen",
+      "b": "No not at any time",
+      "c": "Only if a stabilizer is fitted",
+      "d": "Only if all the seats in the towing vehicle are full"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 15,
+    "category": "Safe Driving",
+    "explanation": "Passengers should not ride in a towed vehicle because control and protection are reduced."
+  },
+  {
+    "question_number": 62,
+    "question": "You have been involved in an argument before starting your journey. This has made you fell angry. You should;",
+    "options": {
+      "a": "Start to drive, but open a window",
+      "b": "Calm down before you start to drive",
+      "c": "Have an alcohol drink to help you relax before driving",
+      "d": "Drive slower than normal and turn your radio on"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 16,
+    "category": "Safe Driving",
+    "explanation": "Staying calm prevents emotional reactions from creating further danger."
+  },
+  {
+    "question_number": 63,
+    "question": "You are driving on a motorway. The car ahead shows its hazard lights for a short time. This tells you that;",
+    "options": {
+      "a": "The driver wants you to overtake",
+      "b": "The other car is going to change lanes",
+      "c": "There is a police speed check ahead",
+      "d": "Traffic ahead is slowing or stopping suddenly"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 16,
+    "category": "Motorway Rules",
+    "explanation": "When a car ahead briefly flashes its hazard lights on a motorway, it warns you of an upcoming hazard, incident, or queuing traffic."
+  },
+  {
+    "question_number": 64,
+    "question": "Which one of these should you do when a front tyre bursts?",
+    "options": {
+      "a": "Apply the handbrake to stop the vehicle",
+      "b": "Brake firmly and quickly",
+      "c": "Hold the steering firmly and control the vehicle to a stop",
+      "d": "Hold the steering wheel lightly"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 16,
+    "category": "Emergency Procedures",
+    "explanation": "Hold the wheel firmly and slow gradually to keep control."
+  },
+  {
+    "question_number": 65,
+    "question": "The two second rule enables a driver to;",
+    "options": {
+      "a": "Keep a separation distance between the driver and the lead vehicle",
+      "b": "Check the exterior mirrors",
+      "c": "Check the off-side of the vehicle",
+      "d": "Drive smoothly in heavy rains"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 16,
+    "category": "Safe Driving",
+    "explanation": "Stay at least two seconds behind the vehicle directly in front of them to provide enough time to react and stop safely in dry conditions."
+  },
+  {
+    "question_number": 66,
+    "question": "Warning road signs are indicated on;",
+    "options": {
+      "a": "Circular signboards",
+      "b": "Rectangular signboards",
+      "c": "Square signboards",
+      "d": "Triangular signboards"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 16,
+    "category": "Road Signs",
+    "explanation": "Warning road signs are typically designed as triangular signboards to alert drivers of upcoming hazards."
+  },
+  {
+    "question_number": 67,
+    "question": "Which of these should you do when a front tire bursts?",
+    "options": {
+      "a": "Apply the handbrake to stop the vehicle",
+      "b": "Brake firmly and quickly",
+      "c": "Control the steering wheel lightly",
+      "d": "Control the vehicle to roll to a stop"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 16,
+    "category": "Emergency Procedures",
+    "explanation": "Hold the wheel firmly and slow gradually to keep control."
+  },
+  {
+    "question_number": 68,
+    "question": "You are travelling at the legal speed limit. A vehicle comes up quickly behind, flashing its headlights. You should;",
+    "options": {
+      "a": "Accelerate to make a gap behind you",
+      "b": "Touch the brakes sharply to show your brake lights",
+      "c": "Allow the vehicle to overtake",
+      "d": "Maintain your speed to prevent the vehicle from overtaking"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 16,
+    "category": "Safe Driving",
+    "explanation": "Allowing a faster vehicle to pass safely reduces conflict, discourages risky overtaking, and helps maintain safe traffic flow."
+  },
+  {
+    "question_number": 69,
+    "question": "You are driving in a clear night. There is a steady stream of oncoming traffic. The national speed limit applies. Which lights should you expect to see?",
+    "options": {
+      "a": "Fog lights",
+      "b": "Full beam headlights",
+      "c": "Sidelights",
+      "d": "Dipped Headlights"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 16,
+    "category": "Hazard Awareness",
+    "explanation": "On unlit road where the national speed limit applies, you must switch from full-beam to dipped headlights when facing a steady stream of oncoming traffic."
+  },
+  {
+    "question_number": 70,
+    "question": "The right-hand lane of a three-lane motorway is;",
+    "options": {
+      "a": "For Lorries only",
+      "b": "An overtaking lane",
+      "c": "The right-turn lane",
+      "d": "An acceleration lane"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 17,
+    "category": "Motorway Rules",
+    "explanation": "This restriction prevents heavy lorries from using the outermost overtaking lane, improving the smooth flow of faster-moving traffic and reducing congestion and accident risk."
+  },
+  {
+    "question_number": 71,
+    "question": "Which one of these safety measures do you keep in mind, when you are about to make a turn?",
+    "options": {
+      "a": "Reduce your speed and signal",
+      "b": "Make the turn and signal",
+      "c": "Quickly turn and speed on",
+      "d": "Quickly turn and slow down"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 17,
+    "category": "Safe Driving",
+    "explanation": "Signal early, position correctly, and confirm it is safe before turning."
+  },
+  {
+    "question_number": 72,
+    "question": "Fog lights may be used ONLY if;",
+    "options": {
+      "a": "Visibility is seriously reduced",
+      "b": "They are fitted above the bumper",
+      "c": "An audible warning device is used",
+      "d": "They are not as bright as the headlights"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 17,
+    "category": "Hazard Awareness",
+    "explanation": "This is due to conditions like dense fog, heavy rain You must switch them off as soon as visibility improves to avoid dazzling other drivers."
+  },
+  {
+    "question_number": 73,
+    "question": "Whiles driving in traffic, you notice suddenly that your engine has gone off. Attempts to start the engine yields no result, which of the following first checks do you carry out before calling for help;",
+    "options": {
+      "a": "The spark plugs",
+      "b": "The fan belt",
+      "c": "The radiator",
+      "d": "Battery terminals"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 17,
+    "category": "Vehicle Handling",
+    "explanation": "Check battery terminals for looseness or heavy corrosion. Loose or dirty terminals disrupt power required to crank the engine and run the car's electronics."
+  },
+  {
+    "question_number": 74,
+    "question": "For which one of the following should you use your hazard warning lights?",
+    "options": {
+      "a": "When you are parking in a restricted area",
+      "b": "When you are temporarily hindering traffic light",
+      "c": "To warn following traffic of a hazard at the rear",
+      "d": "When you have a break down"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 17,
+    "category": "Emergency Procedures",
+    "explanation": "You should use hazard warning lights when your vehicle has broken down to warn other road users of a temporary obstruction or danger."
+  },
+  {
+    "question_number": 75,
+    "question": "When your tyre blows out on the road, you have to park the vehicle;",
+    "options": {
+      "a": "In the right lane and change the tyre",
+      "b": "In the left lane and change the tyre",
+      "c": "On the shoulder of the road and replace the tyre",
+      "d": "In the middle of the road and change the tyre"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 17,
+    "category": "Emergency Procedures",
+    "explanation": "The shoulder of the road is specifically designed for emergency stops and breakdowns."
+  },
+  {
+    "question_number": 76,
+    "question": "Whiles driving, you approach a horse rider. Before you overtake him, you should;",
+    "options": {
+      "a": "Flash your head lamp",
+      "b": "Call the rider",
+      "c": "Overtake him with caution",
+      "d": "Raise your engine sound"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 17,
+    "category": "Hazard Awareness",
+    "explanation": "Give vulnerable road users extra room and avoid startling them."
+  },
+  {
+    "question_number": 77,
+    "question": "Which of the following is allowed to ride in the bucket of a pick-up?",
+    "options": {
+      "a": "Workers",
+      "b": "Able body person",
+      "c": "Road constructors",
+      "d": "None of above"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 17,
+    "category": "Traffic Rules",
+    "explanation": "Passengers should not ride in open load areas because they lack proper protection."
+  },
+  {
+    "question_number": 78,
+    "question": "In which of the following places is the risk of accident greatest?",
+    "options": {
+      "a": "On a motorway",
+      "b": "Built up areas",
+      "c": "On Asphalt roads",
+      "d": "On trunk roads"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 18,
+    "category": "Hazard Awareness",
+    "explanation": "Built-up environments see a higher volume of accidents due to the complex mix of heavy traffic, frequent intersections, pedestrains, cyclists, and numerous distractions."
+  },
+  {
+    "question_number": 79,
+    "question": "If you park your vehicle and leave the radio on for long, it may affect one of the following;",
+    "options": {
+      "a": "The braking system",
+      "b": "Ignition system",
+      "c": "The electrical system",
+      "d": "The battery"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 18,
+    "category": "Vehicle Handling",
+    "explanation": "Electrical accessories can drain the battery when the engine is not running."
+  },
+  {
+    "question_number": 80,
+    "question": "When you take in alcohol, it is likely to affect one of the following;",
+    "options": {
+      "a": "Your brakes",
+      "b": "Increase your alertness",
+      "c": "Increase your reaction time",
+      "d": "Your Vehicle"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 18,
+    "category": "Safe Driving",
+    "explanation": "Alcohol impairs judgement and reactions; only time removes it from the body."
+  },
+  {
+    "question_number": 81,
+    "question": "When approaching a parked vehicle in that has the driver sited in it. What should you be mindful of?",
+    "options": {
+      "a": "Goods falling from the vehicle",
+      "b": "Displayed warning triangle",
+      "c": "A hawker coming towards you",
+      "d": "The door may be opened"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 18,
+    "category": "Hazard Awareness",
+    "explanation": "Occupied parked vehicles can create door-opening hazards without warning."
+  },
+  {
+    "question_number": 82,
+    "question": "Prohibitory signs are always indicated with the following;",
+    "options": {
+      "a": "Circular red boundaries and diagonal red line across",
+      "b": "Rectangle with blue colour boundaries",
+      "c": "Circular boundary with nothing indicated on it",
+      "d": "Triangle with red boundaries"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 18,
+    "category": "Road Signs",
+    "explanation": "Prohibitory instructions tell you what you must not do and are typically indicated by red circular shape with red diagonal line."
+  },
+  {
+    "question_number": 83,
+    "question": "You are driving on a clear night. There is a steady stream of oncoming traffic. The national speed limit applies. Which lights should you see?",
+    "options": {
+      "a": "Full beam headlights",
+      "b": "Sidelights",
+      "c": "Fog lights",
+      "d": "Dipped headlights"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 18,
+    "category": "Safe Driving",
+    "explanation": "To avoid dazzling oncoming drivers, you should use dipped (low-beam) headlights."
+  },
+  {
+    "question_number": 84,
+    "question": "If two motorists from the opposite directions reach an intersection at the same time and one intends to turn left, who will have the right of way?",
+    "options": {
+      "a": "The one turning left",
+      "b": "The one turning right",
+      "c": "The one approaching",
+      "d": "None of them"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 18,
+    "category": "Traffic Rules",
+    "explanation": "The motorist approaching straight (or continuing their path) has the right of way."
+  },
+  {
+    "question_number": 85,
+    "question": "It is advisable to keep replacing your vehicles wiper blades very often to keep them in good shape. What is the standard replacement period?",
+    "options": {
+      "a": "3 months",
+      "b": "1 month",
+      "c": "As often as it gets worn out",
+      "d": "As often as possible"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 19,
+    "category": "Vehicle Handling",
+    "explanation": "Replace wiper blades when they degrade, not on a fixed schedule."
+  },
+  {
+    "question_number": 86,
+    "question": "When you are descending a hill you don’t have to do one of the following excessively;",
+    "options": {
+      "a": "Wave",
+      "b": "Brake",
+      "c": "Observing traffic",
+      "d": "Slow down"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 19,
+    "category": "Safe Driving",
+    "explanation": "Relying on your brakes causes them to overheat and fade, leading to failure, instead use a lower gear."
+  },
+  {
+    "question_number": 87,
+    "question": "You are in a one-way street and want to turn right.  You should position yourself;",
+    "options": {
+      "a": "In the right-hand lane",
+      "b": "In the left-hand lane",
+      "c": "Just left of the centre line",
+      "d": "In the centre of the road, depending on traffic follow"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 19,
+    "category": "Traffic Rules",
+    "explanation": "This maximizes your turning radius and prevents vehicles on your left from accidentally passing you on the inside as you turn."
+  },
+  {
+    "question_number": 88,
+    "question": "When more than one driver reaches a four-way stop intersection, which of them will have the right of way?",
+    "options": {
+      "a": "The last driver to arrive at the intersection",
+      "b": "The first driver to arrive at the intersection",
+      "c": "The driver to the left of the first driver at the intersection",
+      "d": "The third driver to arrive at the intersection"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 19,
+    "category": "Traffic Rules",
+    "explanation": "At a four-way stop, traffic laws dictate a 'first to arrive, first to proceed' rule to maintain orderly, safe traffic flow."
+  },
+  {
+    "question_number": 89,
+    "question": "You must not use your horn when you are stationary;",
+    "options": {
+      "a": "Except for signalling that you have just arrived",
+      "b": "At any time whatsoever",
+      "c": "Unless it is used only briefly",
+      "d": "Unless a moving vehicle may cause danger to you"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 19,
+    "category": "Traffic Rules",
+    "explanation": "This prevents unnecessary noise and panic in traffic."
+  },
+  {
+    "question_number": 90,
+    "question": "If you have to drive a vehicle you are not used to, which of the following controls will you look out for?",
+    "options": {
+      "a": "The Seat adjuster",
+      "b": "The Battery size",
+      "c": "The Starter",
+      "d": "The position of the dip stick"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 19,
+    "category": "Vehicle Handling",
+    "explanation": "You need the seat adjuster first to ensure you can comfortably and safely reach the steering wheel, pedals, and mirrors for proper vehicle control."
+  },
+  {
+    "question_number": 91,
+    "question": "Which of the following will give you an ideal stopping distance?",
+    "options": {
+      "a": "The 2 minutes gap",
+      "b": "The 2 second gap",
+      "c": "The 3 second gap",
+      "d": "The 3 minutes gap"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 19,
+    "category": "Safe Driving",
+    "explanation": "An ideal stopping distance is the total physical space your vehicle travels from hazard perception to a complete stop."
+  },
+  {
+    "question_number": 92,
+    "question": "On which of these roads will double-parking be allowed?",
+    "options": {
+      "a": "One-Way road",
+      "b": "A major road",
+      "c": "Roads in residential areas",
+      "d": "None of the Above"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 19,
+    "category": "Traffic Rules",
+    "explanation": "Double-parking obstructs traffic flow, reduces visibility, and creates hazards, making it prohibited on all road types."
+  },
+  {
+    "question_number": 93,
+    "question": "Your vehicle has broken down at night on a two-way road. You should try to park your vehicle;",
+    "options": {
+      "a": "On the right of the road",
+      "b": "On the left of the road",
+      "c": "Partly on the pavement",
+      "d": "On the grass verge"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 20,
+    "category": "Emergency Procedures",
+    "explanation": "Parking on the grass verge keeps the vehicle farther from moving traffic, reducing collision risk and improving safety for occupants and other road users."
+  },
+  {
+    "question_number": 94,
+    "question": "You are driving a slow moving vehicle on a narrow road. When traffic wishes to overtake, you should;",
+    "options": {
+      "a": "Park off the road",
+      "b": "Take no action",
+      "c": "Pull in safely as soon as you can",
+      "d": "Stop and wave them on"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 20,
+    "category": "Traffic Rules",
+    "explanation": "Maintain your position and speed until a safe opportunity arises. Sudden or unnecessary actions may confuse other drivers and increase risk."
+  },
+  {
+    "question_number": 95,
+    "question": "When following large vehicles it is advisable to stay out of;",
+    "options": {
+      "a": "Your lane to be seen",
+      "b": "Its Blind spot",
+      "c": "Head lamp coverage area",
+      "d": "None of the above"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 20,
+    "category": "Hazard Awareness",
+    "explanation": "Large vehicles have blind spots where drivers cannot see nearby vehicles. Staying out of these areas improves visibility and safety."
+  },
+  {
+    "question_number": 96,
+    "question": "The driver is mainly the cause of one of the following;",
+    "options": {
+      "a": "The engine break down",
+      "b": "The skidding",
+      "c": "Pot holes on the road",
+      "d": "Brake failure"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 20,
+    "category": "Hazard Awareness",
+    "explanation": "Skidding often results from driver actions such as excessive speed, harsh braking, or sudden steering, making it largely preventable."
+  },
+  {
+    "question_number": 97,
+    "question": "If you adjust your side mirrors and you can sight just the sides of your vehicle then it means your mirrors are;",
+    "options": {
+      "a": "Turned too far inwards",
+      "b": "None of the above",
+      "c": "The adjustment is right",
+      "d": "Turned too far outwards"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 20,
+    "category": "Vehicle Handling",
+    "explanation": "Seeing too much of your vehicle's sides means the mirrors are angled inward, reducing coverage of adjacent lanes and blind spots."
+  },
+  {
+    "question_number": 98,
+    "question": "At an accident scene, you suspect a casualty has back injuries. The area is safe. You should;",
+    "options": {
+      "a": "Offer casualty a drink",
+      "b": "Not move the casualty",
+      "c": "Offer the casualty a cigarette",
+      "d": "Raise casualty’s legs"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 20,
+    "category": "Emergency Procedures",
+    "explanation": "Not moving the casualty prevents further injury and allows for proper medical assistance."
+  },
+   {
+    "question_number": 99,
+    "question": "Some two way traffic roads are divided into three lanes. Why are these particularly dangerous?",
+    "options": {
+      "a": "Traffic in both directions can use the middle lane to overtake",
+      "b": "Traffic can travel faster in poor weather conditions",
+      "c": "Traffic uses the middle lane for emergencies only",
+      "d": "Traffic can overtake on the left"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 20,
+    "category": "Hazard Awareness",
+    "explanation": "Traffic in both directions can use the middle lane to overtake, increasing the risk of collisions."
+  },
+  {
+    "question_number": 100,
+    "question": "Which of the following will be an ideal stopping distance to be maintained?",
+    "options": {
+      "a": "One-Second gap",
+      "b": "Two minutes gap",
+      "c": "Two-Second gap",
+      "d": "One-minute gap"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 21,
+    "category": "Safe Driving",
+    "explanation": "The two-second gap provides sufficient time to react and stop safely if the vehicle ahead brakes suddenly under normal conditions."
+  },
+  {
+    "question_number": 101,
+    "question": "The Golden Rule for reversing states that you should always;",
+    "options": {
+      "a": "Reverse without guidance",
+      "b": "Reverse straight",
+      "c": "Reverse without speeding",
+      "d": "Reverse with someones direction"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 21,
+    "category": "Safe Driving",
+    "explanation": "Reversing slowly gives you more time to observe hazards, maintain control, and react safely to unexpected obstacles or pedestrians."
+  },
+  {
+    "question_number": 102,
+    "question": "One rear tyre of your vehicle gets stuck on a sandy or muddy road. How would you get the vehicle out?",
+    "options": {
+      "a": "Drive out quickly with speed",
+      "b": "Steer to the left and drive out",
+      "c": "Steer to the opposite direction of the stuck tyre",
+      "d": "Steer to the direction of the stuck tyre and drive out"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 21,
+    "category": "Safe Driving",
+    "explanation": "Steering toward the stuck tyre helps align the wheels with the rut, improving traction and increasing the chance of moving free."
+  },
+  {
+    "question_number": 103,
+    "question": "After dark, drivers are required to use low beam headlights:",
+    "options": {
+      "a": "When being approached by another vehicle",
+      "b": "Within 300meters of the approach of another vehicle",
+      "c": "Within 150meters of the approach of another vehicle",
+      "d": "Within 200meters of the approach of another vehicle"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 21,
+    "category": "Safe Driving",
+    "explanation": "Using low beam headlights when another vehicle approaches prevents glare, allowing both drivers to see the road safely."
+  },
+  {
+    "question_number": 104,
+    "question": "At Y-junctions, vehicles joining the major road have restricted priority over vehicles on the major road.",
+    "options": {
+      "a": "True",
+      "b": "False",
+      "c": "Not in all cases",
+      "d": "Not at all"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 21,
+    "category": "Traffic Rules",
+    "explanation": "Vehicles entering a major road must yield to traffic already on it, giving priority to vehicles travelling along the main road."
+  },
+  {
+    "question_number": 105,
+    "question": "You cannot see clearly behind when reversing. What should you do?",
+    "options": {
+      "a": "Open your window to look behind",
+      "b": "Open the door and look behind",
+      "c": "Ask someone to guide you",
+      "d": "Look in the nearside mirror"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 21,
+    "category": "Safe Driving",
+    "explanation": "A guide can help identify hazards hidden from view, making reversing safer when visibility behind the vehicle is restricted."
+  },
+  {
+    "question_number": 106,
+    "question": "A driver does something that upsets you in traffic.  What should you do?",
+    "options": {
+      "a": "Flash your headlights several times",
+      "b": "Sound your horn",
+      "c": "Try not to react",
+      "d": "Let the Driver know how you feel"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 21,
+    "category": "Safe Driving",
+    "explanation": "Remaining calm prevents distraction and aggressive behaviour, helping you stay focused on driving safely and avoiding unnecessary conflicts."
+  },
+  {
+    "question_number": 107,
+    "question": "The Doctor says you need glasses to read vehicle number plates at the required distance.  When MUST you wear them?",
+    "options": {
+      "a": "Only in bad weather conditions",
+      "b": "At all times when driving",
+      "c": "When you think it is necessary",
+      "d": "Only in bad light or at night time"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 21,
+    "category": "Safe Driving",
+    "explanation": "Clear vision is essential for identifying hazards, reading signs, and judging distances safely, so prescribed glasses must be worn."
+  },
+  {
+    "question_number": 108,
+    "question": "It is very windy. You are behind a motorcyclist who is overtaking a high-sided vehicle. What should you do?",
+    "options": {
+      "a": "Overtake the motorcyclist immediately",
+      "b": "Keep well back",
+      "c": "Keep close to the motorcyclist",
+      "d": "Stay level with the motorcyclist"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 22,
+    "category": "Hazard Awareness",
+    "explanation": "Keeping well back gives the motorcyclist space to react to strong winds and maintain control when passing large vehicles."
+  },
+  {
+    "question_number": 109,
+    "question": "Which of the following inscriptions are you likely to see on your vehicles exterior mirrors?",
+    "options": {
+      "a": "Adjust mirror to the left",
+      "b": "Look into the mirror to observe traffic behind",
+      "c": "Objects in the mirror are closer than you see",
+      "d": "Objects in the mirror are further than you see"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 22,
+    "category": "Hazard Awareness",
+    "explanation": "Convex exterior mirrors make vehicles appear farther away than they are, so the warning reminds drivers to judge distances carefully."
+  },
+  {
+    "question_number": 110,
+    "question": "How does alcohol affect you when driving?",
+    "options": {
+      "a": "It reduces your concentration",
+      "b": "It increases your awareness",
+      "c": "It improves your co-ordination",
+      "d": "It speeds up you reactions."
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 22,
+    "category": "Hazard Awareness",
+    "explanation": "Alcohol impairs concentration, judgement, and decision-making, reducing a driver's ability to recognize hazards and respond safely."
+  },
+  {
+    "question_number": 111,
+    "question": "You are on a motorway at night with other vehicles just ahead of you. Which lights should you use?",
+    "options": {
+      "a": "Front fog lights",
+      "b": "Dipped headlights",
+      "c": "High lights only",
+      "d": "Main beam headlights"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 22,
+    "category": "Motorway Rules",
+    "explanation": "Dipped headlights provide adequate visibility without dazzling drivers ahead, helping all road users see clearly and travel safely at night."
+  },
+  {
+    "question_number": 112,
+    "question": "The vehicle ahead is being driven by a learner. You should:",
+    "options": {
+      "a": "Keep calm and be patient",
+      "b": "Drive up close behind",
+      "c": "Sound your horn and overtake",
+      "d": "Put your headlights on full beam"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 22,
+    "category": "Hazard Awareness",
+    "explanation": "Learner drivers may hesitate or make mistakes. Patience reduces pressure on them and helps maintain a safer driving environment."
+  },
+  {
+    "question_number": 113,
+    "question": "Driving for long distances may make you feel sleepy, to prevent this you can;",
+    "options": {
+      "a": "Stop and walk around",
+      "b": "Speed quickly to your destination",
+      "c": "Take some coffee drink",
+      "d": "Seek medical attention"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 22,
+    "category": "Hazard Awareness",
+    "explanation": "Stopping for a short walk improves alertness, reduces fatigue, and helps maintain concentration during long journeys."
+  },
+  {
+    "question_number": 114,
+    "question": "When undergoing practical driving course, you are",
+    "options": {
+      "a": "Advised to carry any number of persons in the vehicle",
+      "b": "Allowed to sit with only one passenger without L Plate",
+      "c": "Advised to sit with your instructor with L Plates displayed",
+      "d": "Not allowed to carry anybody except you alone"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 22,
+    "category": "Safe Driving",
+    "explanation": "Displaying L plates and driving with an instructor alerts other road users that you are learning under proper supervision."
+  },
+  {
+    "question_number": 115,
+    "question": "You are driving behind a large goods vehicle. It signals left but steers to the right. You should;",
+    "options": {
+      "a": "Slow down and let the vehicle turn",
+      "b": "Drive on, keeping to the left",
+      "c": "Hold your speed and sound your horn",
+      "d": "Overtake on the right of it"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 22,
+    "category": "Safe Driving",
+    "explanation": "Large vehicles often swing right before turning left. Slowing down and waiting prevents collisions and gives the driver enough turning space."
+  },
+  {
+    "question_number": 116,
+    "question": "Rear view mirrors assist the driver to;",
+    "options": {
+      "a": "See clearly ahead",
+      "b": "View the road at an angle of 45 degrees",
+      "c": "Know what is happening behind him",
+      "d": "See his face in the mirror"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 23,
+    "category": "Vehicle Handling",
+    "explanation": "Rear-view mirrors help drivers monitor traffic behind, enabling safer lane changes, braking decisions, and awareness of surrounding vehicles."
+  },
+  {
+    "question_number": 117,
+    "question": "You are driving a slow moving vehicle on a narrow winding road. You should;",
+    "options": {
+      "a": "Give a left signal when it is safe for vehicles to overtake you",
+      "b": "Wave following vehicles past you if it is safe",
+      "c": "Pull in safely when you can, to let following vehicles overtake",
+      "d": "Keep well out to stop vehicles overtaking dangerously"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 23,
+    "category": "Traffic Rules",
+    "explanation": "Pulling in when safe allows faster traffic to pass without pressure, reducing frustration and lowering the risk of dangerous overtaking."
+  },
+  {
+    "question_number": 118,
+    "question": "A driver pulls out of a side road in front of you, forcing you have to brake suddenly. What should you do?",
+    "options": {
+      "a": "Ignore the error and stay calm",
+      "b": "Flash your lights to show annoyance",
+      "c": "Overtake as soon as possible",
+      "d": "Sound your horn to show your annoyance"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 23,
+    "category": "Safe Driving",
+    "explanation": "Staying calm helps you remain focused on safe driving, while reacting aggressively can increase risk and escalate the situation."
+  },
+  {
+    "question_number": 119,
+    "question": "While driving, a warning light on your vehicles instrument panel comes on. You should;",
+    "options": {
+      "a": "Continue if the engine sounds alright",
+      "b": "Hope that it is just a temporary electrical fault",
+      "c": "Stop and check out the problem quickly and safely",
+      "d": "Deal with the problem when there is more time"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 23,
+    "category": "Vehicle Handling",
+    "explanation": "Warning lights indicate potential vehicle faults. Checking the issue promptly helps prevent breakdowns, further damage, and unsafe driving conditions."
+  },
+  {
+    "question_number": 120,
+    "question": "Your reactions will be much slower when driving;",
+    "options": {
+      "a": "Tired.",
+      "b": "In a rainy weather.",
+      "c": "Too quickly",
+      "d": "In poor weather"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 23,
+    "category": "Hazard Awareness",
+    "explanation": "Fatigue reduces alertness, concentration, and reaction time, making it harder to identify hazards and respond promptly."
+  },
+  {
+    "question_number": 121,
+    "question": "A newly qualified driver must;",
+    "options": {
+      "a": "Display green L plates",
+      "b": "Not exceed 40km/h speed limit for 12 months",
+      "c": "Be accompanied on a motor way",
+      "d": "Have valid motor insurance"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 23,
+    "category": "Safe Driving",
+    "explanation": "Valid motor insurance is a legal requirement that provides financial protection against damage, injury, and liability on the road."
+  },
+  {
+    "question_number": 122,
+    "question": "You are about to drive home.  You feel very tired and have a severe headache.  You should;",
+    "options": {
+      "a": "Wait until you are fit and well before driving",
+      "b": "Drive home, but take a tablet for headaches",
+      "c": "Wait for a short time, and then drive home slowly",
+      "d": "Drive home if you can stay awake for the journey"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 23,
+    "category": "Traffic Rules",
+    "explanation": "Motor insurance is legally required before driving on public roads, ensuring financial protection for drivers, passengers, and other road users."
+  },
+  {
+    "question_number": 123,
+    "question": "You are driving on a wet road. You have to stop your vehicle in an emergency. You should;",
+    "options": {
+      "a": "Apply the handbrake and footbrake together",
+      "b": "Keep both hands on the wheel",
+      "c": "Given an arm signal",
+      "d": "Select reverse gear"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 23,
+    "category": "Emergency Procedures",
+    "explanation": "Keeping both hands on the steering wheel helps maintain control and stability during emergency braking, especially on slippery wet roads."
+  },
+  {
+    "question_number": 124,
+    "question": "One of the following is not required when applying for Learner Driving Licence in Ghana.",
+    "options": {
+      "a": "A certified eye test report",
+      "b": "A birth certificate",
+      "c": "4 recent passport photographs",
+      "d": "Approved driver instructor"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 24,
+    "category": "Traffic Rules",
+    "explanation": "An approved driving instructor is not required when applying for a learner license; the other documents are typically required for eligibility verification."
+  },
+  {
+    "question_number": 125,
+    "question": "As you approach a bridge you should;",
+    "options": {
+      "a": "Move into the middle of the road to get a better view",
+      "b": "Speed up and slow down",
+      "c": "Get over the bridge as quickly a possible",
+      "d": "Consider using your horn"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 24,
+    "category": "Hazard Awareness",
+    "explanation": "Sounding the horn, where appropriate, can warn unseen road users of your approach, improving safety near narrow or restricted-view bridges."
+  },
+  {
+    "question_number": 126,
+    "question": "A properly serviced vehicle will give;",
+    "options": {
+      "a": "Cleaner exhaust emissions",
+      "b": "You a refund on your road tax",
+      "c": "Better fuel economy",
+      "d": "Lower insurance premiums"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 24,
+    "category": "Vehicle Handling",
+    "explanation": "A properly serviced vehicle is more reliable and safer to operate, reducing the likelihood of mechanical failures that could endanger road users."
+  },
+  {
+    "question_number": 127,
+    "question": "If your tyre blows out or you have a tyre burst whilst the vehicle is in motion what would you do?",
+    "options": {
+      "a": "Quickly slam your brakes",
+      "b": "Firmly grip the steering wheel; steer straight to a stop.",
+      "c": "Switch off ignition",
+      "d": "Sound the Horn"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 24,
+    "category": "Emergency Procedures",
+    "explanation": "A firm and steady steering help maintain control after a tyre burst, allowing the vehicle to slow down safely."
+  },
+  {
+    "question_number": 128,
+    "question": "You are driving on a highway; all of a sudden you come across a road sign with the following inscriptions Stop! Look! and Listen! What should you expect ahead of you?",
+    "options": {
+      "a": "Level ground",
+      "b": "Level crossing",
+      "c": "Police check point",
+      "d": "Road works ahead"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 24,
+    "category": "Road Signs",
+    "explanation": "'Stop, Look, and Listen' warns drivers of a railway level crossing ahead, requiring extra caution before proceeding safely."
+  },
+  {
+    "question_number": 129,
+    "question": "Which of the following is not accepted for driving?",
+    "options": {
+      "a": "Shoes for men",
+      "b": "Seat belt",
+      "c": "Buckled sandals",
+      "d": "Shoes with high heels"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 24,
+    "category": "Safe Driving",
+    "explanation": "High heels can reduce pedal control and delay reactions, increasing the risk of incorrect pedal use during driving."
+  },
+  {
+    "question_number": 130,
+    "question": "To ensure maximum safety at night when your vehicle is parked, you should put on;",
+    "options": {
+      "a": "Parking lights only",
+      "b": "Brake lights",
+      "c": "Both Parking and Hazard lights",
+      "d": "Both Parking and Head lights"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 24,
+    "category": "Safe Driving",
+    "explanation": "Parking and hazard lights improve vehicle visibility at night, warning approaching drivers of a stationary vehicle and reducing collision risk."
+  },
+  {
+    "question_number": 131,
+    "question": "A lead vehicle signals that it is intends to turn at a junction. To be sure of the Drivers intention, you should;",
+    "options": {
+      "a": "Watch his front wheels",
+      "b": "Watch his signal lights",
+      "c": "Watch the brake lights",
+      "d": "Watch the following vehicles"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 25,
+    "category": "Hazard Awareness",
+    "explanation": "Front wheels reveal the vehicle's actual movement. Signals may be left on accidentally, but wheel direction confirms the driver's intention."
+  },
+  {
+    "question_number": 132,
+    "question": "You are going straight ahead at a roundabout. How should you signal?",
+    "options": {
+      "a": "Signal right after the first exist, and maintain the signal till you leave the roundabout",
+      "b": "Signal left as you leave the roundabout",
+      "c": "Signal left after the first exist, and maintain the signal till you leave the roundabout",
+      "d": "Signal left on the approach and keep the signal till you leave"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 25,
+    "category": "Traffic Rules",
+    "explanation": "Signalling after the first exit informs other road users that you intend to leave the roundabout at the next exit."
+  },
+  {
+    "question_number": 133,
+    "question": "Which of the following do you do when following a truck on steep hill?",
+    "options": {
+      "a": "Adjust your mirrors",
+      "b": "Maintain a safe speed and signal other rushing drivers to overtake",
+      "c": "Maintain your speed",
+      "d": "Maintain a safe gap"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 25,
+    "category": "Safe Driving",
+    "explanation": "Maintaining a safe gap provides more time to react, improves visibility ahead, and allows for the truck's slower movement."
+  },
+  {
+    "question_number": 134,
+    "question": "If you find out that your spark plug is carbon fouled, soft, black and has dirty deposits. It is an indication that;",
+    "options": {
+      "a": "The engine is not properly tuned",
+      "b": "The plugs are sparking fire",
+      "c": "The Vehicle uses petrol",
+      "d": "The engine is dirty"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 25,
+    "category": "Vehicle Handling",
+    "explanation": "Carbon-fouled spark plugs often result from incorrect fuel-air mixture or poor tuning, reducing engine efficiency and performance."
+  },
+  {
+    "question_number": 135,
+    "question": "You intend overtaking a long vehicle, which of the following should you do?",
+    "options": {
+      "a": "None of the above",
+      "b": "Give arm signal",
+      "c": "Change to a lower gear",
+      "d": "Signal and use your horn"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 25,
+    "category": "Safe Driving",
+    "explanation": "Signalling and using the horn, where appropriate, alerts the long-vehicle driver to your presence before attempting a safe overtake."
+  },
+  {
+    "question_number": 136,
+    "question": "Seat belts are fitted in vehicles for;",
+    "options": {
+      "a": "Long distance journeys only",
+      "b": "Both long and short trips",
+      "c": "Use in emergencies",
+      "d": "Use by drivers only"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 25,
+    "category": "Vehicle Handling",
+    "explanation": "Seat belts reduce the risk of serious injury in a collision and should be worn on every journey, regardless of distance."
+  },
+  {
+    "question_number": 137,
+    "question": "Whiles driving you come across a road sign that has red circular boundary, white background with no inscription in it. Which road sign does it represent?",
+    "options": {
+      "a": "Road closed to vehicles only",
+      "b": "Road closed to all power driven vehicle",
+      "c": "End of restriction",
+      "d": "Road closed to vehicle from both directions"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 25,
+    "category": "Road Signs",
+    "explanation": "A red circle with a white centre indicates no vehicles may enter from either direction, meaning the road is closed to traffic."
+  },
+  {
+    "question_number": 138,
+    "question": "Which of the following foot pedals are operated with the right foot?",
+    "options": {
+      "a": "Clutch and Accelerator Pedals",
+      "b": "Brake and Clutch Pedals",
+      "c": "Foot brake and Parking brake",
+      "d": "Accelerator and Brake Pedals"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 25,
+    "category": "Vehicle Handling",
+    "explanation": "The right foot controls both acceleration and braking, allowing quick transitions between speed control and stopping when needed."
+  },
+  {
+    "question_number": 139,
+    "question": "The device on vehicles that help in the prevention of excessive noise from engine is called;",
+    "options": {
+      "a": "Exhaust pipe moisture tube",
+      "b": "Exhaust pipe sump",
+      "c": "Exhaust pipe Shaft",
+      "d": "Exhaust pipe mufflers"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 26,
+    "category": "Vehicle Handling",
+    "explanation": "The muffler reduces engine and exhaust noise by dampening sound waves, helping vehicles operate more quietly and legally."
+  },
+  {
+    "question_number": 140,
+    "question": "Which of the following should not happen when braking?",
+    "options": {
+      "a": "Brakes should not feel spongy or slack.",
+      "b": "Brakes should be wet",
+      "c": "Vehicle should pull to one side.",
+      "d": "All of the above"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 26,
+    "category": "Vehicle Handling",
+    "explanation": "Effective brakes should respond firmly, remain dry, and stop the vehicle evenly. Any of these faults can reduce braking performance and safety."
+  },
+  {
+    "question_number": 141,
+    "question": "You are turning right at a T-junction. Your view to the right and left is blocked due to parked vehicles. You should:",
+    "options": {
+      "a": "Lean forward to get a better view without crossing the give way lines",
+      "b": "Edge out until you are about 1 metre over the give way lines",
+      "c": "Ask a passenger to assist by waving you out when clear",
+      "d": "Ease forward until you can see clearly past the vehicles"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 26,
+    "category": "Hazard Awareness",
+    "explanation": "Easing forward slowly improves visibility while maintaining control, allowing you to check for approaching traffic before entering the junction."
+  },
+  {
+    "question_number": 142,
+    "question": "When should you use hazard warning lights?",
+    "options": {
+      "a": "To thank a driver for giving way to you",
+      "b": "To warn other drivers that you are towing",
+      "c": "Approaching queuing traffic on a motorway",
+      "d": "When parked illegally on a busy road"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 26,
+    "category": "Motorway Rules",
+    "explanation": "Hazard warning lights alert approaching drivers to unexpected slow-moving or stationary traffic ahead, giving them more time to react safely."
+  },
+  {
+    "question_number": 143,
+    "question": "At an intersection controlled by traffic lights, you intend turning right and just when the light turns green for you, you noticed pedestrians waiting to cross in the turn. Who will have right of way?",
+    "options": {
+      "a": "The pedestrians have the right of way",
+      "b": "You have the right f way",
+      "c": "Other road users have the right of way",
+      "d": "The pedestrians have the right of way if there is a marked crosswalk for them"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 26,
+    "category": "Pedestrian Crossings",
+    "explanation": "Pedestrians crossing your path have priority. Drivers turning at intersections must wait and allow them to cross safely first."
+  },
+  {
+    "question_number": 144,
+    "question": "In which direction will you turn your front wheels when you park uphill next to a curb?",
+    "options": {
+      "a": "Turn the wheels away from the curb",
+      "b": "Keep the wheels straight",
+      "c": "Turn the wheels to your left",
+      "d": "Turn the wheels into the curb"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 26,
+    "category": "Vehicle Handling",
+    "explanation": "Turning the wheel away from the curb helps the vehicle roll into the curb if it moves, reducing the risk of rolling downhill."
+  },
+  {
+    "question_number": 145,
+    "question": "Under which of the following situations will a reduction in speed be crucial?",
+    "options": {
+      "a": "When approaching traffic light that is showing green",
+      "b": "When overtaking another vehicle",
+      "c": "When you take alcoholic drink",
+      "d": "When driving on the motorway"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 26,
+    "category": "Hazard Awareness",
+    "explanation": "A green light can change unexpectedly. Reducing speed slightly when approaching allows more time to react safely to changing conditions"
+  },
+  {
+    "question_number": 146,
+    "question": "You find out that your Blood Alcohol Concentration (BAC) is above 0.08%. Which of the following can help reduce the alcohol effect?",
+    "options": {
+      "a": "Take enough food",
+      "b": "Take cold shower",
+      "c": "Allow enough time to recover",
+      "d": "Drink a lot of water"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 26,
+    "category": "Safe Driving",
+    "explanation": "Only time allows the body to metabolize and eliminate alcohol. Food, water, or shower do not speed up recovery."
+  },
+  {
+    "question_number": 147,
+    "question": "Which of the following signs will be indicated on a triangular road sign?",
+    "options": {
+      "a": "Minimum Speed",
+      "b": "Low bridge ahead",
+      "c": "No waiting",
+      "d": "Keep left"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 27,
+    "category": "Road Signs",
+    "explanation": "Triangular signs are warning signs. A low bridge warning alerts drivers to height restrictions ahead, requiring extra caution."
+  },
+  {
+    "question_number": 148,
+    "question": "On a wet road you always have to apply your brakes gently to avoid one of the following;",
+    "options": {
+      "a": "Skidding",
+      "b": "Falling",
+      "c": "Proper control of the vehicle",
+      "d": "Damage to your tyres"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 27,
+    "category": "Vehicle Handling",
+    "explanation": "Gentle braking helps maintain tyre grip on wet surfaces, reducing the risk of skidding and loss of vehicle control."
+  },
+  {
+    "question_number": 149,
+    "question": "On which of the following road surfaces will the two second gap rule not be ideal?",
+    "options": {
+      "a": "On a dry road",
+      "b": "On a wet road",
+      "c": "A good road",
+      "d": "All the above"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 27,
+    "category": "Safe Driving",
+    "explanation": "On wet roads, stopping distances increase significantly. A two-second gap is usually insufficient, so a larger following distance is needed."
+  },
+  {
+    "question_number": 150,
+    "question": "When MUST you use dipped (dim) headlights during the day?",
+    "options": {
+      "a": "At all times",
+      "b": "Along narrow streets",
+      "c": "When parking",
+      "d": "In poor visibility"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 27,
+    "category": "Hazard Awareness",
+    "explanation": "Dipped headlights improve your visibility to others and help you see better in fog, rain, or poor light."
+  },
+  {
+    "question_number": 151,
+    "question": "You are held up in the middle of a level crossing and cannot restart the engine. The warning bell starts to ring. You should;",
+    "options": {
+      "a": "Phone the signal operator to stop the train",
+      "b": "Run out and warn the signal operator",
+      "c": "Push the vehicle to clear the crossing",
+      "d": "Carry on trying to restart the engine quickly"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 27,
+    "category": "Emergency Procedures",
+    "explanation": "Clearing the vehicle from the crossing immediately reduces the risk of a collision with an approaching train and protects lives."
+  },
+  {
+    "question_number": 152,
+    "question": "Which is the most appropriate gear for descending a steep hill?",
+    "options": {
+      "a": "Second Gear",
+      "b": "First Gear",
+      "c": "Third Gear",
+      "d": "Neutral position"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 27,
+    "category": "Safe Driving",
+    "explanation": "First gear provides maximum engine braking, helping control speed safely on steep descents and reducing reliance on the brakes."
+  },
+  {
+    "question_number": 153,
+    "question": "Is it necessary to always leave your vehicle unattended with the ignition off?",
+    "options": {
+      "a": "No, it’s only wise not to do that",
+      "b": "Yes, its wise to do that",
+      "c": "None of the above",
+      "d": "Yes, its only wise not to do that"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 27,
+    "category": "Safe Driving",
+    "explanation": "Switching off the ignition prevents unintended vehicle movement, reduces theft risk, and ensures the vehicle is safely secured."
+  },
+  {
+    "question_number": 154,
+    "question": "You have broken down on a two way road. You have warning triangle. It should be displayed",
+    "options": {
+      "a": "On the roof of your vehicle",
+      "b": "At least 150 metres (492 feet) behind your vehicle",
+      "c": "Just behind your vehicle",
+      "d": "At least 45 metres (147 feet) behind"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 27,
+    "category": "Emergency Procedures",
+    "explanation": "Placing the warning triangle at least 45 metres behind gives approaching drivers enough notice to slow down and avoid danger."
+  },
+  {
+    "question_number": 155,
+    "question": "Tractors are often encountered, even on big roads travelling very slowly with a long line of faster vehicles. Whenever you see a Tractor approach in the opposite lane you should expect;",
+    "options": {
+      "a": "The tractor to take your lane",
+      "b": "The driver will wave those behind you to overtake",
+      "c": "One of the vehicles behind it to use the shoulder to overtake",
+      "d": "One of the vehicles behind it to suddenly move into your lane"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 28,
+    "category": "Hazard Awareness",
+    "explanation": "Drivers stuck behind slow-moving tractors may become impatient and attempt risky overtakes, causing vehicles to suddenly enter your lane."
+  },
+  {
+    "question_number": 156,
+    "question": "What advice should you give to a driver who has had a few alcoholic drinks at a party?",
+    "options": {
+      "a": "Have a strong cup of coffee and then drive home",
+      "b": "Drive carefully and slowly",
+      "c": "Wait a short while and then drive home",
+      "d": "Go home by public transport"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 28,
+    "category": "Safe Driving",
+    "explanation": "Alcohol impairs judgement, concentration, and reaction time. Using public transport avoids the risk of driving while impaired."
+  },
+  {
+    "question_number": 157,
+    "question": "You are travelling on a highway, suddenly you notice that you are entering a built up area or town. What speed limit should you use?",
+    "options": {
+      "a": "50 km/p",
+      "b": "30 km/p",
+      "c": "50 km/h",
+      "d": "25 km/h"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 28,
+    "category": "Speed Limits",
+    "explanation": "Built-up areas have more pedestrians, cyclists, and traffic activity, so a lower speed limit improves safety for all road users."
+  },
+  {
+    "question_number": 158,
+    "question": "A vehicle travelling on a highway with thinking distance of 18 metres and braking distance of 55 metres will have a total stopping distance of:",
+    "options": {
+      "a": "73 metres",
+      "b": "73 Kilometres",
+      "c": "990 metres",
+      "d": "3.0 metres"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 28,
+    "category": "Safe Driving",
+    "explanation": "Total stopping distance equals thinking distance plus braking distance. Drivers need enough space to react and stop safely."
+  },
+  {
+    "question_number": 159,
+    "question": "You are on a well-lit motorway at night. You must use;",
+    "options": {
+      "a": "Only your sidelights",
+      "b": "Your headlights Always",
+      "c": "Headlights only in bad weather",
+      "d": "Always use rear fog lights"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 28,
+    "category": "Motorway Rules",
+    "explanation": "On a well-lit motorway, sidelights may be sufficient where permitted, ensuring visibility without unncessary glare from stronger lights."
+  },
+  {
+    "question_number": 160,
+    "question": "Some Informatory signs are indicated with the following:",
+    "options": {
+      "a": "Triangle with red boundaries",
+      "b": "Rectangle with green back ground and white arrows",
+      "c": "Octagonal board with yellow back ground",
+      "d": "Hexagonal board with pink colour"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 28,
+    "category": "Road Signs",
+    "explanation": "Informational signs typically use green rectangular backgrounds with white symbols or arrows to provide guidance and route information."
+  },
+  {
+    "question_number": 161,
+    "question": "How would you react to drivers who appear to be inexperienced?",
+    "options": {
+      "a": "Sound your horn to warn them of your presence",
+      "b": "Be patient and prepare for them to react more slowly",
+      "c": "Overtake them as soon as possible",
+      "d": "Flash you headlights to indicate your reaction"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 28,
+    "category": "Safe Driving",
+    "explanation": "Inexperienced drivers may hesitate or make mistakes. Patience and anticipation help you respond safely and reduce unnecessary pressure on them."
+  },
+  {
+    "question_number": 162,
+    "question": "You are driving behind a large goods vehicle. It signals left but steers to the right. You should;",
+    "options": {
+      "a": "Slow down and let the vehicle turn",
+      "b": "Drive on, keeping to the left",
+      "c": "Maintain your speed and sound your horn",
+      "d": "Overtake on the right of it"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 28,
+    "category": "Hazard Awareness",
+    "explanation": "Large vehicles often swing right before turning left to create space. Slowing down prevents conflicts and allows the turn safely."
+  },
+  {
+    "question_number": 163,
+    "question": "Before you make a U-turn on the road, you should;",
+    "options": {
+      "a": "Select a higher gear than normal",
+      "b": "Signal so that other drivers can slow down for you",
+      "c": "Look over your shoulder for a final check",
+      "d": "Give an arm signal as well as using your indicators"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 29,
+    "category": "Traffic Rules",
+    "explanation": "Using indicators and an arm signal gives maximum warning to other road users, helping them anticipate your U-turn safely."
+  },
+  {
+    "question_number": 164,
+    "question": "How does alcohol affect your driving skills?",
+    "options": {
+      "a": "It improves your co-ordination",
+      "b": "It speeds up you reactions",
+      "c": "It increases your awareness",
+      "d": "It reduces your concentration"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 29,
+    "category": "Safe Driving",
+    "explanation": "Alcohol impairs concentration, judgement, and reaction time, reducing a driver's ability to identify hazards and respond safely."
+  },
+  {
+    "question_number": 165,
+    "question": "You are approaching a zebra crossing. Pedestrians are waiting to cross. You should;",
+    "options": {
+      "a": "Give way to the elderly and infirm only",
+      "b": "Wave at them to cross the road",
+      "c": "Use your headlights to indicate they can cross",
+      "d": "Slow down and prepare to stop"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 29,
+    "category": "Pedestrian Crossings",
+    "explanation": "Pedestrians waiting at a zebra crossing may step onto the road. Slowing down and preparing to stop ensures their safety."
+  },
+  {
+    "question_number": 166,
+    "question": "Parking lights are switched on when;",
+    "options": {
+      "a": "The sun is very bright during the day",
+      "b": "The road is very dark",
+      "c": "The moon is very bright at its best",
+      "d": "Visibility is poor"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 29,
+    "category": "Hazard Awareness",
+    "explanation": "Parking lights improve vehicle visibility in poor conditions, helping other road users detect your vehicle more easily."
+  },
+  {
+    "question_number": 167,
+    "question": "When you apply your brakes in an emergency, you are not thrown off the vehicle because;",
+    "options": {
+      "a": "The tyres are good",
+      "b": "The steering wheel is power driven",
+      "c": "The seat belt protects you",
+      "d": "The seats are firmly secured"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 29,
+    "category": "Safe Driving",
+    "explanation": "A seat belt restrains occupants during sudden braking, preventing them from being thrown forward and reducing injury risk."
+  },
+  {
+    "question_number": 168,
+    "question": "When following a large vehicle you should keep well back because;",
+    "options": {
+      "a": "It enables you to turn more quickly",
+      "b": "It helps the large vehicle to stop more easily",
+      "c": "It helps you to keep out of the wind",
+      "d": "It allows the driver to see you in his mirrors"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 29,
+    "category": "Safe Driving",
+    "explanation": "Keeping well back increases the chance of being visible in the large vehicle's mirrors and reduces the risk of remaining unseen."
+  },
+  {
+    "question_number": 169,
+    "question": "You are driving on a wet road. You have to stop your vehicle in an emergency. You should;",
+    "options": {
+      "a": "Apply the handbrake and footbrake together",
+      "b": "Keep both hands firmly on the wheel and apply the brakes gradually",
+      "c": "Give an arm signal",
+      "d": "Select reverse gear"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 29,
+    "category": "Emergency Procedures",
+    "explanation": "Keeping both hands on the wheel and braking progressively helps maintain steering control and reduces the risk of skidding on wet roads."
+  },
+  {
+    "question_number": 170,
+    "question": "You are driving in town. Ahead of you is a bus waiting at a bus stop. Which one of the following should you do?",
+    "options": {
+      "a": "Be prepared to speed off if the bus suddenly moves off",
+      "b": "Continue at the same speed but sound your horn as a warning",
+      "c": "Pass the bus a quickly as you can",
+      "d": "Watch carefully for the sudden appearance of pedestrians"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 29,
+    "category": "Hazard Awareness",
+    "explanation": "Pedestrians may emerge unexpectedly from in front of or behind the bus, so extra caution is needed when passing bus stops."
+  },
+  {
+    "question_number": 171,
+    "question": "If a vehicle approach you on the wrong side of the road, it will be safe to;",
+    "options": {
+      "a": "Alert the driver with your horn and pull to the right as far as possible",
+      "b": "Warn the driver with your lights and keep to your lane",
+      "c": "Sound your horn and keep to your lane",
+      "d": "Warn the driver with your lights and change your lane"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 30,
+    "category": "Emergency Procedures",
+    "explanation": "Sounding the horn warns the driver, while moving as far right as safely possible increases separation and helps avoid a collision."
+  },
+  {
+    "question_number": 172,
+    "question": "For safety reasons, it is better to pay particular attention to one the following;",
+    "options": {
+      "a": "Inside lights and seat covers",
+      "b": "Lights, brakes, steering, tyres and direction indicators",
+      "c": "Roadworthy stickers only",
+      "d": "Road worthy and Insurance stickers"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 30,
+    "category": "Vehicle Handling",
+    "explanation": "Lights, brakes, steering, tyres, and indicators are essential safety systems that directly affect vehicle control, visibility, and roadworthiness."
+  },
+  {
+    "question_number": 173,
+    "question": "Before moving off into a road, a driver must observe one of the following:-",
+    "options": {
+      "a": "Look around, look into the mirrors and signal.",
+      "b": "Look around and wear seat belts",
+      "c": "Hoot and signal other vehicles to stop",
+      "d": "Move to make other road users change direction."
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 30,
+    "category": "Traffic Rules",
+    "explanation": "Checking surroundings, mirrors, and signalling ensures other road users are seen and informed before you safely enter the traffic flow."
+  },
+  {
+    "question_number": 174,
+    "question": "If the legal permissible alcohol level for driving is 0.08 mg, how many bottles of chilled, sparkling star can you take to stay in range?",
+    "options": {
+      "a": "One",
+      "b": "Half glass",
+      "c": "One full glass",
+      "d": "None of the above"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 30,
+    "category": "Safe Driving",
+    "explanation": "Alcohol affects people differently, making it impossible to guarantee a safe amount. The safest choice is not to drink before driving."
+  },
+  {
+    "question_number": 175,
+    "question": "You are driving on a motorway. The traffic ahead is slowing down sharply because of an accident. How could you warn following traffic?",
+    "options": {
+      "a": "Briefly use the hazard warning lights",
+      "b": "Switch on the hazard warning lights continuously",
+      "c": "Switch on the headlights continuously",
+      "d": "Briefly use the rear fog lights"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 30,
+    "category": "Motorway Rules",
+    "explanation": "Briefly using hazard warning lights alerts drivers behind to sudden slowing traffic, giving them extra time to react safely."
+  },
+  {
+    "question_number": 176,
+    "question": "Which of these, if allowed to get low, could cause road crash?",
+    "options": {
+      "a": "Antifreeze level",
+      "b": "Brake fluid level",
+      "c": "Radiator coolant level",
+      "d": "Battery water level"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 30,
+    "category": "Vehicle Handling",
+    "explanation": "Low brake fluid can reduce braking effectiveness or cause brake failure, greatly increasing the risk of losing control and crashing."
+  },
+  {
+    "question_number": 177,
+    "question": "You are driving on a wet road.  How can you tell if your vehicles tyres are losing grip.",
+    "options": {
+      "a": "The engine will stall",
+      "b": "The steering will feel very heavy",
+      "c": "The steering will feel very light",
+      "d": "The engine noise will increase"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 30,
+    "category": "Vehicle Handling",
+    "explanation": "When tyres lose grip on a wet road, steering becomes unusually light, indicating reduced contact and control over the vehicle."
+  },
+  {
+    "question_number": 178,
+    "question": "You are driving down a steep hill. Why could keeping the clutch down or selecting neutral for too long be dangerous?",
+    "options": {
+      "a": "Fuel consumption will be higher",
+      "b": "It will wear tyres out",
+      "c": "Your vehicle will pick up speed",
+      "d": "It will damage the engine"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 30,
+    "category": "Hazard Awareness",
+    "explanation": "Keeping the clutch down or selecting neutral removes engine braking, allowing the vehicle to gain speed and reducing control.."
+  },
+  {
+    "question_number": 179,
+    "question": "Where may you overtake on a one-way street?",
+    "options": {
+      "a": "Only on the left-hand side",
+      "b": "Overtaking is not allowed",
+      "c": "On either sides of the road",
+      "d": "Only on the right-hand side"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 31,
+    "category": "Traffic Rules",
+    "explanation": "On a one-way street, overtaking on the left may be permitted because all traffic moves in the same direction without opposing vehicles."
+  },
+  {
+    "question_number": 180,
+    "question": "While driving, a warning light on your instrument panel comes on. You should;",
+    "options": {
+      "a": "Continue if the engine sounds alright",
+      "b": "Hope that it is just a temporary electrical fault",
+      "c": "Check out the problem quickly and safely",
+      "d": "Deal with the problem when there is enough time"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 31,
+    "category": "Vehicle Handling",
+    "explanation": "Warning lights indicate potential faults. Investigating the issue promptly helps prevent mechanical failure and reduces the risk of unsafe driving."
+  },
+  {
+    "question_number": 181,
+    "question": "Which of the following will you do to ensure safety on the road?",
+    "options": {
+      "a": "Allow others to overtake when they want to",
+      "b": "Wave other vehicles to overtake you when they intend to",
+      "c": "When you race with other vehicles on the motorway",
+      "d": "Signal and overtake the lead vehicle on the right"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 31,
+    "category": "Safe Driving",
+    "explanation": "Allowing faster vehicles to overtake safely reduces frustration, discourages risky manoeuvres, and helps maintain smooth and safe traffic flow."
+  },
+  {
+    "question_number": 182,
+    "question": "You are on a road that is only wide enough for one vehicle. There is a car coming towards you. What should you do?",
+    "options": {
+      "a": "Pull into a passing space on your left",
+      "b": "Force the other driver to reverse",
+      "c": "Pull into a passing space if your vehicle is wider",
+      "d": "Pull into a passing space on your right"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 31,
+    "category": "Traffic Rules",
+    "explanation": "Using a passing space allows both vehicles to proceed safely on a narrow road, reducing the risk of conflict or collision."
+  },
+  {
+    "question_number": 183,
+    "question": "Road signs are mounted at vantage points on the road to",
+    "options": {
+      "a": "Beautify the environment",
+      "b": "Indicate the end of a motorway",
+      "c": "Guide drivers of what to do",
+      "d": "Warn pedestrians of vehicular traffic"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 31,
+    "category": "Road Signs",
+    "explanation": "Road signs provide instructions, warnings, and guidance, helping drivers make safe decisions and comply with traffic regulations."
+  },
+  {
+    "question_number": 184,
+    "question": "You are approaching traffic lights that have been on green for some time. You should;",
+    "options": {
+      "a": "Accelerate hard",
+      "b": "Maintain your speed",
+      "c": "Brake hard",
+      "d": "Be ready to stop"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 31,
+    "category": "Hazard Awareness",
+    "explanation": "A green light may soon change. Being prepared to stop helps you react safely to changing traffic signals."
+  },
+  {
+    "question_number": 185,
+    "question": "You are approaching a roundabout, which of these rules should you observe.",
+    "options": {
+      "a": "Give way to traffic on your right",
+      "b": "Give way to articulated vehicles",
+      "c": "Give way to traffic on your left",
+      "d": "Give way to motor cycles and taxis"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 31,
+    "category": "Traffic Rules",
+    "explanation": "At roundabouts, drivers must give way to traffic already circulating. This helps maintain smooth flow and reduces collision risk."
+  },
+  {
+    "question_number": 186,
+    "question": "You wish to turn right ahead. Why should you take up the correct position in good time?",
+    "options": {
+      "a": "To allow drivers to pass you on the right",
+      "b": "To give a better view into the road that youre joining",
+      "c": "To help other road users know what you intend to do",
+      "d": "To allow other drivers to pull out in front of you"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 31,
+    "category": "Traffic Rules",
+    "explanation": "Positioning early clearly communicates your intention to other road users, helping them anticipate your manoeuvre and react safely."
+  },
+  {
+    "question_number": 187,
+    "question": "Your vehicle is fitted with a hand-held telephone. To use the telephone, you should;",
+    "options": {
+      "a": "Be particularly careful at junctions",
+      "b": "Reduce your speed",
+      "c": "Find a safe place to stop",
+      "d": "Steer the vehicle with one hand"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 32,
+    "category": "Safe Driving",
+    "explanation": "Using a phone while driving can distract attention. Stopping in a safe place allows full focus on the conversation."
+  },
+  {
+    "question_number": 188,
+    "question": "Driving with under-inflated tyres can affect;",
+    "options": {
+      "a": "Engine thermometer",
+      "b": "Fuel consumption",
+      "c": "Oil pressure",
+      "d": "Brake Pedal"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 32,
+    "category": "Vehicle Handling",
+    "explanation": "Under-inflated tyres increase rolling resistance, forcing the engine to work harder and causing higher fuel consumption."
+  },
+  {
+    "question_number": 189,
+    "question": "Wherever you find any of these inscriptions along a road: NO PARKING, NO WAITING or NO STANDING. You can;",
+    "options": {
+      "a": "Stop briefly",
+      "b": "Stop for a longer time",
+      "c": "None of the above",
+      "d": "Park your vehicle"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 32,
+    "category": "Road Signs",
+    "explanation": "These signs prohibit parking, waiting, or standing. You may only stop briefly when necessary and where traffic laws permit."
+  },
+  {
+    "question_number": 190,
+    "question": "To drive on the road, learners MUST;",
+    "options": {
+      "a": "Have no penalty points on their license",
+      "b": "Have taken professional instruction",
+      "c": "Apply for a driving test within 12 months",
+      "d": "Have a signed and valid learner license"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 32,
+    "category": "Traffic Rules",
+    "explanation": "A valid learner licence is a legal requirement that authorizes a learner to drive while gaining supervised driving experience."
+  },
+  {
+    "question_number": 191,
+    "question": "At a level Crossing you noticed no train in sight. You should;",
+    "options": {
+      "a": "Speed off",
+      "b": "Stop completely",
+      "c": "Slow down",
+      "d": "Drive on with care"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 32,
+    "category": "Hazard Awareness",
+    "explanation": "Even when no train is visible, drivers should proceed carefully because trains can approach quickly and may be difficult to spot."
+  },
+  {
+    "question_number": 192,
+    "question": "When driving with low beam light, you will be able to see not more than 40 metres ahead. Which of the following beams will you prefer to use when driving behind another vehicle?",
+    "options": {
+      "a": "Back Beam",
+      "b": "High Beam",
+      "c": "Low Beam",
+      "d": "Side Beam"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 32,
+    "category": "Safe Driving",
+    "explanation": "Low beam headlights reduce glare for drivers ahead, improving safety while still providing sufficient visibility for following traffic."
+  },
+  {
+    "question_number": 193,
+    "question": "Which of the following do you do when following a truck on steep hill?",
+    "options": {
+      "a": "Adjust your mirrors",
+      "b": "Maintain a safe speed and signal other rushing drivers to overtake",
+      "c": "Maintain your speed",
+      "d": "Maintain a safe gap"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 32,
+    "category": "Safe Driving",
+    "explanation": "Maintaining a safe gap improves visibility, provides more reaction time, and allows for the truck's slower speed on steep hills."
+  },
+  {
+    "question_number": 194,
+    "question": "If you enter a vehicle for the first time, the very first thing you should do is;",
+    "options": {
+      "a": "Adjust your seat and steering wheel",
+      "b": "Adjust the windows",
+      "c": "Adjust the gear",
+      "d": "Adjust the pedals"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 32,
+    "category": "Vehicle Handling",
+    "explanation": "Adjustiing the seat and steering wheel first ensures a comfortable driving position, proper control, and easy access to vehicle controls."
+  },
+  {
+    "question_number": 195,
+    "question": "If you approach a school bus waiting to pick or alight school children, what should you do?",
+    "options": {
+      "a": "Drive past the bus in another lane",
+      "b": "Stop as long and allow the children right of way",
+      "c": "Stop, then proceed when there are no children crossing",
+      "d": "Slow down and look for children crossing the street"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 33,
+    "category": "Pedestrian Crossings",
+    "explanation": "Children may cross unpredictably when boarding or leaving a school bus. Stopping gives them priority and greatly improves safety."
+  },
+  {
+    "question_number": 196,
+    "question": "When taking the second exit in a roundabout, you should:",
+    "options": {
+      "a": "Indicate right before entering, indicate left when passing the second exit",
+      "b": "Indicate right before entering, then left at first exit",
+      "c": "Indicate left before entering and continue indicating until you exit",
+      "d": "None of the above"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 33,
+    "category": "Traffic Rules",
+    "explanation": "For the second exit (typically straight ahead), drivers usually signal left only when preparing to leave the roundabout, not before entering."
+  },
+  {
+    "question_number": 197,
+    "question": "Parking very close alongside another vehicle is termed tailgating.",
+    "options": {
+      "a": "True",
+      "b": "False",
+      "c": "Not in all cases",
+      "d": "None of the above"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 33,
+    "category": "Traffic Rules",
+    "explanation": "Tailgating means following another moving vehicle too closely. Parking beside a vehicle is a different driving situation entirely."
+  },
+  {
+    "question_number": 198,
+    "question": "What should you use your horn for?",
+    "options": {
+      "a": "To alert others of your presence",
+      "b": "To allow you right of way",
+      "c": "To indicate your annoyance",
+      "d": "To greet other road users"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 33,
+    "category": "Traffic Rules",
+    "explanation": "The horn is a warning device used to alert others to your presence and help prevent potential hazards."
+  },
+  {
+    "question_number": 199,
+    "question": "When you approach a road where there are road humps (Ramps). What should you do?",
+    "options": {
+      "a": "Reduce speed throughout",
+      "b": "Accelerate quickly",
+      "c": "Drive slowly at school times only",
+      "d": "Keep to maximum legal speed"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 33,
+    "category": "Safe Driving",
+    "explanation": "Road humps are designed to slow traffic. Reducing speed improves control, protect the vehicle, and enhances pedestrian safety."
+  },
+  {
+    "question_number": 200,
+    "question": "If your vehicle breaks down in traffic or on the highway what would you do?",
+    "options": {
+      "a": "Lock the doors and leave the vehicle till traffic eases up.",
+      "b": "Get your vehicle off the road and place an Advance Warning Triangle at 46 metres to the front and rear.",
+      "c": "Put leaves behind the broken down vehicle.",
+      "d": "Put your hazard lights on and leave the vehicle where the breakdown occurred."
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 33,
+    "category": "Emergency Procedures",
+    "explanation": "Moving the vehicle off the roadway and placing warning triangles alerts approaching drivers early, reducing collision risk and improving safety."
+  },
+  {
+    "question_number": 201,
+    "question": "You are on a well-lit motorway at night. You must;",
+    "options": {
+      "a": "Use only your sidelights",
+      "b": "Always use your headlights",
+      "c": "Use headlights only in bad weather",
+      "d": "Always use rear fog lights"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 33,
+    "category": "Motorway Rules",
+    "explanation": "On a well-lit motorway, sidelights may be sufficient where permitted, ensuring visibility without causing unnecessary glare to other drivers."
+  },
+  {
+    "question_number": 202,
+    "question": "You are travelling along a road that has just been graveled with loose gravels, which of the of following must you pay particular attention to;",
+    "options": {
+      "a": "Red and white railing along the road",
+      "b": "Vehicles overtaking you",
+      "c": "Dazzle indicators",
+      "d": "Vehicles parked on the shoulder of the road"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 34,
+    "category": "Hazard Awareness",
+    "explanation": "Loose gravel reduces tyre grip and can cause stones to be thrown up. Extra caution helps maintain control and avoid hazards."
+  },
+  {
+    "question_number": 203,
+    "question": "You should never wave people to cross at pedestrian crossings because;",
+    "options": {
+      "a": "There may be another vehicle coming",
+      "b": "They may not be looking at you",
+      "c": "They may not be ready to cross",
+      "d": "It is safer for you to carry on"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 34,
+    "category": "Pedestrian Crossings",
+    "explanation": "Another vehicle may be approaching that pedestrians cannot see. Waving them across could place them in unexpected danger."
+  },
+  {
+    "question_number": 204,
+    "question": "Skidding is mainly caused by;",
+    "options": {
+      "a": "The weather",
+      "b": "The driver",
+      "c": "The road",
+      "d": "The vehicle"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 34,
+    "category": "Vehicle Handling",
+    "explanation": "Skidding is often caused by driver actions such as excessive speed, harsh braking, or sudden steering on slippery surfaces."
+  },
+  {
+    "question_number": 205,
+    "question": "You think the driver of the lead vehicle has forgotten to cancel the right side indicator. You should;",
+    "options": {
+      "a": "Flash your lights to alert the driver",
+      "b": "Sound your horn to alert him before you overtake",
+      "c": "Stay behind and not overtake",
+      "d": "Overtake on the left if there is room"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 34,
+    "category": "Hazard Awareness",
+    "explanation": "A forgotten indicator can create uncertainty. Sounding the horn alerts the driver before overtaking, helping reduce the risk of misunderstanding"
+  },
+  {
+    "question_number": 206,
+    "question": "Which of the following should you do before stopping?",
+    "options": {
+      "a": "Sound the horn",
+      "b": "Flash your headlights",
+      "c": "Select a higher gear",
+      "d": "Use the mirrors"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 34,
+    "category": "Safe Driving",
+    "explanation": "Checking mirrors before stopping ensures you are aware of traffic behind, helping prevent sudden braking conflicts and rear-end collision."
+  },
+  {
+    "question_number": 207,
+    "question": "You want to turn right from a junction but your view is restricted by parked vehicles. What should you do?",
+    "options": {
+      "a": "Stop, get out and look along the main road to check",
+      "b": "Sound your horn and pull out if there is no reply",
+      "c": "Stop, and then move slowly until you have a clear view",
+      "d": "Move out quickly, but be prepared to stop"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 34,
+    "category": "Hazard Awareness",
+    "explanation": "Moving forward slowly after stopping improves visibility while maintaining control, allowing you to check for traffic before entering the junction."
+  },
+  {
+    "question_number": 208,
+    "question": "If you are walking with children along a road, protect them by walking;",
+    "options": {
+      "a": "Behind them",
+      "b": "Between them to enable you hold them",
+      "c": "Towards them",
+      "d": "Between him and the traffic"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 34,
+    "category": "Pedestrian Crossings",
+    "explanation": "Walking between children and traffic provides protection, helping prevent them from accidentally stepping into the path of vehicles."
+  },
+  {
+    "question_number": 209,
+    "question": "Which of the following messages will you display on your vehicle to help save lives on our roads?",
+    "options": {
+      "a": "Aids is real",
+      "b": "Don’t jump the red light",
+      "c": "Say a little prayer",
+      "d": "I am a winner"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 34,
+    "category": "Safe Driving",
+    "explanation": "Obeying red traffic lights prevents collisions at intersections and promotes safer behaviour, helping reduce crashes and save lives."
+  },
+  {
+    "question_number": 210,
+    "question": "On a wet road one of the following is seriously affected.",
+    "options": {
+      "a": "Road Signs",
+      "b": "Speed",
+      "c": "Stopping distance",
+      "d": "Visibility"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 35,
+    "category": "Hazard Awareness",
+    "explanation": "Wet roads reduce tyre grip and increase braking distance, meaning vehicles need significantly more space to stop safely."
+  },
+  {
+    "question_number": 211,
+    "question": "For which of the following must a driver allow the two second stopping gap when following?",
+    "options": {
+      "a": "Cars",
+      "b": "Trucks",
+      "c": "Motor bikes",
+      "d": "All the above"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 35,
+    "category": "Safe Driving",
+    "explanation": "The two-second gap should be maintained behind all vehicles, providing enough time to react and stop safely if needed."
+  },
+  {
+    "question_number": 212,
+    "question": "You noticed from your dip stick that your engine oil is above the maximum level. What should you do?",
+    "options": {
+      "a": "Level it to burn to the required level",
+      "b": "Use a hose to drain out the excess oil",
+      "c": "Use it as it",
+      "d": "Drain the excess from the sump"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 35,
+    "category": "Vehicle Handling",
+    "explanation": "Excess engine oil can cause engine damage, increased pressure, and door performance. Draining the surplus restores the correct operating level."
+  },
+  {
+    "question_number": 213,
+    "question": "You are approaching a traffic light; suddenly it changes to amber and keeps flashing. What do you do.?",
+    "options": {
+      "a": "Keep to your speed",
+      "b": "Accelerate to beat the red light",
+      "c": "Proceed when you have crossed the white line",
+      "d": "Proceed if it is safe to do so"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 35,
+    "category": "Road Markings",
+    "explanation": "If you have already crossed the stop line when the signal changes, continue through safely rather than stopping abruptly in the junction."
+  },
+  {
+    "question_number": 214,
+    "question": "Under what conditions can you legally park in front of a driveway?",
+    "options": {
+      "a": "If the driveway leads to your house",
+      "b": "It is never legal to park in front of a driveway",
+      "c": "If you have a break down",
+      "d": "If you are parking for a short moment"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 35,
+    "category": "Safe Driving",
+    "explanation": "Parking in front of a driveway obstructs access for vehicles entering or leaving, creating inconvenience and potential safety hazards."
+  },
+  {
+    "question_number": 215,
+    "question": "On a wet road visibility, can seriously be affected.",
+    "options": {
+      "a": "False",
+      "b": "True",
+      "c": "True but it can be controlled",
+      "d": "Sometimes"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 35,
+    "category": "Hazard Awareness",
+    "explanation": "Wet roads mainly reduce tyre grip and increase stopping distances. Visibility may be affected by rain, not by the we road itself."
+  },
+  {
+    "question_number": 216,
+    "question": "It is very windy. You are about to overtake a motorcyclist. You should allow extra room.",
+    "options": {
+      "a": "True but it can be controlled",
+      "b": "False",
+      "c": "True",
+      "d": "Sometimes"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 35,
+    "category": "Hazard Awareness",
+    "explanation": "Strong winds can make motorcyclists unstable or push them sideways. Extra passing space helps prevent collisions and improves safety."
+  },
+  {
+    "question_number": 217,
+    "question": "Seat belts when used properly protect the occupants of a vehicle. The Seat belts are designed to;",
+    "options": {
+      "a": "Keep the occupants firm in the seat",
+      "b": "Keep the occupants focused",
+      "c": "Make occupants dress dirty",
+      "d": "Prevent occupants been thrown out in an emergency"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 35,
+    "category": "Safe Driving",
+    "explanation": "Seat belts restrain occupants during sudden stops or collisions, reducing the risk of being ejected and suffering serious injuries."
+  },
+  {
+    "question_number": 218,
+    "question": "You are about to travel with your family, your wife decides to drive the family. Whose responsibility is it to ensure that everybody wears seat belt?",
+    "options": {
+      "a": "The Head of the family",
+      "b": "The Husband",
+      "c": "The Wife",
+      "d": "Those in the car"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 36,
+    "category": "Safe Driving",
+    "explanation": "The driver is responsible for ensuring all occupants comply with seat belt requirements before starting the journey, promoting safety for everyone."
+  },
+  {
+    "question_number": 219,
+    "question": "You notice a bus alighting passengers. Why could this be dangerous? Because;",
+    "options": {
+      "a": "Alighting passengers may stop you",
+      "b": "The bus may move after signalling",
+      "c": "Hazard warning lights are not shown",
+      "d": "Alighting passengers may suddenly cross the road"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 36,
+    "category": "Hazard Awareness",
+    "explanation": "Passengers leaving a bus may unexpectedly step into the road from behind or in front of it, creating a serious hazard."
+  },
+  {
+    "question_number": 220,
+    "question": "Why is it not advisable to make U turn on the highways?",
+    "options": {
+      "a": "Traffic travels faster on highways",
+      "b": "Your vehicle may fail you",
+      "c": "Traffic travels slower on highways",
+      "d": "Police Check Point may be ahead"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 36,
+    "category": "Motorway Rules",
+    "explanation": "Highway traffic moves at higher speeds, leaving little time for other drivers to react to a vehicle making a U-turn."
+  },
+  {
+    "question_number": 221,
+    "question": "Before starting your engine your seat should be adjusted for;",
+    "options": {
+      "a": "Arm rest",
+      "b": "Height",
+      "c": "Seat belt tension",
+      "d": "Air ventilation"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 36,
+    "category": "Safe Driving",
+    "explanation": "Proper seat adjustment helps ensure the seat belt fits correctly, allowing effective protection and comfortable control of the vehicle."
+  },
+  {
+    "question_number": 222,
+    "question": "You are driving along a road that has a cycle lane. The lane is marked by a solid white line. This means that during its period of operation;",
+    "options": {
+      "a": "The lane may be used for parking your car",
+      "b": "You may drive in that lane at any time",
+      "c": "You must not drive in that lane",
+      "d": "The lane may be used when necessary"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 36,
+    "category": "Road Markings",
+    "explanation": "A solid white line marking a cycle lane means it is reserved for cyclists, and drivers must not enter it."
+  },
+  {
+    "question_number": 223,
+    "question": "Before moving off into a road, a driver must observe one of the following:-",
+    "options": {
+      "a": "Look around, look into the mirrors and signal.",
+      "b": "Look around, sound your horn and move on",
+      "c": "Move to make other road users change direction.",
+      "d": "Look around and wear seat belts"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 36,
+    "category": "Safe Driving",
+    "explanation": "Checking around, using mirrors, and signalling ensures you are aware of hazards and informs other road users of your intentions."
+  },
+  {
+    "question_number": 224,
+    "question": "When you are moving off from behind a parked car you should;",
+    "options": {
+      "a": "Use all the mirrors on the vehicle",
+      "b": "Look around after moving off",
+      "c": "Give a signal after moving off",
+      "d": "Use the exterior mirrors only"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 36,
+    "category": "Safe Driving",
+    "explanation": "Using all mirrors helps detect approaching vehicles, cyclists, and pedestrians, ensuring it is safe to move back into traffic."
+  },
+  {
+    "question_number": 225,
+    "question": "Which one of these would help to keep you alert during a long journey?",
+    "options": {
+      "a": "Making regular stops for drinks",
+      "b": "Drive fast to finish your journey early",
+      "c": "Avoid the motorway and use a country side road",
+      "d": "Make sure you get plenty of fresh air"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 36,
+    "category": "Safe Driving",
+    "explanation": "Fresh air can help reduce drowsiness and improve alertness, making it easier to stay focused during long journeys."
+  },
+  {
+    "question_number": 226,
+    "question": "An elderly persons driving ability could be affected because they may be unable to;",
+    "options": {
+      "a": "Obtain car insurance",
+      "b": "Give signals correctly",
+      "c": "React very quickly",
+      "d": "Understand road signs"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 37,
+    "category": "Hazard Awareness",
+    "explanation": "Age-related changes can slow reaction times, making it harder to respond quickly to hazards and changing traffic conditions."
+  },
+  {
+    "question_number": 227,
+    "question": "You are approaching a zebra crossing and pedestrians are waiting to cross. What should you do?",
+    "options": {
+      "a": "Give way to the elderly and infirm only",
+      "b": "Slow down and be prepared to stop",
+      "c": "Wave at them to cross the road",
+      "d": "Flash your headlights to indicate they can cross"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 37,
+    "category": "Pedestrian Crossings",
+    "explanation": "Pedestrians waiting at a zebra crossing may step onto the road. Slowing down and preparing to stop helps ensure their safety."
+  },
+  {
+    "question_number": 228,
+    "question": "When should you BEST check the engine oil level?",
+    "options": {
+      "a": "Before a long journey",
+      "b": "When the engine is hot",
+      "c": "Every 6000 miles",
+      "d": "Early in the morning"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 37,
+    "category": "Vehicle Handling",
+    "explanation": "Checking engine oil early in the morning, before driving, gives an accurate reading because the oil has settled completely."
+  },
+  {
+    "question_number": 239,
+    "question": "Mandatory signs always give;",
+    "options": {
+      "a": "The width of the road",
+      "b": "The radius of the road",
+      "c": "The length of the road",
+      "d": "The direction to follow"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 37,
+    "category": "Road Signs",
+    "explanation": "Mandatory signs provide instructions that drivers must follow, guiding movement and helping maintain safe and orderly traffic flow."
+  },
+  {
+    "question_number": 230,
+    "question": "The wiper on a vehicle assists the driver to see;",
+    "options": {
+      "a": "The rear of the vehicle clearly during the day",
+      "b": "His side of the vehicle clearly when raining",
+      "c": "Through the windscreen when raining",
+      "d": "All directions clearly during heavy fog"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 37,
+    "category": "Vehicle Handling",
+    "explanation": "Windscreen wipers clear rain, improving visibility through the windscreen and helping drivers see the road safely."
+  },
+  {
+    "question_number": 231,
+    "question": "The main cause of brake fade is;",
+    "options": {
+      "a": "The brake overheating",
+      "b": "Air in the fluid",
+      "c": "The brakes are out of adjustment",
+      "d": "Oil on the brake"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 37,
+    "category": "Vehicle Handling",
+    "explanation": "Brake fade occurs when excessive heat reduces braking effectiveness, making it harder for the vehicle to slow or stop."
+  },
+  {
+    "question_number": 232,
+    "question": "You are approaching a roundabout, which of these rules should you observe.",
+    "options": {
+      "a": "Give way to traffic on your right",
+      "b": "Give way to traffic on your left",
+      "c": "Give way to motor cycles and taxis",
+      "d": "Give way to articulated vehicles"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 37,
+    "category": "Traffic Rules",
+    "explanation": "Drivers must give way to traffic already on the roundabout, helping maintain smooth traffic flow and reducing collision risks."
+  },
+  {
+    "question_number": 233,
+    "question": "How can you use the engine of your vehicle to reduce its speed?",
+    "options": {
+      "a": "By changing to a lower gear",
+      "b": "By selecting reverse gear",
+      "c": "By selecting neutral gear",
+      "d": "By changing to a higher gear"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 37,
+    "category": "Vehicle Handling",
+    "explanation": "Changing to a lower gear increases engine braking, helping the vehicle slow down safely while reducing reliance on the brakes."
+  },
+  {
+    "question_number": 234,
+    "question": "You are following a car driven by an elderly driver. You should;",
+    "options": {
+      "a": "Expect the driver to drive badly",
+      "b": "Flash your lights and overtake",
+      "c": "Stay very close behind but be careful",
+      "d": "Be aware that the drivers reaction may not be as fast as yours"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 38,
+    "category": "Hazard Awareness",
+    "explanation": "Older drivers may react more slowly to changing road conditions. Allowing extra space and patience helps maintain safety for everyone."
+  },
+  {
+    "question_number": 235,
+    "question": "You enter a road where there are road humps. What should you do?",
+    "options": {
+      "a": "Drive slowly at school times only",
+      "b": "Maintain a reduced speed throughout",
+      "c": "Accelerate quickly between each one",
+      "d": "Always keep to the maximum legal speed"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 38,
+    "category": "Safe Driving",
+    "explanation": "Road humps are traffic-calming measures. Maintaining a reduced speed throughout improves vehicle control and protects pedestrians and other road users."
+  },
+  {
+    "question_number": 236,
+    "question": "Where may you overtake on a one-way street?",
+    "options": {
+      "a": "Only on the left-hand side",
+      "b": "Overtaking is not allowed",
+      "c": "Either on the right or the left",
+      "d": "Only on the right-hand side"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 38,
+    "category": "Traffic Rules",
+    "explanation": "On a one-way street, overtaking on the left may be permitted because all vehicles travel in the same direction."
+  },
+  {
+    "question_number": 237,
+    "question": "Which of these should you use your hazard warning lights for?",
+    "options": {
+      "a": "When you are parking in a restricted area",
+      "b": "When only stopping for a short time",
+      "c": "To warn following traffic of a hazard behind",
+      "d": "When you are temporarily obstructing traffic"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 38,
+    "category": "Emergency Procedures",
+    "explanation": "Hazard warning lights alert other road users that your vehicle is creating an obstruction, giving them time to slow down safely."
+  },
+  {
+    "question_number": 238,
+    "question": "How would you react to drivers who appear to be inexperienced?",
+    "options": {
+      "a": "Overtake them as soon as possible",
+      "b": "Be patient and prepare for them to react more slowly",
+      "c": "Flash you headlights to indicate that it is safe for them to go",
+      "d": "Sound your horn to warn them of your presence"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 38,
+    "category": "Safe Driving",
+    "explanation": "Inexperienced drivers may hesitate or make unexpected decisions. Patience and anticipation help you respond safely and avoid unnecessary pressure."
+  },
+  {
+    "question_number": 239,
+    "question": "Tractors are often encountered, even on big roads travelling very slowly with a long line of faster vehicles. Whenever you see a Tractor approach in the opposite lane you should expect;",
+    "options": {
+      "a": "The tractor to take your lane",
+      "b": "One of the vehicles behind it to use the shoulder to overtake",
+      "c": "One of the vehicles behind it to suddenly move into your lane",
+      "d": "The driver will wave those behind you to overtake"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 38,
+    "category": "Hazard Awareness",
+    "explanation": "Drivers trapped behind a slow-moving tractor may attempt risky overtakes, causing vehicles to suddenly enter your lane unexpectedly."
+  },
+  {
+    "question_number": 240,
+    "question": "Which is the most appropriate gear for descending a steep hill?",
+    "options": {
+      "a": "Third Gear",
+      "b": "Second Gear",
+      "c": "First Gear",
+      "d": "Neutral position"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 38,
+    "category": "Vehicle Handling",
+    "explanation": "First gear provides maximum engine braking, helping control speed on steep descents and reducing the risk of brake overheating."
+  },
+  {
+    "question_number": 241,
+    "question": "The triangular sign with a Cross warns you of;",
+    "options": {
+      "a": "A Level Crossing ahead",
+      "b": "A Church ahead",
+      "c": "A Cross Road ahead",
+      "d": "Pedestrian Crossing ahead"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 38,
+    "category": "Road Signs",
+    "explanation": "A triangular sign with a cross warns of a crossroad ahead, where traffic may join or cross your path."
+  },
+  {
+    "question_number": 242,
+    "question": "You notice a Pedestrian crossing the road without noticing your presence. You should;",
+    "options": {
+      "a": "Horn to alert him",
+      "b": "Wave him to cross",
+      "c": "Approach with care",
+      "d": "Stop for him to cross"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 39,
+    "category": "Pedestrian Crossings",
+    "explanation": "If a pedestrian is unaware of your presence, stopping allows them to cross safely and prevents a potential collision"
+  },
+  {
+    "question_number": 243,
+    "question": "If in the course of driving, it becomes necessary to cross traffic, you should ensure one of the following;",
+    "options": {
+      "a": "You are in the middle lane",
+      "b": "Cross with care",
+      "c": "Cross immediately",
+      "d": "Beware of the size and weight of your vehicle"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 39,
+    "category": "Traffic Rules",
+    "explanation": "Crossing traffic requires careful observation, proper judgement, and patience to ensure the manoeuvre can be completed safely."
+  },
+  {
+    "question_number": 244,
+    "question": "When your vehicle is involved in an accident, which of the following do you do first?",
+    "options": {
+      "a": "Mark the position of your vehicle and clear off the road",
+      "b": "Try to find the cause of the accident",
+      "c": "Call the police",
+      "d": "None of the above"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 39,
+    "category": "Emergency Procedures",
+    "explanation": "Marking the vehicle's position and clearing the road helps prevent further collisions, protects other road users, and preserves accident information."
+  },
+  {
+    "question_number": 245,
+    "question": "On a wet road you always have to apply your brakes gently to avoid one of the following;",
+    "options": {
+      "a": "Proper control of the vehicle",
+      "b": "Skidding",
+      "c": "Falling",
+      "d": "Damage to your tyres"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 39,
+    "category": "Vehicle Handling",
+    "explanation": "Gentle braking helps maintain tyre grip on wet roads, reducing the risk of skidding and loss of vehicle control."
+  },
+  {
+    "question_number": 246,
+    "question": "You are driving a slow moving vehicle on a narrow road. When traffic wishes to overtake, you should;",
+    "options": {
+      "a": "Take no action",
+      "b": "Park off the road",
+      "c": "Stop and wave them on",
+      "d": "Pull in safely as soon as you can"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 39,
+    "category": "Traffic Rules",
+    "explanation": "Maintain your course and speed safely. Do not stop or wave others on, as overtaking decisions are the responsibility of the overtaking driver."
+  },
+  {
+    "question_number": 247,
+    "question": "At an accident scene, if causalities are unconscious and bleeding you should first use the ABC of first aid to check the victim. What does the ABC mean?",
+    "options": {
+      "a": "Airway, Bleeding, Conscious effort",
+      "b": "Airway, Breathing, Circulation",
+      "c": "Airway, Breathing, Care",
+      "d": "None of the above"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 39,
+    "category": "Emergency Procedures",
+    "explanation": "ABC stands for Airway, Breathing, and Circulation. The vital checks used to assess and prioritize life-threatening conditions in first aid."
+  },
+  {
+    "question_number": 248,
+    "question": "A driver should look _____ahead of the vehicle while driving.",
+    "options": {
+      "a": "25 seconds",
+      "b": "510 seconds",
+      "c": "10 kilometres",
+      "d": "12-15 seconds"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 39,
+    "category": "Safe Driving",
+    "explanation": "Looking 12-15 seconds ahead helps drivers identify hazards early, plan actions, and respond safely to changing road conditions."
+  },
+  {
+    "question_number": 249,
+    "question": "You should never wave people to cross at pedestrian crossings because;",
+    "options": {
+      "a": "There may be another vehicle coming",
+      "b": "They may not be ready to cross",
+      "c": "It is safer for you to carry on",
+      "d": "They may not be looking"
+    },
+    "correct_answer": "a",
+    "image": null,
+    "page": 40,
+    "category": "Pedestrian Crossings",
+    "explanation": "Another vehicle may be approaching that pedestrians cannot see. Waving them across could place them directly in danger"
+  },
+  {
+    "question_number": 250,
+    "question": "You have been convicted of driving whilst unfit through alcohol or drugs.  Which one of the following would be affected?",
+    "options": {
+      "a": "Road fund licence",
+      "b": "Insurance premiums",
+      "c": "Driving licence",
+      "d": "Vehicle test certificate"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 40,
+    "category": "Safe Driving",
+    "explanation": "A conviction for driving under the influence increases risk in the eyes of insurers, often resulting in higher insurance premiums."
+  },
+  {
+    "question_number": 251,
+    "question": "When traffic lights are out of order, who has priority?",
+    "options": {
+      "a": "Traffic going straight on",
+      "b": "Traffic turning left",
+      "c": "Nobody",
+      "d": "Traffic turning right"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 40,
+    "category": "Traffic Rules",
+    "explanation": "When traffic lights fail, no direction has automatic priority. All drivers must proceed cautiously, observe others, and negotiate the junction safely."
+  },
+  {
+    "question_number": 252,
+    "question": "Seat belts when used properly protect the occupants of a vehicle. The Seat belts are designed to;",
+    "options": {
+      "a": "Keep the occupants firm in the seat",
+      "b": "Keep the occupants focused",
+      "c": "Make occupants dress dirty",
+      "d": "Prevent occupants been thrown out in an emergency"
+    },
+    "correct_answer": "d",
+    "image": null,
+    "page": 40,
+    "category": "Safe Driving",
+    "explanation": "Seat belts restrain occupants during sudden stops or collisions, preventing ejection from the vehicle and reducing the risk of serious injury."
+  },
+  {
+    "question_number": 253,
+    "question": "In which of these situations should you avoid overtaking?",
+    "options": {
+      "a": "Just after a bend",
+      "b": "On a one-way street",
+      "c": "Approaching a pot hole in the road",
+      "d": "On a 30 km/ph road"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 40,
+    "category": "Hazard Awareness",
+    "explanation": "Avoid overtaking near a pothole because other vehicles may suddenly swerve or slow down, increasing the risk of collision."
+  },
+  {
+    "question_number": 254,
+    "question": "Your vehicle breaks down on a major road and someone offers to tow it to nearest mechanic shop, which of the following should you use?",
+    "options": {
+      "a": "A Strong Rope",
+      "b": "Any of the above",
+      "c": "Metal Bar",
+      "d": "Conveyor Chain"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 40,
+    "category": "Emergency Procedures",
+    "explanation": "A metal bar provides a stronger, more secure connection during towing, reducing the risk of separation and improving vehicle control."
+  },
+  {
+    "question_number": 255,
+    "question": "Which of the following is at risk of not being seen as you reverse?",
+    "options": {
+      "a": "The driver",
+      "b": "The Ground",
+      "c": "A Child",
+      "d": "None of the above"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 40,
+    "category": "Hazard Awareness",
+    "explanation": "Children are small and can easily be hidden in blind spots, making them especially difficult to see when reversing."
+  },
+  {
+    "question_number": 256,
+    "question": "Which of the following will you consider as the basic function of a vehicles suspension system?",
+    "options": {
+      "a": "It keeps the cars electrical system in good shape",
+      "b": "It helps keep the brake pads in good shape",
+      "c": "It keeps the cars wheels in firm contact with the road",
+      "d": "All the above"
+    },
+    "correct_answer": "c",
+    "image": null,
+    "page": 40,
+    "category": "Vehicle Handling",
+    "explanation": "The suspension system keeps tyres firmly in contact with the road, improving stability, steering control, comfort, and braking performance."
+  },
+  {
+    "question_number": 257,
+    "question": "Cross a clear road quickly by;",
+    "options": {
+      "a": "Running across the road",
+      "b": "Walking across the road",
+      "c": "Jumping across",
+      "d": "Stopping the traffic yourself"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 41,
+    "category": "Pedestrian Crossings",
+    "explanation": "Walking briskly across a clear road is safer than running, which can cause slips, trips, or poor judgement."
+  },
+  {
+    "question_number": 258,
+    "question": "You are driving through an intersection and you suddenly notice an ambulance with its emergency lights flashing and the siren on approaching. What should you do?",
+    "options": {
+      "a": "Stop in the intersection for the ambulance to pass",
+      "b": "Drive on and stop after the intersection",
+      "c": "Drive on carefully without stopping",
+      "d": "None of the above actions is right to do"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 41,
+    "category": "Emergency Procedures",
+    "explanation": "Do not stop in the intersection. Clear it first, then pull over safely to allow the ambulance a clear path."
+  },
+  {
+    "question_number": 259,
+    "question": "On the motorway you always use the left Lane when overtaking.",
+    "options": {
+      "a": "False",
+      "b": "True",
+      "c": "Sometimes",
+      "d": "None of the above"
+    },
+    "correct_answer": "b",
+    "image": null,
+    "page": 41,
+    "category": "Motorway Rules",
+    "explanation": "On motorways, drivers normally keep left and use the overtaking lane only when passing slower-moving vehicles safely."
+  }
+]

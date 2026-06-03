@@ -1,0 +1,600 @@
+// ===========================
+// features/home/presentation/screens/home_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+import '../../widgets/home_header_section.dart';
+import '../../../../shared/widgets/action_card.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../../../../core/navigation/route_names.dart';
+import '../../../../core/utils/responsive.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final media = MediaQuery.of(context);
+
+    final width = media.size.width;
+    final height = media.size.height;
+    final isTablet = Responsive.isTablet(context);
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 0),
+      body: SafeArea(
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverAppBar(
+              backgroundColor: theme.colorScheme.background,
+              foregroundColor: theme.colorScheme.onBackground,
+              surfaceTintColor: Colors.transparent,
+              elevation: 0,
+              pinned: true,
+              floating: false,
+              stretch: true,
+              automaticallyImplyLeading: false,
+              expandedHeight: isTablet ? 260 : 220,
+              collapsedHeight: 80,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.parallax,
+                stretchModes: const [
+                  StretchMode.zoomBackground,
+                  StretchMode.fadeTitle,
+                ],
+                background: Padding(
+                  padding: EdgeInsets.only(top: height * 0.03),
+                  child: const HomeHeaderSection(userName: 'Kwasi'),
+                ),
+                titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
+                title: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final collapsed = constraints.biggest.height <= 120;
+
+                    return AnimatedOpacity(
+                      duration: const Duration(milliseconds: 250),
+                      opacity: collapsed ? 1 : 0,
+                      child: AnimatedSlide(
+                        duration: const Duration(milliseconds: 250),
+                        offset: collapsed ? Offset.zero : const Offset(0, 0.5),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/shared/logo.png',
+                              width: 30,
+                            ),
+                            const SizedBox(width: 10),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'DVL',
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onBackground,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: 'THEORY',
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(249, 52, 26, 0.965),
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(
+                horizontal: isTablet ? width * 0.08 : 16,
+                vertical: 18,
+              ),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  HomeActionCard(
+                    title: "Start Practice Test",
+                    subtitle: "Quick practice to sharpen your knowledge",
+                    color: Colors.blue,
+                    icon: Icons.assignment,
+                    onTap: () =>
+                        Navigator.pushNamed(context, RouteNames.practice),
+                  ),
+                  HomeActionCard(
+                    title: "Start Mock Exam",
+                    subtitle: "Real exam simulation just like the real test",
+                    color: Colors.green,
+                    icon: Icons.school,
+                    onTap: () =>
+                        Navigator.pushNamed(context, RouteNames.mockExam),
+                  ),
+                  HomeActionCard(
+                    title: "Continue Learning",
+                    subtitle: "Pick up where you left off",
+                    color: Colors.orange,
+                    icon: Icons.menu_book,
+                    onTap: () {},
+                  ),
+                  HomeActionCard(
+                    title: "View Progress",
+                    subtitle: "Track your performance and improvement",
+                    color: Colors.purple,
+                    icon: Icons.bar_chart,
+                    onTap: () =>
+                        Navigator.pushNamed(context, RouteNames.progress),
+                  ),
+                  HomeActionCard(
+                    title: "Review Wrong Answers",
+                    subtitle: "Learn from your mistakes and get better",
+                    color: Colors.red,
+                    icon: Icons.assignment_turned_in,
+                    onTap: () =>
+                        Navigator.pushNamed(context, RouteNames.review),
+                  ),
+                  SizedBox(height: height * 0.03),
+                ]),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+core/utils/responsive.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class Responsive {
+  static bool isTablet(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 700;
+
+  static bool isSmallPhone(BuildContext context) =>
+      MediaQuery.of(context).size.width < 360;
+}
+
+// ===========================
+core/navigation/route_names.dart
+// ===========================
+class RouteNames {
+  static const splash = '/';
+  static const home = '/home';
+  static const practice = '/practice';
+  static const mockExam = '/mock-exam';
+  static const progress = '/progress';
+  static const review = '/review';
+  static const profile = '/profile';
+  static const settings = '/settings';
+  static const account = '/account';
+  static const studyPreferences = '/study-preferences';
+  static const notifications = '/notifications';
+  static const language = '/language';
+  static const privacySecurity = '/privacy-security';
+  static const helpSupport = '/help-support';
+  static const about = '/about';
+}
+
+// ===========================
+shared/navigation/app_bottom_navigation.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../core/navigation/navigation_items.dart';
+import '../../../core/utils/responsive.dart';
+
+class AppBottomNavigation extends StatelessWidget {
+  final int currentIndex;
+
+  const AppBottomNavigation({super.key, required this.currentIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    final isSmallPhone = Responsive.isSmallPhone(context);
+    final isTablet = Responsive.isTablet(context);
+
+    final items = NavigationItems.items;
+
+    return NavigationBar(
+      selectedIndex: currentIndex,
+      height: isTablet ? 82 : 72,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
+      indicatorColor: Theme.of(context).colorScheme.primary.withOpacity(0.14),
+      labelBehavior: isSmallPhone
+          ? NavigationDestinationLabelBehavior.onlyShowSelected
+          : NavigationDestinationLabelBehavior.alwaysShow,
+      onDestinationSelected: (index) {
+        final selectedRoute = items[index].route;
+        final currentRoute = ModalRoute.of(context)?.settings.name;
+
+        if (currentRoute == selectedRoute) return;
+
+        Navigator.pushNamed(context, selectedRoute);
+      },
+      destinations: items.map((item) {
+        return NavigationDestination(
+          icon: Tooltip(message: item.label, child: Icon(item.icon)),
+          selectedIcon: Tooltip(
+            message: item.label,
+            child: Icon(item.selectedIcon),
+          ),
+          label: item.label,
+        );
+      }).toList(),
+    );
+  }
+}
+
+// ===========================
+shared/widgets/action_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+import '../../core/utils/responsive.dart';
+
+class HomeActionCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const HomeActionCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final media = MediaQuery.of(context);
+
+    final screenWidth = media.size.width;
+    final screenHeight = media.size.height;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isSmallPhone = Responsive.isSmallPhone(context);
+        final isTablet = Responsive.isTablet(context);
+
+        final horizontalPadding = isTablet ? 24.0 : 18.0;
+        final verticalPadding = isTablet ? 22.0 : 16.0;
+
+        final iconSize = isTablet
+            ? 34.0
+            : isSmallPhone
+            ? 20.0
+            : 26.0;
+
+        final avatarRadius = isTablet
+            ? 32.0
+            : isSmallPhone
+            ? 22.0
+            : 26.0;
+
+        final titleSize = isTablet
+            ? 20.0
+            : isSmallPhone
+            ? 14.0
+            : 16.0;
+
+        final subtitleSize = isTablet
+            ? 15.0
+            : isSmallPhone
+            ? 11.0
+            : 13.0;
+
+        return Padding(
+          padding: EdgeInsets.only(bottom: screenHeight * 0.015),
+          child: Material(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(22),
+            elevation: theme.brightness == Brightness.dark ? 0 : 1.5,
+            shadowColor: theme.colorScheme.shadow.withOpacity(0.15),
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(22),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: horizontalPadding,
+                  vertical: verticalPadding,
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      height: avatarRadius * 2,
+                      width: avatarRadius * 2,
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(
+                          theme.brightness == Brightness.dark ? 0.20 : 0.12,
+                        ),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(icon, color: color, size: iconSize),
+                    ),
+                    SizedBox(width: screenWidth * 0.04),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontSize: titleSize,
+                              fontWeight: FontWeight.w700,
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                          SizedBox(height: screenHeight * 0.004),
+                          Text(
+                            subtitle,
+                            maxLines: isTablet ? 2 : 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontSize: subtitleSize,
+                              height: 1.4,
+                              color: theme.colorScheme.onSurface.withOpacity(
+                                0.65,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: screenWidth * 0.02),
+                    Icon(
+                      Icons.chevron_right,
+                      color: theme.colorScheme.onSurface.withOpacity(0.35),
+                      size: isTablet ? 30 : 24,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+// ===========================
+widgets/home_header_section.dart
+// ===========================
+import 'package:flutter/material.dart';
+import '../../../shared/animations/staggered_fade_slide.dart';
+import '../../../../core/utils/responsive.dart';
+
+class HomeHeaderSection extends StatelessWidget {
+  final String userName;
+  final String logoPath;
+
+  const HomeHeaderSection({
+    super.key,
+    this.userName = 'Learner',
+    this.logoPath = 'assets/images/shared/logo.png',
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final media = MediaQuery.of(context);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = media.size.width;
+        final height = media.size.height;
+
+        final isSmallPhone = Responsive.isSmallPhone(context);
+        final isTablet = Responsive.isTablet(context);
+        final isLandscape = width > height;
+
+        final horizontalPadding = isTablet ? width * 0.08 : width * 0.045;
+
+        final logoWidth = isTablet
+            ? width * 0.18
+            : isLandscape
+            ? width * 0.16
+            : width * 0.28;
+
+        final titleSize = isTablet
+            ? 32.0
+            : isSmallPhone
+            ? 20.0
+            : 24.0;
+
+        final subtitleSize = isTablet
+            ? 18.0
+            : isSmallPhone
+            ? 13.0
+            : 15.0;
+
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 6,
+                child: StaggeredFadeSlide(
+                  delay: 100,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Welcome back, $userName',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontSize: subtitleSize,
+                          color: theme.colorScheme.onBackground.withOpacity(
+                            0.65,
+                          ),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Let’s get you',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontSize: titleSize,
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onBackground,
+                          height: 1.1,
+                        ),
+                      ),
+                      Text(
+                        'test ready!',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontSize: titleSize,
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onBackground,
+                          height: 1.1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Spacer(flex: 1),
+              Flexible(
+                flex: 3,
+                child: StaggeredFadeSlide(
+                  delay: 250,
+                  child: Semantics(
+                    label: 'DVL Theory app logo',
+                    image: true,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: logoWidth,
+                        maxHeight: isTablet ? 160 : 110,
+                      ),
+                      child: FractionallySizedBox(
+                        widthFactor: 1,
+                        child: Image.asset(logoPath, fit: BoxFit.contain),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+// ===========================
+shared/animations/staggered_fade_slide.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class StaggeredFadeSlide extends StatefulWidget {
+  final Widget child;
+  final int delay;
+
+  const StaggeredFadeSlide({super.key, required this.child, this.delay = 0});
+
+  @override
+  State<StaggeredFadeSlide> createState() => _StaggeredFadeSlideState();
+}
+
+class _StaggeredFadeSlideState extends State<StaggeredFadeSlide>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  late Animation<double> _fade;
+
+  late Animation<Offset> _slide;
+
+  // ===========================
+  // INIT
+  // ===========================
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+
+    _fade = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(_fade);
+
+    Future.delayed(Duration(milliseconds: widget.delay), () {
+      if (mounted) {
+        _controller.forward();
+      }
+    });
+  }
+
+  // ===========================
+  // CLEANUP
+  // ===========================
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
+  // ===========================
+  // BUILD
+  // ===========================
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _fade,
+
+      child: SlideTransition(position: _slide, child: widget.child),
+    );
+  }
+}
+
+// ===========================
+// core/navigation/navigation_item.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class NavigationItem {
+  final String label;
+  final IconData icon;
+  final IconData selectedIcon;
+  final String route;
+
+  const NavigationItem({
+    required this.label,
+    required this.icon,
+    required this.selectedIcon,
+    required this.route,
+  });
+}

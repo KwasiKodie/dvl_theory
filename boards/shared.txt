@@ -1,0 +1,138 @@
+.
+├── core
+│   ├── constants
+│   │   └── app_assets.dart
+│   ├── navigation
+│   │   ├── app_router.dart
+│   │   ├── navigation_item.dart
+│   │   ├── navigation_items.dart
+│   │   ├── navigation_service.dart
+│   │   ├── route_names.dart
+│   │   └── route_transitions.dart
+│   ├── storage
+│   │   ├── hive_boxes.dart
+│   │   └── hive_service.dart
+│   ├── theme
+│   │   ├── app_colors.dart
+│   │   ├── app_spacing.dart
+│   │   ├── app_theme.dart
+│   │   ├── dark_theme.dart
+│   │   ├── light_theme.dart
+│   │   ├── theme_controller.dart
+│   │   └── theme_mode_storage.dart
+│   └── utils
+│       └── responsive.dart
+├── features
+│   ├── analytics
+│   │   └── domain
+│   │       └── services
+│   │           └── readiness_service.dart
+│   ├── home
+│   │   ├── data
+│   │   │   ├── datasources
+│   │   │   ├── models
+│   │   │   └── repositories
+│   │   ├── domain
+│   │   │   ├── entities
+│   │   │   ├── repositories
+│   │   │   └── usecases
+│   │   ├── presentation
+│   │   │   ├── screens
+│   │   │   │   └── home_screen.dart
+│   │   │   └── widgets
+│   │   └── widgets
+│   │       ├── home_header_section.dart
+│   │       └── home_theme.dart
+│   ├── practice
+│   │   ├── data
+│   │   │   ├── datasources
+│   │   │   │   └── local_question_loader.dart
+│   │   │   └── models
+│   │   │       └── question_model.dart
+│   │   ├── domain
+│   │   │   └── services
+│   │   │       ├── adaptive_practice_service.dart
+│   │   │       └── practice_session_controller.dart
+│   │   └── presentation
+│   │       ├── screens
+│   │       │   └── practice_screen.dart
+│   │       └── widgets
+│   │           ├── practice_answer_option_tile.dart
+│   │           ├── practice_explanation_card.dart
+│   │           └── practice_progress_card.dart
+│   ├── profile
+│   │   └── presentation
+│   │       ├── screens
+│   │       │   ├── about_screen.dart
+│   │       │   ├── account_screen.dart
+│   │       │   ├── help_support_screen.dart
+│   │       │   ├── language_screen.dart
+│   │       │   ├── notifications_screen.dart
+│   │       │   ├── privacy_security_screen.dart
+│   │       │   ├── profile_screen.dart
+│   │       │   └── study_preferences_screen.dart
+│   │       └── widgets
+│   │           ├── about_branding_section.dart
+│   │           ├── about_card.dart
+│   │           ├── about_tile.dart
+│   │           ├── account_card.dart
+│   │           ├── account_info_tile.dart
+│   │           ├── account_profile_photo.dart
+│   │           ├── help_support_card.dart
+│   │           ├── help_support_tile.dart
+│   │           ├── language_selection_card.dart
+│   │           ├── language_tile.dart
+│   │           ├── logout_tile.dart
+│   │           ├── notification_settings_card.dart
+│   │           ├── notification_setting_tile.dart
+│   │           ├── privacy_security_card.dart
+│   │           ├── privacy_security_tile.dart
+│   │           ├── profile_header.dart
+│   │           ├── profile_menu_section.dart
+│   │           ├── profile_menu_tile.dart
+│   │           ├── profile_stats_card.dart
+│   │           ├── study_preference_card.dart
+│   │           └── study_preference_tile.dart
+│   ├── progress
+│   │   ├── data
+│   │   │   └── models
+│   │   │       └── question_attempt_model.dart
+│   │   ├── domain
+│   │   │   └── services
+│   │   │       ├── category_service.dart
+│   │   │       └── progress_engine.dart
+│   │   └── presentation
+│   │       ├── screens
+│   │       │   └── progress_screen.dart
+│   │       └── widgets
+│   │           ├── overall_progress_card.dart
+│   │           └── topic_progress_tile.dart
+│   ├── settings
+│   │   └── presentation
+│   │       ├── screens
+│   │       │   └── settings_screen.dart
+│   │       └── widgets
+│   │           ├── settings_tile.dart
+│   │           └── theme_selector.dart
+│   └── splash
+│       └── presentation
+│           ├── screens
+│           │   ├── splash_screen_controller.dart
+│           │   └── splash_screen.dart
+│           └── widgets
+│               ├── splash_bottom_text.dart
+│               ├── splash_branding_section.dart
+│               └── splash_theme.dart
+├── main.dart
+└── shared
+    ├── animations
+    │   ├── fade_slide.dart
+    │   ├── route_animations.dart
+    │   ├── scale_fade.dart
+    │   └── staggered_fade_slide.dart
+    ├── navigation
+    │   └── app_bottom_navigation.dart
+    └── widgets
+        └── action_card.dart
+
+57 directories, 79 files
