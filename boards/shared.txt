@@ -40,6 +40,9 @@
 │   │   │   ├── screens
 │   │   │   │   └── home_screen.dart
 │   │   │   └── widgets
+│   │   │       ├── home_category_mapper.dart
+│   │   │       ├── home_category_tile.dart
+│   │   │       └── home_logo_header.dart
 │   │   └── widgets
 │   │       ├── home_header_section.dart
 │   │       └── home_theme.dart
@@ -48,18 +51,23 @@
 │   │   │   ├── datasources
 │   │   │   │   └── local_question_loader.dart
 │   │   │   └── models
-│   │   │       └── question_model.dart
+│   │   │       ├── question_model.dart
+│   │   │       └── review_question_model.dart
 │   │   ├── domain
 │   │   │   └── services
 │   │   │       ├── adaptive_practice_service.dart
 │   │   │       └── practice_session_controller.dart
 │   │   └── presentation
 │   │       ├── screens
-│   │       │   └── practice_screen.dart
+│   │       │   ├── practice_screen.dart
+│   │       │   └── review_screen.dart
 │   │       └── widgets
 │   │           ├── practice_answer_option_tile.dart
 │   │           ├── practice_explanation_card.dart
-│   │           └── practice_progress_card.dart
+│   │           ├── practice_progress_card.dart
+│   │           ├── review_filter_chip.dart
+│   │           ├── review_question_list.dart
+│   │           └── review_question_tile.dart
 │   ├── profile
 │   │   └── presentation
 │   │       ├── screens
@@ -135,4 +143,4 @@
     └── widgets
         └── action_card.dart
 
-57 directories, 79 files
+57 directories, 87 files

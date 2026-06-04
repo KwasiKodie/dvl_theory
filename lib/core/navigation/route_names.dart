@@ -5,6 +5,7 @@ class RouteNames {
   static const mockExam = '/mock-exam';
   static const progress = '/progress';
   static const review = '/review';
+  static const reviewQuestion = '/review-question';
   static const profile = '/profile';
   static const settings = '/settings';
   static const account = '/account';

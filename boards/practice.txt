@@ -1,0 +1,1120 @@
+// ===========================
+// features/practice/presentation/screens/practice_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../../../progress/domain/services/progress_engine.dart';
+import '../../data/datasources/local_question_loader.dart';
+import '../../data/models/question_model.dart';
+import '../../domain/services/practice_session_controller.dart';
+import '../../domain/services/adaptive_practice_service.dart';
+import '../widgets/practice_answer_option_tile.dart';
+import '../widgets/practice_explanation_card.dart';
+import '../widgets/practice_progress_card.dart';
+
+class PracticeScreen extends StatefulWidget {
+  const PracticeScreen({super.key});
+
+  @override
+  State<PracticeScreen> createState() => _PracticeScreenState();
+}
+
+class _PracticeScreenState extends State<PracticeScreen> {
+  final _loader = LocalQuestionLoader();
+  final _engine = ProgressEngine();
+  final _uuid = const Uuid();
+  final _stopwatch = Stopwatch();
+
+  final _session = PracticeSessionController.instance;
+  final _adaptiveService = AdaptivePracticeService();
+  bool _loading = true;
+  String? _error;
+
+  QuestionModel get _question => _session.questions[_session.currentIndex];
+
+  String? get _selectedAnswer => _session.selectedAnswers[_question.id];
+
+  bool get _showResult => _session.answeredQuestions[_question.id] ?? false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializePracticeSession();
+  }
+
+  @override
+  void dispose() {
+    _stopwatch.stop();
+    super.dispose();
+  }
+
+  Future<void> _initializePracticeSession() async {
+    try {
+      if (_session.initialized && _session.questions.isNotEmpty) {
+        if (!mounted) return;
+
+        setState(() => _loading = false);
+
+        if (!_showResult) _restartTimer();
+        return;
+      }
+
+      final data = await _loader.loadQuestions();
+
+      if (!mounted) return;
+
+      final selectedCategory =
+          ModalRoute.of(context)?.settings.arguments as String?;
+
+      final selectedQuestions = selectedCategory == null
+          ? _adaptiveService.generateSession(data, sessionSize: 10)
+          : (data
+                    .where(
+                      (question) =>
+                          question.category.toLowerCase() ==
+                          selectedCategory.toLowerCase(),
+                    )
+                    .toList()
+                  ..shuffle())
+                .take(10)
+                .toList();
+
+      _session.questions = selectedQuestions;
+      _session.currentIndex = 0;
+      _session.selectedAnswers.clear();
+      _session.answeredQuestions.clear();
+      _session.initialized = true;
+
+      setState(() => _loading = false);
+
+      _restartTimer();
+    } catch (e, stackTrace) {
+      debugPrint('Question loading failed: $e');
+      debugPrintStack(stackTrace: stackTrace);
+
+      if (!mounted) return;
+
+      setState(() {
+        _loading = false;
+        _error = 'Unable to load practice questions.';
+      });
+    }
+  }
+
+  void _restartTimer() {
+    if (_showResult) return;
+
+    _stopwatch
+      ..reset()
+      ..start();
+  }
+
+  void _selectAnswer(String key) {
+    if (_showResult) return;
+
+    setState(() {
+      _session.selectedAnswers[_question.id] = key;
+    });
+  }
+
+  void _submitAnswer() {
+    if (_selectedAnswer == null || _showResult) return;
+
+    _stopwatch.stop();
+
+    final isCorrect = _selectedAnswer == _question.correctAnswer;
+
+    _engine.recordAttempt({
+      'id': _uuid.v4(),
+      'questionId': _question.id,
+      'category': _question.category,
+      'selectedAnswer': _selectedAnswer,
+      'correctAnswer': _question.correctAnswer,
+      'isCorrect': isCorrect,
+      'timeTaken': _stopwatch.elapsed.inSeconds,
+      'date': DateTime.now(),
+      'testType': 'practice',
+    });
+
+    setState(() {
+      _session.answeredQuestions[_question.id] = true;
+    });
+  }
+
+  void _previous() {
+    if (_session.currentIndex == 0) return;
+
+    setState(() {
+      _session.currentIndex--;
+    });
+
+    if (!_showResult) _restartTimer();
+  }
+
+  void _next() {
+    if (_session.currentIndex >= _session.questions.length - 1) {
+      _session.reset();
+      Navigator.pop(context);
+      return;
+    }
+
+    setState(() {
+      _session.currentIndex++;
+    });
+
+    if (!_showResult) _restartTimer();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    if (_loading) {
+      return Scaffold(
+        backgroundColor: theme.colorScheme.background,
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_error != null || _session.questions.isEmpty) {
+      return Scaffold(
+        backgroundColor: theme.colorScheme.background,
+        appBar: AppBar(
+          title: const Text('Practice Question'),
+          centerTitle: true,
+        ),
+        body: Center(
+          child: Text(
+            _error ?? 'No practice questions available.',
+            style: theme.textTheme.bodyLarge,
+          ),
+        ),
+      );
+    }
+
+    final progress = (_session.currentIndex + 1) / _session.questions.length;
+    final isLastQuestion =
+        _session.currentIndex == _session.questions.length - 1;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 1),
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+        foregroundColor: theme.colorScheme.onBackground,
+        title: Text(
+          'Practice Question',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(22, 16, 22, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PracticeProgressCard(
+                      currentQuestion: _session.currentIndex + 1,
+                      totalQuestions: _session.questions.length,
+                      progress: progress,
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    Text(
+                      _question.question,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: theme.colorScheme.onBackground,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    if (_question.image != null)
+                      Center(
+                        child: Image.asset(
+                          _question.image!,
+                          height: 120,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    const SizedBox(height: AppSpacing.md),
+                    ..._question.options.entries.map(
+                      (entry) => PracticeAnswerOptionTile(
+                        optionKey: entry.key,
+                        optionText: entry.value,
+                        selectedAnswer: _selectedAnswer,
+                        correctAnswer: _question.correctAnswer,
+                        showResult: _showResult,
+                        onTap: () => _selectAnswer(entry.key),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    if (_showResult)
+                      PracticeExplanationCard(
+                        isCorrect: _selectedAnswer == _question.correctAnswer,
+                        explanation: _safeExplanation(_question),
+                        source: _safeSource(_question),
+                        imagePath: _question.image,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(22, 12, 22, 18),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _session.currentIndex > 0 ? _previous : null,
+                      icon: const Icon(Icons.chevron_left),
+                      label: const Text('Previous'),
+                    ),
+                  ),
+                  const SizedBox(width: 24),
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: _selectedAnswer == null
+                          ? null
+                          : _showResult
+                          ? _next
+                          : _submitAnswer,
+                      icon: const Icon(Icons.chevron_right),
+                      label: Text(
+                        _showResult
+                            ? isLastQuestion
+                                  ? 'Finish'
+                                  : 'Next'
+                            : 'Submit',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _safeExplanation(QuestionModel question) {
+    return question.explanation.trim().isNotEmpty
+        ? question.explanation
+        : 'Explanation unavailable.';
+  }
+
+  String _safeSource(QuestionModel question) {
+    return question.source?.trim().isNotEmpty == true
+        ? question.source!
+        : 'Official DVL Theory Material';
+  }
+}
+
+// ===========================
+// features/practice/presentation/widgets/practice_progress_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class PracticeProgressCard extends StatelessWidget {
+  final int currentQuestion;
+  final int totalQuestions;
+  final double progress;
+
+  const PracticeProgressCard({
+    super.key,
+    required this.currentQuestion,
+    required this.totalQuestions,
+    required this.progress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: theme.colorScheme.outlineVariant),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Question $currentQuestion of $totalQuestions',
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                ),
+                Text('${(progress * 100).round()}%'),
+              ],
+            ),
+            const SizedBox(height: 6),
+            LinearProgressIndicator(
+              value: progress,
+              minHeight: 4,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+// ===========================
+// features/practice/presentation/widgets/practice_explanation_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class PracticeExplanationCard extends StatelessWidget {
+  final bool isCorrect;
+  final String explanation;
+  final String source;
+  final String? imagePath;
+
+  const PracticeExplanationCard({
+    super.key,
+    required this.isCorrect,
+    required this.explanation,
+    required this.source,
+    this.imagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final statusColor = isCorrect ? Colors.green : theme.colorScheme.error;
+
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6),
+        side: BorderSide(color: theme.colorScheme.outlineVariant),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              isCorrect ? Icons.check_circle : Icons.cancel,
+              color: statusColor,
+              size: 34,
+            ),
+
+            const SizedBox(width: 12),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    isCorrect ? 'Correct!' : 'Incorrect',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: statusColor,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    explanation,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                      height: 1.25,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Text(
+                    'Source:$source',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            if (imagePath != null) ...[
+              const SizedBox(width: 12),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: Image.asset(
+                  imagePath!,
+                  width: 102,
+                  height: 96,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+// ===========================
+// features/practice/presentation/widgets/practice_answer_option_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class PracticeAnswerOptionTile extends StatelessWidget {
+  final String optionKey;
+  final String optionText;
+  final String? selectedAnswer;
+  final String correctAnswer;
+  final bool showResult;
+  final VoidCallback onTap;
+
+  const PracticeAnswerOptionTile({
+    super.key,
+    required this.optionKey,
+    required this.optionText,
+    required this.selectedAnswer,
+    required this.correctAnswer,
+    required this.showResult,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final selected = selectedAnswer == optionKey;
+    final correct = correctAnswer == optionKey;
+
+    Color border = theme.colorScheme.outlineVariant;
+    Color background = theme.colorScheme.surface;
+    Color badge = theme.colorScheme.onSurfaceVariant;
+    Color badgeText = theme.colorScheme.surface;
+
+    if (showResult && correct) {
+      border = Colors.green;
+      background = Colors.green.withOpacity(0.14);
+      badge = Colors.green;
+      badgeText = Colors.white;
+    } else if (showResult && selected) {
+      border = theme.colorScheme.error;
+      background = theme.colorScheme.error.withOpacity(0.12);
+      badge = theme.colorScheme.error;
+      badgeText = theme.colorScheme.onError;
+    } else if (selected) {
+      border = theme.colorScheme.primary;
+      background = theme.colorScheme.primary.withOpacity(0.08);
+      badge = theme.colorScheme.primary;
+      badgeText = theme.colorScheme.onPrimary;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        color: background,
+        borderRadius: BorderRadius.circular(6),
+        child: InkWell(
+          onTap: showResult ? null : onTap,
+          borderRadius: BorderRadius.circular(6),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: border),
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundColor: badge,
+                  child: Text(
+                    optionKey.toUpperCase(),
+                    style: TextStyle(
+                      color: badgeText,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    optionText,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: selected && showResult && correct
+                          ? Colors.green.shade800
+                          : theme.colorScheme.onSurface,
+                      fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+// ===========================
+// features/practice/domain/services/adaptive_practice_service.dart
+// ===========================
+import 'dart:math';
+
+import 'package:hive/hive.dart';
+
+import '../../../../core/storage/hive_boxes.dart';
+import '../../data/models/question_model.dart';
+
+class AdaptivePracticeService {
+  final Box categoryBox = Hive.box(HiveBoxes.category);
+  final Box masteryBox = Hive.box(HiveBoxes.mastery);
+
+  List<QuestionModel> generateSession(
+    List<QuestionModel> allQuestions, {
+    int sessionSize = 20,
+  }) {
+    if (allQuestions.isEmpty) return [];
+
+    final random = Random();
+
+    final weak = <QuestionModel>[];
+    final medium = <QuestionModel>[];
+    final mastered = <QuestionModel>[];
+
+    for (final question in allQuestions) {
+      final categoryData = categoryBox.get(question.category);
+      final masteryData = masteryBox.get(question.id);
+
+      final categoryAccuracy = categoryData == null
+          ? 0.0
+          : ((categoryData['accuracy'] ?? 0) as num).toDouble();
+
+      final masteryScore = masteryData == null
+          ? 0.0
+          : ((masteryData['masteryScore'] ?? 0) as num).toDouble();
+
+      if (categoryAccuracy < 50 || masteryScore < 0.5) {
+        weak.add(question);
+      } else if (categoryAccuracy < 80 || masteryScore < 0.85) {
+        medium.add(question);
+      } else {
+        mastered.add(question);
+      }
+    }
+
+    weak.shuffle(random);
+    medium.shuffle(random);
+    mastered.shuffle(random);
+
+    final weakCount = (sessionSize * 0.7).round();
+    final mediumCount = (sessionSize * 0.2).round();
+    final masteredCount = sessionSize - weakCount - mediumCount;
+
+    final selected = <QuestionModel>[
+      ...weak.take(weakCount),
+      ...medium.take(mediumCount),
+      ...mastered.take(masteredCount),
+    ];
+
+    if (selected.length < sessionSize) {
+      final selectedIds = selected.map((q) => q.id).toSet();
+
+      final fallback =
+          allQuestions.where((q) => !selectedIds.contains(q.id)).toList()
+            ..shuffle(random);
+
+      selected.addAll(fallback.take(sessionSize - selected.length));
+    }
+
+    selected.shuffle(random);
+
+    return selected.take(sessionSize).toList();
+  }
+}
+// ===========================
+// features/practice/domain/services/practice_session_controller.dart
+// ===========================
+import '../../data/models/question_model.dart';
+
+class PracticeSessionController {
+  PracticeSessionController._();
+
+  static final PracticeSessionController instance =
+      PracticeSessionController._();
+
+  List<QuestionModel> questions = [];
+  int currentIndex = 0;
+  bool initialized = false;
+
+  final Map<int, String> selectedAnswers = {};
+  final Map<int, bool> answeredQuestions = {};
+
+  void reset() {
+    questions = [];
+    currentIndex = 0;
+    selectedAnswers.clear();
+    answeredQuestions.clear();
+    initialized = false;
+  }
+}
+// ===========================
+// features/practice/data/models/question_model.dart
+// ===========================
+class QuestionModel {
+  final int id;
+  final String category;
+  final String question;
+  final String? image;
+  final String explanation;
+  final String? source;
+
+  final Map<String, String> options;
+  final String correctAnswer;
+
+  const QuestionModel({
+    required this.id,
+    required this.category,
+    required this.question,
+    required this.options,
+    required this.correctAnswer,
+    required this.explanation,
+    this.source,
+    this.image,
+  });
+
+  factory QuestionModel.fromJson(Map<String, dynamic> json) {
+    return QuestionModel(
+      id: json["question_number"] ?? 0,
+      question: json["question"] ?? "",
+      options: Map<String, String>.from(
+        (json["options"] as Map).map(
+          (k, v) => MapEntry(k.toString().toUpperCase(), v.toString()),
+        ),
+      ),
+      correctAnswer: (json["correct_answer"] ?? "").toString().toUpperCase(),
+      category: json["category"] ?? "General",
+      image: json["image"],
+
+      explanation: json["explanation"] ?? "Explanation unavailable.",
+
+      source: json["source"] ?? "Official DVL Theory Material",
+    );
+  }
+}
+// ===========================
+// features/practice/data/datasources/local_question_loader.dart
+// ===========================
+import 'dart:convert';
+import 'package:flutter/services.dart';
+import '../models/question_model.dart';
+
+class LocalQuestionLoader {
+  Future<List<QuestionModel>> loadQuestions() async {
+    final String jsonString = await rootBundle.loadString(
+      'assets/data/questions.json',
+    );
+
+    final List<dynamic> data = json.decode(jsonString);
+
+    return data.map((q) => QuestionModel.fromJson(q)).toList();
+  }
+}
+
+// ===========================
+// features/progress/domain/services/progress_engine.dart
+// ===========================
+import 'package:hive/hive.dart';
+
+import '../../../../core/storage/hive_boxes.dart';
+
+class ProgressEngine {
+  final Box attemptsBox = Hive.box(HiveBoxes.attempts);
+  final Box categoryBox = Hive.box(HiveBoxes.category);
+  final Box statsBox = Hive.box(HiveBoxes.stats);
+  final Box wrongBox = Hive.box(HiveBoxes.wrong);
+  final Box masteryBox = Hive.box(HiveBoxes.mastery);
+  final Box reviewBox = Hive.box(HiveBoxes.review);
+  final Box streakBox = Hive.box(HiveBoxes.streak);
+
+  void recordAttempt(Map<String, dynamic> attempt) {
+    attemptsBox.add(Map<String, dynamic>.from(attempt));
+
+    _updateStats(attempt);
+    _updateCategory(attempt);
+    _updateWrongAnswers(attempt);
+    _updateMastery(attempt);
+    _updateSpacedRepetition(attempt);
+    _updateStreak();
+  }
+
+  void _updateStats(Map<String, dynamic> attempt) {
+    final stats = Map<String, dynamic>.from(
+      statsBox.get('stats') ??
+          <String, dynamic>{
+            'totalQuestionsAnswered': 0,
+            'totalCorrectAnswers': 0,
+            'totalIncorrectAnswers': 0,
+            'totalTime': 0,
+            'accuracy': 0.0,
+            'averageResponseTime': 0.0,
+          },
+    );
+
+    stats['totalQuestionsAnswered'] =
+        (stats['totalQuestionsAnswered'] as num).toInt() + 1;
+
+    if (attempt['isCorrect'] == true) {
+      stats['totalCorrectAnswers'] =
+          (stats['totalCorrectAnswers'] as num).toInt() + 1;
+    } else {
+      stats['totalIncorrectAnswers'] =
+          (stats['totalIncorrectAnswers'] as num).toInt() + 1;
+    }
+
+    stats['totalTime'] =
+        (stats['totalTime'] as num).toInt() +
+        ((attempt['timeTaken'] ?? 0) as num).toInt();
+
+    final total = (stats['totalQuestionsAnswered'] as num).toInt();
+    final correct = (stats['totalCorrectAnswers'] as num).toInt();
+    final totalTime = (stats['totalTime'] as num).toInt();
+
+    stats['accuracy'] = total > 0 ? (correct / total) * 100.0 : 0.0;
+    stats['averageResponseTime'] = total > 0 ? totalTime / total : 0.0;
+
+    statsBox.put('stats', stats);
+  }
+
+  void _updateCategory(Map<String, dynamic> attempt) {
+    final category = attempt['category'].toString();
+    final isCorrect = attempt['isCorrect'] == true;
+    final timeTaken = ((attempt['timeTaken'] ?? 0) as num).toInt();
+
+    final existing = Map<String, dynamic>.from(
+      categoryBox.get(category) ??
+          <String, dynamic>{
+            'attempted': 0,
+            'correct': 0,
+            'incorrect': 0,
+            'totalTime': 0,
+            'accuracy': 0.0,
+            'averageTime': 0.0,
+            'status': 'Weak',
+          },
+    );
+
+    existing['attempted'] = (existing['attempted'] as num).toInt() + 1;
+
+    if (isCorrect) {
+      existing['correct'] = (existing['correct'] as num).toInt() + 1;
+    } else {
+      existing['incorrect'] = (existing['incorrect'] as num).toInt() + 1;
+    }
+
+    existing['totalTime'] = (existing['totalTime'] as num).toInt() + timeTaken;
+
+    final attempted = (existing['attempted'] as num).toInt();
+    final correct = (existing['correct'] as num).toInt();
+    final totalTime = (existing['totalTime'] as num).toInt();
+
+    final accuracy = attempted > 0 ? (correct / attempted) * 100.0 : 0.0;
+
+    existing['accuracy'] = accuracy;
+    existing['averageTime'] = attempted > 0 ? totalTime / attempted : 0.0;
+    existing['status'] = _getCategoryStatus(accuracy);
+
+    categoryBox.put(category, existing);
+  }
+
+  void _updateWrongAnswers(Map<String, dynamic> attempt) {
+    final questionId = ((attempt['questionId'] ?? 0) as num).toInt();
+    final isCorrect = attempt['isCorrect'] == true;
+
+    final existingRaw = wrongBox.get(questionId);
+    final existing = existingRaw == null
+        ? null
+        : Map<String, dynamic>.from(existingRaw);
+
+    if (!isCorrect) {
+      if (existing == null) {
+        wrongBox.put(questionId, {
+          'questionId': questionId,
+          'category': attempt['category'],
+          'wrongCount': 1,
+          'lastAttempt': DateTime.now(),
+          'resolved': false,
+        });
+      } else {
+        existing['wrongCount'] =
+            ((existing['wrongCount'] ?? 0) as num).toInt() + 1;
+        existing['lastAttempt'] = DateTime.now();
+        existing['resolved'] = false;
+        wrongBox.put(questionId, existing);
+      }
+    } else {
+      if (existing != null) {
+        existing['resolved'] = true;
+        wrongBox.put(questionId, existing);
+      }
+    }
+  }
+
+  void _updateMastery(Map<String, dynamic> attempt) {
+    final questionId = ((attempt['questionId'] ?? 0) as num).toInt();
+    final isCorrect = attempt['isCorrect'] == true;
+
+    final existing = Map<String, dynamic>.from(
+      masteryBox.get(questionId) ??
+          <String, dynamic>{
+            'correct': 0,
+            'incorrect': 0,
+            'masteryScore': 0.0,
+            'level': 'Beginner',
+          },
+    );
+
+    if (isCorrect) {
+      existing['correct'] = (existing['correct'] as num).toInt() + 1;
+    } else {
+      existing['incorrect'] = (existing['incorrect'] as num).toInt() + 1;
+    }
+
+    final correct = (existing['correct'] as num).toInt();
+    final incorrect = (existing['incorrect'] as num).toInt();
+    final total = correct + incorrect;
+
+    final score = total > 0 ? correct / total : 0.0;
+
+    existing['masteryScore'] = score;
+    existing['level'] = _getMasteryLevel(score);
+
+    masteryBox.put(questionId, existing);
+  }
+
+  void _updateSpacedRepetition(Map<String, dynamic> attempt) {
+    final questionId = ((attempt['questionId'] ?? 0) as num).toInt();
+    final isCorrect = attempt['isCorrect'] == true;
+    final now = DateTime.now();
+
+    final existing = Map<String, dynamic>.from(
+      reviewBox.get(questionId) ??
+          <String, dynamic>{
+            'questionId': questionId,
+            'level': 0,
+            'nextReview': now,
+            'lastReviewed': now,
+          },
+    );
+
+    int level = ((existing['level'] ?? 0) as num).toInt();
+
+    level = isCorrect ? level + 1 : 0;
+
+    final nextReview = switch (level) {
+      0 => now,
+      1 => now.add(const Duration(days: 1)),
+      2 => now.add(const Duration(days: 3)),
+      3 => now.add(const Duration(days: 7)),
+      _ => now.add(const Duration(days: 30)),
+    };
+
+    reviewBox.put(questionId, {
+      'questionId': questionId,
+      'level': level,
+      'nextReview': nextReview,
+      'lastReviewed': now,
+    });
+  }
+
+  void _updateStreak() {
+    final today = DateTime.now();
+
+    final streak = Map<String, dynamic>.from(
+      streakBox.get('streak') ??
+          <String, dynamic>{'current': 0, 'longest': 0, 'lastDate': null},
+    );
+
+    DateTime? lastDate;
+
+    final rawLastDate = streak['lastDate'];
+
+    if (rawLastDate is DateTime) {
+      lastDate = rawLastDate;
+    } else if (rawLastDate is String) {
+      lastDate = DateTime.tryParse(rawLastDate);
+    }
+
+    if (lastDate == null) {
+      streak['current'] = 1;
+    } else {
+      final todayDate = DateTime(today.year, today.month, today.day);
+      final lastOnlyDate = DateTime(
+        lastDate.year,
+        lastDate.month,
+        lastDate.day,
+      );
+
+      final difference = todayDate.difference(lastOnlyDate).inDays;
+
+      if (difference == 1) {
+        streak['current'] = ((streak['current'] ?? 0) as num).toInt() + 1;
+      } else if (difference > 1) {
+        streak['current'] = 1;
+      }
+    }
+
+    final current = ((streak['current'] ?? 0) as num).toInt();
+    final longest = ((streak['longest'] ?? 0) as num).toInt();
+
+    if (current > longest) {
+      streak['longest'] = current;
+    }
+
+    streak['lastDate'] = today.toIso8601String();
+
+    streakBox.put('streak', streak);
+  }
+
+  // ===========================
+  // Public Statistics API
+  // ===========================
+
+  Map<String, dynamic> getStats() {
+    return Map<String, dynamic>.from(
+      statsBox.get('stats') ??
+          <String, dynamic>{
+            'totalQuestionsAnswered': 0,
+            'totalCorrectAnswers': 0,
+            'totalIncorrectAnswers': 0,
+            'totalTime': 0,
+            'accuracy': 0.0,
+            'averageResponseTime': 0.0,
+          },
+    );
+  }
+
+  int totalAnswered() {
+    return (getStats()['totalQuestionsAnswered'] as num).toInt();
+  }
+
+  int totalCorrect() {
+    return (getStats()['totalCorrectAnswers'] as num).toInt();
+  }
+
+  int totalIncorrect() {
+    return (getStats()['totalIncorrectAnswers'] as num).toInt();
+  }
+
+  int totalTimeSpent() {
+    return (getStats()['totalTime'] as num).toInt();
+  }
+
+  double overallAccuracy() {
+    return (getStats()['accuracy'] as num).toDouble();
+  }
+
+  double averageResponseTime() {
+    return (getStats()['averageResponseTime'] as num).toDouble();
+  }
+
+  int totalQuestions() {
+    final stats = getStats();
+
+    return (stats['totalCorrectAnswers'] as num).toInt() +
+        (stats['totalIncorrectAnswers'] as num).toInt();
+  }
+
+  String _getCategoryStatus(double accuracy) {
+    if (accuracy <= 50) return 'Weak';
+    if (accuracy <= 75) return 'Improving';
+    if (accuracy <= 90) return 'Good';
+    return 'Mastered';
+  }
+
+  String _getMasteryLevel(double score) {
+    if (score < 0.3) return 'Beginner';
+    if (score < 0.5) return 'Learning';
+    if (score < 0.7) return 'Improving';
+    if (score < 0.9) return 'Proficient';
+    return 'Mastered';
+  }
+}
+
+// ===========================
+// shared/navigation/app_bottom_navigation.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../core/navigation/navigation_items.dart';
+import '../../../core/utils/responsive.dart';
+
+class AppBottomNavigation extends StatelessWidget {
+  final int currentIndex;
+
+  const AppBottomNavigation({super.key, required this.currentIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    final isSmallPhone = Responsive.isSmallPhone(context);
+    final isTablet = Responsive.isTablet(context);
+
+    final items = NavigationItems.items;
+
+    return NavigationBar(
+      selectedIndex: currentIndex,
+      height: isTablet ? 82 : 72,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
+      indicatorColor: Theme.of(context).colorScheme.primary.withOpacity(0.14),
+      labelBehavior: isSmallPhone
+          ? NavigationDestinationLabelBehavior.onlyShowSelected
+          : NavigationDestinationLabelBehavior.alwaysShow,
+      onDestinationSelected: (index) {
+        final selectedRoute = items[index].route;
+        final currentRoute = ModalRoute.of(context)?.settings.name;
+
+        if (currentRoute == selectedRoute) return;
+
+        Navigator.pushNamed(context, selectedRoute);
+      },
+      destinations: items.map((item) {
+        return NavigationDestination(
+          icon: Tooltip(message: item.label, child: Icon(item.icon)),
+          selectedIcon: Tooltip(
+            message: item.label,
+            child: Icon(item.selectedIcon),
+          ),
+          label: item.label,
+        );
+      }).toList(),
+    );
+  }
+}
+
+// ===========================
+// core/theme/app_spacing.dart
+// ===========================
+class AppSpacing {
+  static const xs = 4.0;
+  static const sm = 8.0;
+  static const md = 16.0;
+  static const lg = 24.0;
+  static const xl = 32.0;
+}

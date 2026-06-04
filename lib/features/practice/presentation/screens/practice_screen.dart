@@ -11,6 +11,7 @@ import '../../domain/services/adaptive_practice_service.dart';
 import '../widgets/practice_answer_option_tile.dart';
 import '../widgets/practice_explanation_card.dart';
 import '../widgets/practice_progress_card.dart';
+import '../../../../core/navigation/route_names.dart';
 
 class PracticeScreen extends StatefulWidget {
   const PracticeScreen({super.key});
@@ -63,10 +64,23 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
       if (!mounted) return;
 
-      _session.questions = _adaptiveService.generateSession(
-        data,
-        sessionSize: 8,
-      );
+      final selectedCategory =
+          ModalRoute.of(context)?.settings.arguments as String?;
+
+      final selectedQuestions = selectedCategory == null
+          ? _adaptiveService.generateSession(data, sessionSize: 10)
+          : (data
+                    .where(
+                      (question) =>
+                          question.category.toLowerCase() ==
+                          selectedCategory.toLowerCase(),
+                    )
+                    .toList()
+                  ..shuffle())
+                .take(10)
+                .toList();
+
+      _session.questions = selectedQuestions;
       _session.currentIndex = 0;
       _session.selectedAnswers.clear();
       _session.answeredQuestions.clear();
@@ -125,6 +139,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
     setState(() {
       _session.answeredQuestions[_question.id] = true;
+      _session.questionResults[_question.id] = isCorrect;
     });
   }
 
@@ -139,9 +154,14 @@ class _PracticeScreenState extends State<PracticeScreen> {
   }
 
   void _next() {
+    final reviewData = _session.buildReviewData();
+
     if (_session.currentIndex >= _session.questions.length - 1) {
-      _session.reset();
-      Navigator.pop(context);
+      Navigator.pushReplacementNamed(
+        context,
+        RouteNames.review,
+        arguments: reviewData,
+      );
       return;
     }
 

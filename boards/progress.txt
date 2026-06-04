@@ -12,6 +12,29 @@ class HiveBoxes {
   static const streak = 'streak_box';
 }
 
+// ===========================
+// core/storage/hive_service.dart
+// ===========================
+import 'package:hive_flutter/hive_flutter.dart';
+import 'hive_boxes.dart';
+
+class HiveService {
+  static Future<void> init() async {
+    await Hive.initFlutter();
+
+    // Open all boxes BEFORE app starts
+    await Future.wait([
+      Hive.openBox(HiveBoxes.attempts),
+      Hive.openBox(HiveBoxes.stats),
+      Hive.openBox(HiveBoxes.category),
+      Hive.openBox(HiveBoxes.wrong),
+      Hive.openBox(HiveBoxes.mastery),
+      Hive.openBox(HiveBoxes.review),
+      Hive.openBox(HiveBoxes.streak),
+    ]);
+  }
+}
+
 
 // ===========================
 // lib/features/progress/data/models/question_attempt_model.dart
@@ -592,5 +615,407 @@ class ReadinessService {
 }
 
 // ===========================
-// features/analytics/domain/services/readiness_service.dart
+// features/practice/data/datasources/local_question_loader.dart
 // ===========================
+import 'dart:convert';
+import 'package:flutter/services.dart';
+import '../models/question_model.dart';
+
+class LocalQuestionLoader {
+  Future<List<QuestionModel>> loadQuestions() async {
+    final String jsonString = await rootBundle.loadString(
+      'assets/data/questions.json',
+    );
+
+    final List<dynamic> data = json.decode(jsonString);
+
+    return data.map((q) => QuestionModel.fromJson(q)).toList();
+  }
+}
+
+// ===========================
+// features/practice/data/models/question_model.dart
+// ===========================
+class QuestionModel {
+  final int id;
+  final String question;
+  final Map<String, String> options;
+  final String correctAnswer;
+  final String category;
+  final String? image;
+
+  QuestionModel({
+    required this.id,
+    required this.question,
+    required this.options,
+    required this.correctAnswer,
+    required this.category,
+    this.image,
+  });
+
+  factory QuestionModel.fromJson(Map<String, dynamic> json) {
+    return QuestionModel(
+      id: json["question_number"],
+      question: json["question"],
+      options: Map<String, String>.from(json["options"]),
+      correctAnswer: json["correct_answer"],
+      category: json["category"],
+      image: json["image"],
+    );
+  }
+}
+
+// ===========================
+// features/practice/domain/services/adaptive_practice_service.dart
+// ===========================
+import 'package:hive/hive.dart';
+import '../../../../features/practice/data/models/question_model.dart';
+import '../../../../core/storage/hive_boxes.dart';
+
+class AdaptivePracticeService {
+  final Box categoryBox = Hive.box(HiveBoxes.category);
+  final Box wrongBox = Hive.box(HiveBoxes.wrong);
+  final Box masteryBox = Hive.box(HiveBoxes.mastery);
+  final Box reviewBox = Hive.box(HiveBoxes.review);
+
+  List<QuestionModel> generateSession(List<QuestionModel> allQuestions) {
+    // 🔴 1. Weak categories
+    final weakCategories = categoryBox.keys.where((key) {
+      final data = categoryBox.get(key);
+      return (data["accuracy"] ?? 0) < 50;
+    }).toSet();
+
+    // 🟡 2. Improving categories
+    final improvingCategories = categoryBox.keys.where((key) {
+      final data = categoryBox.get(key);
+      final acc = data["accuracy"] ?? 0;
+      return acc >= 50 && acc < 75;
+    }).toSet();
+
+    // 🟢 3. Strong categories
+    final strongCategories = categoryBox.keys.where((key) {
+      final data = categoryBox.get(key);
+      return (data["accuracy"] ?? 0) >= 75;
+    }).toSet();
+
+    // 🔁 4. Spaced repetition due
+    final now = DateTime.now();
+    final dueReviews = reviewBox.values
+        .where((r) => r["nextReview"].isBefore(now))
+        .map((r) => r["questionId"])
+        .toSet();
+
+    // ❌ 5. Wrong answers
+    final wrongQuestions = wrongBox.values
+        .where((w) => w["resolved"] == false)
+        .map((w) => w["questionId"])
+        .toSet();
+
+    // 🧠 6. Low mastery
+    final lowMastery = masteryBox.keys.where((id) {
+      final m = masteryBox.get(id);
+      return (m["masteryScore"] ?? 0) < 0.5;
+    }).toSet();
+
+    // =====================================================
+    // 🎯 FINAL SELECTION
+    // =====================================================
+
+    final weak = allQuestions
+        .where(
+          (q) =>
+              weakCategories.contains(q.category) ||
+              wrongQuestions.contains(q.id) ||
+              lowMastery.contains(q.id),
+        )
+        .toList();
+
+    final improving = allQuestions
+        .where((q) => improvingCategories.contains(q.category))
+        .toList();
+
+    final strong = allQuestions
+        .where((q) => strongCategories.contains(q.category))
+        .toList();
+
+    final review = allQuestions
+        .where((q) => dueReviews.contains(q.id))
+        .toList();
+
+    // 🎯 Weighted selection
+    return [
+      ...review.take(3), // 🔁 spaced repetition first
+      ...weak.take(5), // 🔴 weak focus
+      ...improving.take(2),
+      ...strong.take(1),
+    ];
+  }
+}
+// ===========================
+// features/presentation/screens/practice_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+import '../../data/models/question_model.dart';
+import '../../data/datasources/local_question_loader.dart';
+import '../../../progress/domain/services/progress_engine.dart';
+import '../../../../shared/animations/fade_slide.dart';
+import 'package:uuid/uuid.dart';
+
+class PracticeScreen extends StatefulWidget {
+  const PracticeScreen({super.key});
+
+  @override
+  State<PracticeScreen> createState() => _PracticeScreenState();
+}
+
+class _PracticeScreenState extends State<PracticeScreen> {
+  final loader = LocalQuestionLoader();
+  final engine = ProgressEngine();
+  final uuid = const Uuid();
+
+  List<QuestionModel> questions = [];
+  int currentIndex = 0;
+  String? selectedAnswer;
+  bool showResult = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final data = await loader.loadQuestions();
+    setState(() => questions = data.take(20).toList());
+  }
+
+  void _selectAnswer(String key) {
+    if (showResult) return;
+    setState(() => selectedAnswer = key);
+  }
+
+  void _submitAnswer() {
+    final q = questions[currentIndex];
+    final isCorrect = selectedAnswer == q.correctAnswer;
+
+    engine.recordAttempt({
+      "id": uuid.v4(),
+      "questionId": q.id,
+      "category": q.category,
+      "selectedAnswer": selectedAnswer,
+      "correctAnswer": q.correctAnswer,
+      "isCorrect": isCorrect,
+      "timeTaken": 5,
+      "date": DateTime.now(),
+      "testType": "practice",
+    });
+
+    setState(() => showResult = true);
+  }
+
+  void _next() {
+    setState(() {
+      currentIndex++;
+      selectedAnswer = null;
+      showResult = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (questions.isEmpty) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    final q = questions[currentIndex];
+    final progress = (currentIndex + 1) / questions.length;
+
+    return Scaffold(
+      appBar: AppBar(title: const Text("Practice Question"), centerTitle: true),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final height = MediaQuery.of(context).size.height;
+
+            return Column(
+              children: [
+                // 🔁 SCROLLABLE CONTENT
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildProgress(progress),
+
+                            SizedBox(height: height * 0.02),
+
+                            FadeSlide(
+                              child: Text(
+                                q.question,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
+
+                            SizedBox(height: height * 0.02),
+
+                            if (q.image != null)
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxHeight: height * 0.22,
+                                ),
+                                child: Image.asset(
+                                  q.image!,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+
+                            SizedBox(height: height * 0.02),
+
+                            ...q.options.entries.map(
+                              (e) => _optionTile(q, e.key, e.value),
+                            ),
+
+                            SizedBox(height: height * 0.02),
+
+                            if (showResult) _buildResult(q),
+
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // 🔒 FIXED BUTTONS (NO OVERFLOW EVER)
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: currentIndex > 0
+                              ? () => setState(() => currentIndex--)
+                              : null,
+                          child: const Text("Previous"),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: selectedAnswer == null
+                              ? null
+                              : showResult
+                              ? _next
+                              : _submitAnswer,
+                          child: Text(showResult ? "Next" : "Submit"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  // =====================================================
+  // 🔵 PROGRESS BAR
+  // =====================================================
+  Widget _buildProgress(double value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Question ${currentIndex + 1} of ${questions.length}"),
+        const SizedBox(height: 6),
+        LinearProgressIndicator(value: value),
+      ],
+    );
+  }
+
+  // =====================================================
+  // 🧩 OPTION TILE
+  // =====================================================
+  Widget _optionTile(QuestionModel q, String key, String text) {
+    final isSelected = selectedAnswer == key;
+    final isCorrect = q.correctAnswer == key;
+
+    Color borderColor = Colors.grey.shade300;
+    Color bgColor = Colors.transparent;
+
+    if (showResult) {
+      if (isCorrect) {
+        bgColor = Colors.green.withOpacity(0.2);
+        borderColor = Colors.green;
+      } else if (isSelected) {
+        bgColor = Colors.red.withOpacity(0.2);
+        borderColor = Colors.red;
+      }
+    } else if (isSelected) {
+      borderColor = Theme.of(context).colorScheme.primary;
+    }
+
+    return GestureDetector(
+      onTap: () => _selectAnswer(key),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: borderColor),
+          color: bgColor,
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.grey.shade300,
+              child: Text(key.toUpperCase()),
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: Text(text)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // =====================================================
+  // ✅ RESULT CARD
+  // =====================================================
+  Widget _buildResult(QuestionModel q) {
+    final isCorrect = selectedAnswer == q.correctAnswer;
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            isCorrect ? Icons.check_circle : Icons.cancel,
+            color: isCorrect ? Colors.green : Colors.red,
+            size: 28,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              isCorrect ? "Correct!" : "Incorrect",
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

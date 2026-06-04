@@ -154,6 +154,337 @@ class HomeScreen extends StatelessWidget {
 }
 
 // ===========================
+// features/home/presentation/widgets/home_logo_header.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class HomeLogoHeader extends StatelessWidget {
+  const HomeLogoHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Row(
+      children: [
+        Image.asset(
+          'assets/images/shared/logo.png',
+          width: 48,
+          height: 48,
+          fit: BoxFit.contain,
+        ),
+        const SizedBox(width: 10),
+        RichText(
+          text: TextSpan(
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+            children: [
+              TextSpan(
+                text: 'DVL',
+                style: TextStyle(
+                  color: theme.colorScheme.onBackground,
+                ),
+              ),
+              const TextSpan(
+                text: 'THEORY',
+                style: TextStyle(
+                  color: Color.fromRGBO(249, 52, 26, 0.965),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ===========================
+features/home/presentation/widgets/home_category_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class HomeCategoryTile extends StatelessWidget {
+  final String category;
+  final double progress;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const HomeCategoryTile({
+    super.key,
+    required this.category,
+    required this.progress,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final percent = progress.clamp(0, 100).round();
+
+    return Material(
+      color: theme.colorScheme.surface,
+      borderRadius: BorderRadius.circular(6),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(6),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant,
+            ),
+          ),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 17,
+                backgroundColor: color,
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                  size: 19,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                flex: 3,
+                child: Text(
+                  category,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                flex: 3,
+                child: LinearProgressIndicator(
+                  value: percent / 100,
+                  minHeight: 4,
+                  borderRadius: BorderRadius.circular(20),
+                  backgroundColor: theme.colorScheme.outlineVariant,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                decoration: BoxDecoration(
+                  color: _badgeColor(percent).withOpacity(.18),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Text(
+                  '$percent%',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: _badgeColor(percent),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Icon(
+                Icons.chevron_right,
+                color: theme.colorScheme.onSurfaceVariant,
+                size: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Color _badgeColor(int value) {
+    if (value >= 80) return Colors.green;
+    if (value >= 70) return Colors.blue;
+    return Colors.orange;
+  }
+}
+
+// ===========================
+features/home/presentation/widgets/home_category_mapper.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class HomeCategoryMapper {
+  const HomeCategoryMapper._();
+
+  static IconData iconFor(String category) {
+    switch (category.toLowerCase()) {
+      case 'road signs':
+        return Icons.warning_rounded;
+      case 'road markings':
+        return Icons.add_road;
+      case 'traffic rules':
+        return Icons.gavel;
+      case 'speed limits':
+        return Icons.speed;
+      case 'hazard awareness':
+        return Icons.report_problem;
+      case 'safe driving':
+        return Icons.steering;
+      case 'vehicle handling':
+        return Icons.directions_car;
+      case 'motorway rules':
+        return Icons.route;
+      case 'pedestrian crossings':
+        return Icons.directions_walk;
+      case 'emergency procedures':
+        return Icons.sos;
+      default:
+        return Icons.school;
+    }
+  }
+
+  static Color colorFor(String category) {
+    switch (category.toLowerCase()) {
+      case 'road signs':
+        return Colors.red;
+      case 'road markings':
+        return Colors.grey;
+      case 'traffic rules':
+        return Colors.green;
+      case 'speed limits':
+        return Colors.orange;
+      case 'hazard awareness':
+        return Colors.purple;
+      case 'safe driving':
+        return Colors.teal;
+      case 'vehicle handling':
+        return Colors.blue;
+      case 'motorway rules':
+        return Colors.greenAccent;
+      case 'pedestrian crossings':
+        return Colors.amber;
+      case 'emergency procedures':
+        return Colors.redAccent;
+      default:
+        return Colors.blueGrey;
+    }
+  }
+}
+
+// ===========================
+features/home/presentation/screens/home_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/navigation/route_names.dart';
+import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../../../progress/domain/services/category_service.dart';
+import '../widgets/home_category_mapper.dart';
+import '../widgets/home_category_tile.dart';
+import '../widgets/home_logo_header.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  static const List<String> _defaultCategories = [
+    'Road signs',
+    'Road markings',
+    'Traffic rules',
+    'Speed limits',
+    'Hazard awareness',
+    'Safe driving',
+    'Vehicle handling',
+    'Motorway rules',
+    'Pedestrian crossings',
+    'Emergency procedures',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isTablet = Responsive.isTablet(context);
+    final width = MediaQuery.of(context).size.width;
+
+    final categoryService = CategoryService();
+    final trackedCategories = categoryService.getCategoryStats();
+
+    final progressMap = {
+      for (final item in trackedCategories)
+        item['category'].toString().toLowerCase():
+            (item['accuracy'] as num).toDouble(),
+    };
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 0),
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+        foregroundColor: theme.colorScheme.onBackground,
+        title: Text(
+          'Home',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: isTablet ? 720 : width,
+            ),
+            child: ListView.separated(
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.fromLTRB(
+                isTablet ? 32 : 22,
+                14,
+                isTablet ? 32 : 22,
+                24,
+              ),
+              itemCount: _defaultCategories.length + 1,
+              separatorBuilder: (_, index) {
+                if (index == 0) return const SizedBox(height: 22);
+                return const SizedBox(height: 4);
+              },
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return const HomeLogoHeader();
+                }
+
+                final category = _defaultCategories[index - 1];
+                final progress = progressMap[category.toLowerCase()] ?? 0.0;
+
+                return HomeCategoryTile(
+                  category: category,
+                  progress: progress,
+                  icon: HomeCategoryMapper.iconFor(category),
+                  color: HomeCategoryMapper.colorFor(category),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RouteNames.practice,
+                      arguments: category,
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
 core/utils/responsive.dart
 // ===========================
 import 'package:flutter/material.dart';

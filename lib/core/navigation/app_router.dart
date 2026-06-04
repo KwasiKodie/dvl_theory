@@ -16,6 +16,8 @@ import '../../features/splash/presentation/screens/splash_screen_controller.dart
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/progress/presentation/screens/progress_screen.dart';
 import '../../features/practice/presentation/screens/practice_screen.dart';
+import '../../features/practice/presentation/screens/review_screen.dart';
+import '../../features/practice/domain/services/practice_session_controller.dart';
 import '../theme/theme_controller.dart';
 
 class AppRouter {
@@ -71,6 +73,13 @@ class AppRouter {
 
       case RouteNames.about:
         return RouteTransitions.fadeSlide(const AboutScreen());
+
+      case RouteNames.review:
+        return RouteTransitions.fadeSlide(
+          ReviewScreen(
+            reviewData: settings.arguments as List<ReviewQuestionData>,
+          ),
+        );
 
       default:
         return _errorRoute('Route not found: ${settings.name}');
