@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/navigation/route_names.dart';
+import '../../data/models/review_question_arguments.dart';
 import '../../domain/services/practice_session_controller.dart';
 import 'review_question_tile.dart';
 
@@ -22,8 +24,14 @@ class ReviewQuestionList extends StatelessWidget {
           isCorrect: item.isCorrect,
           isFlagged: item.isFlagged,
           onTap: () {
-            // Future:
-            // Navigate to question review details
+            Navigator.pushNamed(
+              context,
+              RouteNames.reviewQuestion,
+              arguments: ReviewQuestionArguments(
+                questions: questions,
+                initialIndex: index,
+              ),
+            );
           },
         );
       },

@@ -1,37 +1,41 @@
 import 'package:flutter/material.dart';
 
+import '../../../progress/domain/services/progress_engine.dart';
+
 class ProfileStatsCard extends StatelessWidget {
   const ProfileStatsCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final progress = ProgressEngine();
+
+    final accuracy = progress.overallAccuracy().round();
+    final testsTaken = progress.totalAnswered();
+    final bestScore = progress.overallAccuracy().round();
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-          children: const [
+          children: [
             _StatItem(
               icon: Icons.emoji_events,
               iconColor: Colors.green,
-              value: '82%',
+              value: '$accuracy%',
               label: 'Overall Progress',
             ),
-
             _StatItem(
               icon: Icons.assignment,
               iconColor: Colors.blue,
-              value: '23',
-              label: 'Tests Taken',
+              value: '$testsTaken',
+              label: 'Questions Answered',
             ),
-
             _StatItem(
               icon: Icons.track_changes,
               iconColor: Colors.pink,
-              value: '87%',
-              label: 'Best Score',
+              value: '$bestScore%',
+              label: 'Accuracy',
             ),
           ],
         ),
@@ -63,24 +67,21 @@ class _StatItem extends StatelessWidget {
           CircleAvatar(
             radius: 22,
             backgroundColor: iconColor.withOpacity(0.12),
-
             child: Icon(icon, color: iconColor),
           ),
-
           const SizedBox(height: 10),
-
           Text(
             value,
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
-
           const SizedBox(height: 4),
-
           Text(
             label,
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: theme.textTheme.bodySmall,
           ),
         ],

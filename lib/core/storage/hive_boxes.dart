@@ -7,4 +7,5 @@ class HiveBoxes {
   static const review = 'review_box';
   static const readiness = 'readiness_box';
   static const streak = 'streak_box';
+  static const profile = 'profile';
 }

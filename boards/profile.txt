@@ -1,0 +1,2486 @@
+// ===========================
+// features/profile/presentation/screens/profile_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/profile_header.dart';
+import '../widgets/profile_stats_card.dart';
+import '../widgets/profile_menu_section.dart';
+import '../widgets/logout_tile.dart';
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+
+      body: SafeArea(
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: theme.colorScheme.background,
+              surfaceTintColor: Colors.transparent,
+
+              title: Text(
+                'Profile',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.notifications),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(const [
+                  ProfileHeader(),
+
+                  SizedBox(height: 24),
+
+                  ProfileStatsCard(),
+
+                  SizedBox(height: 24),
+
+                  ProfileMenuSection(),
+
+                  SizedBox(height: 24),
+
+                  LogoutTile(),
+
+                  SizedBox(height: 40),
+                ]),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/profile_menu_section.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/navigation/route_names.dart';
+import 'profile_menu_tile.dart';
+
+class ProfileMenuSection extends StatelessWidget {
+  const ProfileMenuSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          ProfileMenuTile(
+            icon: Icons.people,
+            title: 'Account',
+            subtitle: 'Manage your personal information',
+
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.account);
+            },
+          ),
+
+          const Divider(height: 1),
+
+          ProfileMenuTile(
+            icon: Icons.menu_book,
+            title: 'Study Preferences',
+            subtitle: 'Set your study and test preferences',
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.studyPreferences);
+            },
+          ),
+
+          const Divider(height: 1),
+
+          ProfileMenuTile(
+            icon: Icons.notifications,
+            title: 'Notifications',
+            subtitle: 'Manage your notification settings',
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.notifications);
+            },
+          ),
+
+          const Divider(height: 1),
+
+          ProfileMenuTile(
+            icon: Icons.palette,
+            title: 'Appearance',
+            subtitle: 'Choose app theme',
+
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.settings);
+            },
+          ),
+
+          const Divider(height: 1),
+
+          ProfileMenuTile(
+            icon: Icons.language,
+            title: 'Language',
+            subtitle: 'Change app language',
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.language);
+            },
+          ),
+
+          const Divider(height: 1),
+
+          ProfileMenuTile(
+            icon: Icons.shield,
+            title: 'Privacy & Security',
+            subtitle: 'Manage your data privacy',
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.privacySecurity);
+            },
+          ),
+
+          const Divider(height: 1),
+
+          ProfileMenuTile(
+            icon: Icons.help_outline,
+            title: 'Help & Support',
+            subtitle: 'Get help and contact us',
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.helpSupport);
+            },
+          ),
+
+          const Divider(height: 1),
+
+          ProfileMenuTile(
+            icon: Icons.info_outline,
+            title: 'About',
+            subtitle: 'App version and information',
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.about);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/profile_stats_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class ProfileStatsCard extends StatelessWidget {
+  const ProfileStatsCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+          children: const [
+            _StatItem(
+              icon: Icons.emoji_events,
+              iconColor: Colors.green,
+              value: '82%',
+              label: 'Overall Progress',
+            ),
+
+            _StatItem(
+              icon: Icons.assignment,
+              iconColor: Colors.blue,
+              value: '23',
+              label: 'Tests Taken',
+            ),
+
+            _StatItem(
+              icon: Icons.track_changes,
+              iconColor: Colors.pink,
+              value: '87%',
+              label: 'Best Score',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StatItem extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String value;
+  final String label;
+
+  const _StatItem({
+    required this.icon,
+    required this.iconColor,
+    required this.value,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Expanded(
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 22,
+            backgroundColor: iconColor.withOpacity(0.12),
+
+            child: Icon(icon, color: iconColor),
+          ),
+
+          const SizedBox(height: 10),
+
+          Text(
+            value,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 4),
+
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodySmall,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ===========================
+// shared/navigation/app_bottom_navigation.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../core/navigation/navigation_items.dart';
+import '../../../core/utils/responsive.dart';
+
+class AppBottomNavigation extends StatelessWidget {
+  final int currentIndex;
+
+  const AppBottomNavigation({super.key, required this.currentIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    final isSmallPhone = Responsive.isSmallPhone(context);
+    final isTablet = Responsive.isTablet(context);
+
+    final items = NavigationItems.items;
+
+    return NavigationBar(
+      selectedIndex: currentIndex,
+      height: isTablet ? 82 : 72,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
+      indicatorColor: Theme.of(context).colorScheme.primary.withOpacity(0.14),
+      labelBehavior: isSmallPhone
+          ? NavigationDestinationLabelBehavior.onlyShowSelected
+          : NavigationDestinationLabelBehavior.alwaysShow,
+      onDestinationSelected: (index) {
+        final selectedRoute = items[index].route;
+        final currentRoute = ModalRoute.of(context)?.settings.name;
+
+        if (currentRoute == selectedRoute) return;
+
+        Navigator.pushNamed(context, selectedRoute);
+      },
+      destinations: items.map((item) {
+        return NavigationDestination(
+          icon: Tooltip(message: item.label, child: Icon(item.icon)),
+          selectedIcon: Tooltip(
+            message: item.label,
+            child: Icon(item.selectedIcon),
+          ),
+          label: item.label,
+        );
+      }).toList(),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/study_preference_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class StudyPreferenceTile extends StatelessWidget {
+  final String title;
+  final String? value;
+  final bool valueMuted;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+
+  const StudyPreferenceTile({
+    super.key,
+    required this.title,
+    this.value,
+    this.valueMuted = false,
+    this.trailing,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final valueWidget = value == null
+        ? null
+        : Text(
+            value!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: valueMuted
+                  ? theme.colorScheme.onSurfaceVariant
+                  : theme.colorScheme.primary,
+              fontWeight: FontWeight.w500,
+            ),
+          );
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+            ),
+            if (valueWidget != null) valueWidget,
+            if (trailing != null) ...[
+              const SizedBox(width: 12),
+              trailing!,
+            ] else if (onTap != null) ...[
+              const SizedBox(width: 8),
+              Icon(
+                Icons.chevron_right,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/study_preference_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import 'study_preference_tile.dart';
+
+class StudyPreferenceCard extends StatefulWidget {
+  const StudyPreferenceCard({super.key});
+
+  @override
+  State<StudyPreferenceCard> createState() => _StudyPreferenceCardState();
+}
+
+class _StudyPreferenceCardState extends State<StudyPreferenceCard> {
+  bool timerEnabled = true;
+  bool saveWrongAnswers = true;
+  bool autoAdvance = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withOpacity(0.6),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        child: Column(
+          children: [
+            StudyPreferenceTile(
+              title: 'Default Question Mode',
+              value: 'Multiple Choice',
+              onTap: () {},
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Question per Practice Test',
+              value: '20 Questions',
+              onTap: () {},
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Timer for Practice Test',
+              trailing: Switch(
+                value: timerEnabled,
+                onChanged: (value) {
+                  setState(() => timerEnabled = value);
+                },
+              ),
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Show Explanations',
+              value: 'After Every Answer',
+              onTap: () {},
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Save Wrong Answers',
+              trailing: Switch(
+                value: saveWrongAnswers,
+                onChanged: (value) {
+                  setState(() => saveWrongAnswers = value);
+                },
+              ),
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Auto Advance to Next Question',
+              value: autoAdvance ? 'Enabled' : 'Disabled',
+              valueMuted: !autoAdvance,
+              trailing: Switch(
+                value: autoAdvance,
+                onChanged: (value) {
+                  setState(() => autoAdvance = value);
+                },
+              ),
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Default Mock Test Time',
+              value: '30 Minutes',
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PreferenceDivider extends StatelessWidget {
+  const _PreferenceDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 1,
+      color: Theme.of(context).colorScheme.outlineVariant,
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/profile_header.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class ProfileHeader extends StatelessWidget {
+  const ProfileHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Row(
+      children: [
+        CircleAvatar(
+          radius: 36,
+          backgroundColor: theme.colorScheme.surfaceVariant,
+
+          child: Icon(
+            Icons.person,
+            size: 42,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+
+        const SizedBox(width: 16),
+
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+
+            children: [
+              Text(
+                'John Doe',
+
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+
+              const SizedBox(height: 4),
+
+              Text(
+                'Keep learning, keep driving\nwith confidence!',
+
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        CircleAvatar(
+          radius: 18,
+
+          backgroundColor: theme.colorScheme.surface,
+
+          child: Icon(Icons.edit, size: 18, color: theme.colorScheme.onSurface),
+        ),
+      ],
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/privacy_security_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class PrivacySecurityTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final String? value;
+  final bool destructive;
+  final VoidCallback? onTap;
+
+  const PrivacySecurityTile({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.value,
+    this.destructive = false,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final Color color = destructive
+        ? theme.colorScheme.error
+        : theme.colorScheme.onSurface;
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18),
+
+        child: Row(
+          children: [
+            Icon(icon, color: color, size: 24),
+
+            const SizedBox(width: 16),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+                  Text(
+                    title,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: color,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  Text(
+                    subtitle,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: destructive
+                          ? theme.colorScheme.error.withOpacity(0.8)
+                          : theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            if (value != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Text(
+                  value!,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+
+            Icon(
+              Icons.chevron_right,
+              color: destructive
+                  ? theme.colorScheme.error
+                  : theme.colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/privacy_security_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import 'privacy_security_tile.dart';
+
+class PrivacySecurityCard extends StatelessWidget {
+  const PrivacySecurityCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+        ),
+      ),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+
+        child: Column(
+          children: [
+            PrivacySecurityTile(
+              icon: Icons.storage,
+              title: 'Data Usage',
+              subtitle: 'Control how your data is used',
+              onTap: () {},
+            ),
+
+            const _PrivacyDivider(),
+
+            PrivacySecurityTile(
+              icon: Icons.cleaning_services,
+              title: 'Clear Cache',
+              subtitle: 'Free up storage space',
+              value: '12.4 MB',
+              onTap: () {},
+            ),
+
+            const _PrivacyDivider(),
+
+            PrivacySecurityTile(
+              icon: Icons.file_download_outlined,
+              title: 'Export My Data',
+              subtitle: 'Download your data',
+              onTap: () {},
+            ),
+
+            const _PrivacyDivider(),
+
+            PrivacySecurityTile(
+              icon: Icons.delete,
+              title: 'Delete Account',
+              subtitle: 'Permanently delete your account',
+              destructive: true,
+              onTap: () {
+                _showDeleteDialog(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Delete Account'),
+        content: const Text(
+          'This action cannot be undone. Are you sure you want to permanently delete your account?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PrivacyDivider extends StatelessWidget {
+  const _PrivacyDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 1,
+      color: Theme.of(context).colorScheme.outlineVariant,
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/notification_settings_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import 'notification_setting_tile.dart';
+
+class NotificationSettingsCard extends StatefulWidget {
+  const NotificationSettingsCard({super.key});
+
+  @override
+  State<NotificationSettingsCard> createState() =>
+      _NotificationSettingsCardState();
+}
+
+class _NotificationSettingsCardState extends State<NotificationSettingsCard> {
+  bool studyReminders = true;
+  bool testReminders = true;
+  bool newFeatures = true;
+  bool tipsAdvice = true;
+  bool promotions = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+
+      color: theme.colorScheme.surface,
+
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+        ),
+      ),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+
+        child: Column(
+          children: [
+            NotificationSettingTile(
+              title: 'Study Reminders',
+              subtitle: 'Get reminded to study daily',
+              value: studyReminders,
+              onChanged: (value) {
+                setState(() {
+                  studyReminders = value;
+                });
+              },
+            ),
+
+            const _NotificationDivider(),
+
+            NotificationSettingTile(
+              title: 'Test Reminders',
+              subtitle: 'Get reminded about mock tests',
+              value: testReminders,
+              onChanged: (value) {
+                setState(() {
+                  testReminders = value;
+                });
+              },
+            ),
+
+            const _NotificationDivider(),
+
+            NotificationSettingTile(
+              title: 'New Features',
+              subtitle: 'Updates about new features',
+              value: newFeatures,
+              onChanged: (value) {
+                setState(() {
+                  newFeatures = value;
+                });
+              },
+            ),
+
+            const _NotificationDivider(),
+
+            NotificationSettingTile(
+              title: 'Tip & Advice',
+              subtitle: 'Helpful driving tips and advice',
+              value: tipsAdvice,
+              onChanged: (value) {
+                setState(() {
+                  tipsAdvice = value;
+                });
+              },
+            ),
+
+            const _NotificationDivider(),
+
+            NotificationSettingTile(
+              title: 'Promotions',
+              subtitle: 'Offers and promotions',
+              value: promotions,
+              onChanged: (value) {
+                setState(() {
+                  promotions = value;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NotificationDivider extends StatelessWidget {
+  const _NotificationDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 1,
+      color: Theme.of(context).colorScheme.outlineVariant,
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/notification_setting_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class NotificationSettingTile extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const NotificationSettingTile({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+                Text(
+                  title,
+
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                Text(
+                  subtitle,
+
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Switch(value: value, onChanged: onChanged),
+        ],
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/logout_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class LogoutTile extends StatelessWidget {
+  const LogoutTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        onTap: () {},
+
+        leading: CircleAvatar(
+          backgroundColor: Colors.red.withOpacity(0.12),
+
+          child: const Icon(Icons.logout, color: Colors.red),
+        ),
+
+        title: const Text(
+          'Logout',
+          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+        ),
+
+        subtitle: const Text('Logout from your account'),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/language_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class LanguageTile extends StatelessWidget {
+  final String code;
+  final String nativeName;
+  final String englishName;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const LanguageTile({
+    super.key,
+    required this.code,
+    required this.nativeName,
+    required this.englishName,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18),
+
+        child: Row(
+          children: [
+            Radio<String>(
+              value: code,
+              groupValue: selected ? code : null,
+              onChanged: (_) => onTap(),
+            ),
+
+            Expanded(
+              child: Text(
+                nativeName,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+
+            Text(
+              englishName,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: selected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurfaceVariant,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/language_selection_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import 'language_tile.dart';
+
+class LanguageSelectionCard extends StatefulWidget {
+  const LanguageSelectionCard({super.key});
+
+  @override
+  State<LanguageSelectionCard> createState() => _LanguageSelectionCardState();
+}
+
+class _LanguageSelectionCardState extends State<LanguageSelectionCard> {
+  String selectedLanguage = 'en';
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+        ),
+      ),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+
+        child: Column(
+          children: [
+            LanguageTile(
+              code: 'en',
+              nativeName: 'English',
+              englishName: 'Default',
+              selected: selectedLanguage == 'en',
+              onTap: () {
+                setState(() {
+                  selectedLanguage = 'en';
+                });
+              },
+            ),
+
+            const _LanguageDivider(),
+
+            LanguageTile(
+              code: 'es',
+              nativeName: 'Español',
+              englishName: 'Spanish',
+              selected: selectedLanguage == 'es',
+              onTap: () {
+                setState(() {
+                  selectedLanguage = 'es';
+                });
+              },
+            ),
+
+            const _LanguageDivider(),
+
+            LanguageTile(
+              code: 'fr',
+              nativeName: 'Français',
+              englishName: 'French',
+              selected: selectedLanguage == 'fr',
+              onTap: () {
+                setState(() {
+                  selectedLanguage = 'fr';
+                });
+              },
+            ),
+
+            const _LanguageDivider(),
+
+            LanguageTile(
+              code: 'de',
+              nativeName: 'Deutsch',
+              englishName: 'German',
+              selected: selectedLanguage == 'de',
+              onTap: () {
+                setState(() {
+                  selectedLanguage = 'de';
+                });
+              },
+            ),
+
+            const _LanguageDivider(),
+
+            LanguageTile(
+              code: 'ar',
+              nativeName: 'العربية',
+              englishName: 'Arabic',
+              selected: selectedLanguage == 'ar',
+              onTap: () {
+                setState(() {
+                  selectedLanguage = 'ar';
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LanguageDivider extends StatelessWidget {
+  const _LanguageDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 1,
+      color: Theme.of(context).colorScheme.outlineVariant,
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/help_support_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class HelpSupportTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback? onTap;
+
+  const HelpSupportTile({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18),
+
+        child: Row(
+          children: [
+            Icon(icon, color: theme.colorScheme.onSurfaceVariant, size: 24),
+
+            const SizedBox(width: 16),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+                  Text(
+                    title,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  Text(
+                    subtitle,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            Icon(
+              Icons.chevron_right,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/help_support_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import 'help_support_tile.dart';
+
+class HelpSupportCard extends StatelessWidget {
+  const HelpSupportCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+        ),
+      ),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+
+        child: Column(
+          children: [
+            HelpSupportTile(
+              icon: Icons.help,
+              title: 'FAQs',
+              subtitle: 'Find answers to common questions',
+              onTap: () {},
+            ),
+
+            const _HelpDivider(),
+
+            HelpSupportTile(
+              icon: Icons.phone,
+              title: 'Contact Us',
+              subtitle: 'Send us a message',
+              onTap: () {},
+            ),
+
+            const _HelpDivider(),
+
+            HelpSupportTile(
+              icon: Icons.report_problem,
+              title: 'Report a Problem',
+              subtitle: 'Help us improve the app',
+              onTap: () {},
+            ),
+
+            const _HelpDivider(),
+
+            HelpSupportTile(
+              icon: Icons.star_outline,
+              title: 'Rate Our App',
+              subtitle: 'Share your feedback',
+              onTap: () {},
+            ),
+
+            const _HelpDivider(),
+
+            HelpSupportTile(
+              icon: Icons.people_alt_outlined,
+              title: 'Follow Us',
+              subtitle: 'Stay connected on social media',
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HelpDivider extends StatelessWidget {
+  const _HelpDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 1,
+      color: Theme.of(context).colorScheme.outlineVariant,
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/account_profile_photo.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class AccountProfilePhoto extends StatelessWidget {
+  const AccountProfilePhoto({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 38,
+
+          backgroundColor: theme.colorScheme.surfaceContainerHighest,
+
+          child: Icon(
+            Icons.person,
+            size: 50,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
+        TextButton(onPressed: () {}, child: const Text('Change Photo')),
+      ],
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/account_info_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class AccountInfoTile extends StatelessWidget {
+  final String title;
+  final String value;
+  final VoidCallback? onTap;
+
+  const AccountInfoTile({
+    super.key,
+    required this.title,
+    required this.value,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+                  Text(
+                    title,
+
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  Text(
+                    value,
+
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            Icon(
+              Icons.chevron_right,
+
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/account_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import 'account_profile_photo.dart';
+import 'account_info_tile.dart';
+
+class AccountCard extends StatelessWidget {
+  const AccountCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+
+        child: Column(
+          children: [
+            const AccountProfilePhoto(),
+
+            const SizedBox(height: 20),
+
+            Divider(color: theme.colorScheme.outlineVariant),
+
+            const AccountInfoTile(title: 'Full Name', value: 'John Doe'),
+
+            const AccountInfoTile(title: 'Email', value: 'john.doe@email.com'),
+
+            const AccountInfoTile(title: 'Date of Birth', value: '15 May 1998'),
+
+            const AccountInfoTile(
+              title: 'Phone Number',
+              value: '+233 599 206 754',
+            ),
+
+            Divider(color: theme.colorScheme.outlineVariant),
+
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+
+              title: Text(
+                'Change Password',
+
+                style: theme.textTheme.titleMedium,
+              ),
+
+              trailing: const Icon(Icons.chevron_right),
+
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/about_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class AboutTile extends StatelessWidget {
+  final String title;
+  final VoidCallback? onTap;
+
+  const AboutTile({super.key, required this.title, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 22),
+
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+
+            Icon(
+              Icons.chevron_right,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/about_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import 'about_tile.dart';
+
+class AboutCard extends StatelessWidget {
+  const AboutCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+
+      color: theme.colorScheme.surface,
+
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+        ),
+      ),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+
+        child: Column(
+          children: [
+            AboutTile(title: 'What’s New', onTap: () {}),
+
+            const _AboutDivider(),
+
+            AboutTile(title: 'Terms of Use', onTap: () {}),
+
+            const _AboutDivider(),
+
+            AboutTile(title: 'Privacy Policy', onTap: () {}),
+
+            const _AboutDivider(),
+
+            AboutTile(
+              title: 'Licenses',
+              onTap: () {
+                showLicensePage(context: context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AboutDivider extends StatelessWidget {
+  const _AboutDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 1,
+      color: Theme.of(context).colorScheme.outlineVariant,
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/about_branding_section.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class AboutBrandingSection extends StatelessWidget {
+  const AboutBrandingSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      children: [
+        Image.asset('assets/images/shared/logo.png', width: 140),
+
+        const SizedBox(height: 16),
+
+        RichText(
+          text: TextSpan(
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+
+            children: [
+              TextSpan(
+                text: 'DVL',
+                style: TextStyle(color: theme.colorScheme.onBackground),
+              ),
+
+              const TextSpan(
+                text: 'THEORY',
+                style: TextStyle(color: Color(0xFFFF1A0A)),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 18),
+
+        Text(
+          'Version 1.0.0',
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/profile_photo_sheet.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../domain/services/profile_photo_service.dart';
+import '../../domain/services/user_profile_controller.dart';
+
+class ProfilePhotoSheet extends StatelessWidget {
+  const ProfilePhotoSheet({super.key});
+
+  Future<void> _pickFromGallery(BuildContext context) async {
+    final path = await ProfilePhotoService.instance.pickFromGallery();
+
+    if (path == null) return;
+
+    await UserProfileController.instance.updateProfileImage(path);
+
+    if (!context.mounted) return;
+
+    Navigator.pop(context);
+  }
+
+  Future<void> _takePhoto(BuildContext context) async {
+    final path = await ProfilePhotoService.instance.takePhoto();
+
+    if (path == null) return;
+
+    await UserProfileController.instance.updateProfileImage(path);
+
+    if (!context.mounted) return;
+
+    Navigator.pop(context);
+  }
+
+  Future<void> _removePhoto(BuildContext context) async {
+    final controller = UserProfileController.instance;
+
+    await ProfilePhotoService.instance.deletePhoto(controller.profileImagePath);
+
+    await controller.removeProfileImage();
+
+    if (!context.mounted) return;
+
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 8,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Take Photo'),
+                onTap: () => _takePhoto(context),
+              ),
+
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose From Gallery'),
+                onTap: () => _pickFromGallery(context),
+              ),
+
+              ListTile(
+                leading: Icon(Icons.delete, color: theme.colorScheme.error),
+                title: Text(
+                  'Remove Photo',
+                  style: TextStyle(color: theme.colorScheme.error),
+                ),
+                onTap: () => _removePhoto(context),
+              ),
+
+              const Divider(height: 1),
+
+              ListTile(
+                leading: const Icon(Icons.close),
+                title: const Text('Cancel'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/profile_avatar.dart
+// ===========================
+import 'package:flutter/material.dart';
+import '../../domain/services/user_profile_controller.dart';
+import 'dart:io';
+
+class ProfileAvatar extends StatelessWidget {
+  final double radius;
+
+  const ProfileAvatar({super.key, this.radius = 36});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = UserProfileController.instance;
+
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (_, __) {
+        final imagePath = controller.profileImagePath;
+
+        return CircleAvatar(
+          radius: radius,
+
+          backgroundImage: imagePath != null
+              ? FileImage(File(imagePath))
+              : null,
+
+          child: imagePath == null ? Icon(Icons.person, size: radius) : null,
+        );
+      },
+    );
+  }
+}
+
+// ===========================
+// features/profile/domain/services/profile_photo_service.dart
+// ===========================
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+
+class ProfilePhotoService {
+  ProfilePhotoService._();
+
+  static final ProfilePhotoService instance = ProfilePhotoService._();
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<String?> pickFromGallery() async {
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+    );
+
+    if (image == null) return null;
+
+    return _saveImage(File(image.path));
+  }
+
+  Future<String?> takePhoto() async {
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 85,
+    );
+
+    if (image == null) return null;
+
+    return _saveImage(File(image.path));
+  }
+
+  Future<String> _saveImage(File file) async {
+    final appDir = await getApplicationDocumentsDirectory();
+
+    final profileDir = Directory('${appDir.path}/profile');
+
+    if (!await profileDir.exists()) {
+      await profileDir.create(recursive: true);
+    }
+
+    final filePath = '${profileDir.path}/profile_photo.jpg';
+
+    final savedImage = await file.copy(filePath);
+
+    return savedImage.path;
+  }
+
+  Future<void> deletePhoto(String? imagePath) async {
+    if (imagePath == null || imagePath.isEmpty) {
+      return;
+    }
+
+    final file = File(imagePath);
+
+    if (await file.exists()) {
+      await file.delete();
+    }
+  }
+}
+
+// ===========================
+// features/profile/domain/services/user_profile_controller.dart
+// ===========================
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+import 'package:dvl_theory/core/storage/hive_boxes.dart';
+
+class UserProfileController extends ChangeNotifier {
+  UserProfileController._();
+
+  static final UserProfileController instance = UserProfileController._();
+
+  String fullName = 'John Doe';
+  String email = 'john.doe@email.com';
+  DateTime dateOfBirth = DateTime(1998, 5, 15);
+  String phoneNumber = '+233 599 206 754';
+  String? profileImagePath;
+
+  void updateProfile({
+    required String fullName,
+    required String email,
+    required DateTime dateOfBirth,
+    required String phoneNumber,
+  }) {
+    this.fullName = fullName.trim();
+    this.email = email.trim();
+    this.dateOfBirth = dateOfBirth;
+    this.phoneNumber = phoneNumber.trim();
+
+    notifyListeners();
+  }
+
+  Future<void> updateProfileImage(String path) async {
+    profileImagePath = path;
+
+    final box = Hive.box(HiveBoxes.profile);
+    await box.put('profileImagePath', path);
+
+    notifyListeners();
+  }
+
+  Future<void> removeProfileImage() async {
+    profileImagePath = null;
+
+    final box = Hive.box(HiveBoxes.profile);
+    await box.delete('profileImagePath');
+
+    notifyListeners();
+  }
+
+  String get firstName {
+    final parts = fullName.trim().split(RegExp(r'\s+'));
+    return parts.isEmpty ? fullName : parts.first;
+  }
+
+  String get formattedDob {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    return '${dateOfBirth.day} ${months[dateOfBirth.month - 1]} ${dateOfBirth.year}';
+  }
+}
+
+
+// ===========================
+// features/profile/presentation/screens/study_preference_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/study_preference_card.dart';
+
+class StudyPreferencesScreen extends StatelessWidget {
+  const StudyPreferencesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isTablet = Responsive.isTablet(context);
+    final width = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+        foregroundColor: theme.colorScheme.onBackground,
+        title: Text(
+          'Study Preferences',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isTablet ? 720 : width),
+            child: const SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+              child: StudyPreferenceCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/screens/profile_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/profile_header.dart';
+import '../widgets/profile_stats_card.dart';
+import '../widgets/profile_menu_section.dart';
+import '../widgets/logout_tile.dart';
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+
+      body: SafeArea(
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: theme.colorScheme.background,
+              surfaceTintColor: Colors.transparent,
+
+              title: Text(
+                'Profile',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.notifications),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(const [
+                  ProfileHeader(),
+
+                  SizedBox(height: 24),
+
+                  ProfileStatsCard(),
+
+                  SizedBox(height: 24),
+
+                  ProfileMenuSection(),
+
+                  SizedBox(height: 24),
+
+                  LogoutTile(),
+
+                  SizedBox(height: 40),
+                ]),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/screens/privacy_security_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/privacy_security_card.dart';
+
+class PrivacySecurityScreen extends StatelessWidget {
+  const PrivacySecurityScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final isTablet = Responsive.isTablet(context);
+    final width = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+        foregroundColor: theme.colorScheme.onBackground,
+
+        title: Text(
+          'Privacy & Security',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isTablet ? 720 : width),
+            child: const SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+              child: PrivacySecurityCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/screens/notification_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/notification_settings_card.dart';
+
+class NotificationsScreen extends StatelessWidget {
+  const NotificationsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final isTablet = Responsive.isTablet(context);
+    final width = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+        foregroundColor: theme.colorScheme.onBackground,
+
+        title: Text(
+          'Notifications',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isTablet ? 720 : width),
+
+            child: const SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+
+              child: NotificationSettingsCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/screens/language_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/language_selection_card.dart';
+
+class LanguageScreen extends StatelessWidget {
+  const LanguageScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final isTablet = Responsive.isTablet(context);
+    final width = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+        foregroundColor: theme.colorScheme.onBackground,
+
+        title: Text(
+          'Language',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isTablet ? 720 : width),
+            child: const SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+              child: LanguageSelectionCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/screens/help_support_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/help_support_card.dart';
+
+class HelpSupportScreen extends StatelessWidget {
+  const HelpSupportScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final isTablet = Responsive.isTablet(context);
+    final width = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+        foregroundColor: theme.colorScheme.onBackground,
+
+        title: Text(
+          'Help & Support',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isTablet ? 720 : width),
+            child: const SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+              child: HelpSupportCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/screens/account_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+
+import '../widgets/account_card.dart';
+
+class AccountScreen extends StatelessWidget {
+  const AccountScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final isTablet = Responsive.isTablet(context);
+    final width = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+
+        title: Text(
+          'Account',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isTablet ? 700 : width),
+
+            child: const SingleChildScrollView(
+              padding: EdgeInsets.all(20),
+              child: AccountCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/screens/about_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/about_branding_section.dart';
+import '../widgets/about_card.dart';
+
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final width = MediaQuery.of(context).size.width;
+    final isTablet = Responsive.isTablet(context);
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+        foregroundColor: theme.colorScheme.onBackground,
+
+        title: Text(
+          'About',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isTablet ? 720 : width),
+
+            child: const SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+
+              child: Column(
+                children: [
+                  AboutBrandingSection(),
+                  SizedBox(height: 28),
+                  AboutCard(),
+                  SizedBox(height: 32),
+                  _CopyrightSection(),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CopyrightSection extends StatelessWidget {
+  const _CopyrightSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      children: [
+        Text(
+          '© 2025 DVLTHEORY. All rights reserved.',
+          textAlign: TextAlign.center,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+
+        const SizedBox(height: 32),
+
+        Text(
+          'Powered By',
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+
+        const SizedBox(height: 14),
+
+        Container(
+          width: 90,
+          height: 36,
+
+          alignment: Alignment.center,
+
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(4),
+          ),
+
+          child: const Text(
+            'VROTONIX',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+              fontSize: 11,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

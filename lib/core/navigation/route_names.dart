@@ -3,6 +3,11 @@ class RouteNames {
   static const home = '/home';
   static const practice = '/practice';
   static const mockExam = '/mock-exam';
+  static const mockSummary = '/mock-summary';
+  static const mockSubmit = '/mock-submit';
+  static const mockResult = '/mock-result';
+  static const mockIntro = '/mock-intro';
+  static const mockInstructions = '/mock-instructions';
   static const progress = '/progress';
   static const review = '/review';
   static const reviewQuestion = '/review-question';

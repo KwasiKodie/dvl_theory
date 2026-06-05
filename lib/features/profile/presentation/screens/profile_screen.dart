@@ -49,12 +49,12 @@ class ProfileScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
 
               sliver: SliverList(
-                delegate: SliverChildListDelegate(const [
-                  ProfileHeader(),
+                delegate: SliverChildListDelegate([
+                  const ProfileHeader(),
 
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                  ProfileStatsCard(),
+                  const ProfileStatsCard(),
 
                   SizedBox(height: 24),
 

@@ -17,7 +17,15 @@ import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/progress/presentation/screens/progress_screen.dart';
 import '../../features/practice/presentation/screens/practice_screen.dart';
 import '../../features/practice/presentation/screens/review_screen.dart';
+import '../../features/practice/presentation/screens/review_question_detail_screen.dart';
+import '../../features/practice/data/models/review_question_arguments.dart';
 import '../../features/practice/domain/services/practice_session_controller.dart';
+import '../../features/mock/presentation/screens/mock_intro_screen.dart';
+import '../../features/mock/presentation/screens/mock_instructions_screen.dart';
+import '../../features/mock/presentation/screens/mock_exam_screen.dart';
+import '../../features/mock/presentation/screens/mock_summary_screen.dart';
+import '../../features/mock/presentation/screens/mock_submit_screen.dart';
+import '../../features/mock/presentation/screens/mock_result_screen.dart';
 import '../theme/theme_controller.dart';
 
 class AppRouter {
@@ -35,6 +43,24 @@ class AppRouter {
 
       case RouteNames.practice:
         return RouteTransitions.fadeSlide(const PracticeScreen());
+
+      case RouteNames.mockIntro:
+        return RouteTransitions.fadeSlide(const MockIntroScreen());
+
+      case RouteNames.mockInstructions:
+        return RouteTransitions.fadeSlide(const MockInstructionsScreen());
+
+      case RouteNames.mockExam:
+        return RouteTransitions.fadeSlide(const MockExamScreen());
+
+      case RouteNames.mockSummary:
+        return RouteTransitions.fadeSlide(const MockSummaryScreen());
+
+      case RouteNames.mockSubmit:
+        return RouteTransitions.fadeSlide(const MockSubmitScreen());
+
+      case RouteNames.mockResult:
+        return RouteTransitions.fadeSlide(const MockResultScreen());
 
       case RouteNames.settings:
         final controller = themeController;
@@ -78,6 +104,13 @@ class AppRouter {
         return RouteTransitions.fadeSlide(
           ReviewScreen(
             reviewData: settings.arguments as List<ReviewQuestionData>,
+          ),
+        );
+
+      case RouteNames.reviewQuestion:
+        return RouteTransitions.fadeSlide(
+          ReviewQuestionDetailScreen(
+            args: settings.arguments as ReviewQuestionArguments,
           ),
         );
 

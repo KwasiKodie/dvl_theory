@@ -46,12 +46,35 @@
 │   │   └── widgets
 │   │       ├── home_header_section.dart
 │   │       └── home_theme.dart
+│   ├── mock
+│   │   ├── data
+│   │   │   └── models
+│   │   │       └── mock_configuration.dart
+│   │   ├── domain
+│   │   │   └── services
+│   │   │       └── mock_session_controller.dart
+│   │   └── presentation
+│   │       ├── screens
+│   │       │   ├── mock_exam_screen.dart
+│   │       │   ├── mock_instructions_screen.dart
+│   │       │   ├── mock_intro_screen.dart
+│   │       │   ├── mock_result_screen.dart
+│   │       │   ├── mock_submit_screen.dart
+│   │       │   └── mock_summary_screen.dart
+│   │       └── widgets
+│   │           ├── instruction_card.dart
+│   │           ├── instruction_item.dart
+│   │           ├── mock_action_button.dart
+│   │           ├── mock_configuration_tile.dart
+│   │           ├── mock_exam_header.dart
+│   │           └── mock_info_card.dart
 │   ├── practice
 │   │   ├── data
 │   │   │   ├── datasources
 │   │   │   │   └── local_question_loader.dart
 │   │   │   └── models
 │   │   │       ├── question_model.dart
+│   │   │       ├── review_question_arguments.dart
 │   │   │       └── review_question_model.dart
 │   │   ├── domain
 │   │   │   └── services
@@ -60,15 +83,23 @@
 │   │   └── presentation
 │   │       ├── screens
 │   │       │   ├── practice_screen.dart
+│   │       │   ├── review_question_detail_screen.dart
 │   │       │   └── review_screen.dart
 │   │       └── widgets
 │   │           ├── practice_answer_option_tile.dart
 │   │           ├── practice_explanation_card.dart
 │   │           ├── practice_progress_card.dart
+│   │           ├── review_explanation_card.dart
 │   │           ├── review_filter_chip.dart
+│   │           ├── review_option_tile.dart
 │   │           ├── review_question_list.dart
-│   │           └── review_question_tile.dart
+│   │           ├── review_question_tile.dart
+│   │           └── review_status_badge.dart
 │   ├── profile
+│   │   ├── domain
+│   │   │   └── services
+│   │   │       ├── profile_photo_service.dart
+│   │   │       └── user_profile_controller.dart
 │   │   └── presentation
 │   │       ├── screens
 │   │       │   ├── about_screen.dart
@@ -95,9 +126,11 @@
 │   │           ├── notification_setting_tile.dart
 │   │           ├── privacy_security_card.dart
 │   │           ├── privacy_security_tile.dart
+│   │           ├── profile_avatar.dart
 │   │           ├── profile_header.dart
 │   │           ├── profile_menu_section.dart
 │   │           ├── profile_menu_tile.dart
+│   │           ├── profile_photo_sheet.dart
 │   │           ├── profile_stats_card.dart
 │   │           ├── study_preference_card.dart
 │   │           └── study_preference_tile.dart
@@ -143,4 +176,4 @@
     └── widgets
         └── action_card.dart
 
-57 directories, 87 files
+67 directories, 110 files

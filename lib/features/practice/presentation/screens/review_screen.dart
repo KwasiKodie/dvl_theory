@@ -38,7 +38,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
 
-      bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 1),
 
       appBar: AppBar(
         centerTitle: true,

@@ -5,6 +5,8 @@ class HiveService {
   static Future<void> init() async {
     await Hive.initFlutter();
 
+    await Hive.openBox(HiveBoxes.profile);
+
     // Open all boxes BEFORE app starts
     await Future.wait([
       Hive.openBox(HiveBoxes.attempts),

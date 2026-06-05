@@ -1,0 +1,625 @@
+After analysing all the mock UI screens and comparing them with what we already built for Practice, there is a lot we can reuse rather than building everything from scratch.
+
+---
+
+# Complete Mock Exam Flow
+
+The screens form the following workflow:
+
+```text
+Home
+ ↓
+Mock Intro Screen
+ ↓
+Instructions Screen
+ ↓
+Mock Exam Session
+ ↓
+Review Answers Screen
+ ↓
+Question Detail Screen
+ ↓
+Back to Review
+ ↓
+Submit Confirmation
+ ↓
+Result Screen
+ ↓
+Review Answers (optional)
+ ↓
+Home
+```
+
+---
+
+# Screen 1 — Mock Intro
+
+Already designed.
+
+Purpose:
+
+* Explain mock test format
+* Show:
+
+  * 20 Questions
+  * Timed Mode
+  * Random Questions
+  * Pass Mark
+
+Navigation:
+
+```text
+Instructions Button
+ ↓
+Instructions Screen
+```
+
+Current location:
+
+```text
+features/mock/presentation/screens/mock_intro_screen.dart
+```
+
+---
+
+# Screen 2 — Instructions Screen
+
+Already designed.
+
+Purpose:
+
+* Explain rules
+* Prevent accidental start
+
+Navigation:
+
+```text
+I'm Ready, Start Test
+ ↓
+Mock Exam Session
+```
+
+Current location:
+
+```text
+features/mock/presentation/screens/mock_instructions_screen.dart
+```
+
+---
+
+# Screen 3 — Mock Exam Session
+
+First new major screen.
+
+This is the equivalent of:
+
+```text
+PracticeScreen
+```
+
+but with:
+
+### Additional requirements
+
+#### Timer
+
+Top card contains:
+
+```text
+Time left
+22:32
+
+Questions
+3 / 20
+```
+
+---
+
+### Color State
+
+#### Green
+
+More than 10 minutes remaining.
+
+#### Amber
+
+5–10 minutes remaining.
+
+#### Red
+
+Less than 5 minutes remaining.
+
+Exactly as shown in screenshots.
+
+---
+
+### Actions
+
+Bottom contains:
+
+```text
+Flag
+Review
+Next
+```
+
+---
+
+### Flag Button
+
+Marks question for review.
+
+Stored in session.
+
+```dart
+Set<int> flaggedQuestions
+```
+
+---
+
+### Review Button
+
+User can temporarily review answers before submission.
+
+Opens:
+
+```text
+Mock Review Screen
+```
+
+without ending test.
+
+---
+
+### Next Button
+
+Moves to next question.
+
+---
+
+### Important Difference from Practice
+
+Practice:
+
+```text
+Answer
+↓
+Show explanation immediately
+```
+
+Mock:
+
+```text
+Answer
+↓
+NO explanation
+↓
+Next
+```
+
+This is critical.
+
+Real exams do not reveal answers during test.
+
+---
+
+# Screen 4 — End of Exam Summary
+
+When:
+
+```text
+Question 20 answered
+```
+
+or
+
+```text
+Timer = 00:00
+```
+
+Show summary page.
+
+---
+
+Contents
+
+### Timer Card
+
+Red warning state.
+
+---
+
+### Completion Card
+
+```text
+You have answered all questions.
+Please review your answers before submitting.
+```
+
+---
+
+### Statistics Card
+
+```text
+Answered
+20 / 20
+
+Flagged
+3
+
+Unanswered
+0
+```
+
+---
+
+Button:
+
+```text
+Review Answers
+```
+
+---
+
+Navigation:
+
+```text
+Review Answers
+ ↓
+Mock Review Screen
+```
+
+---
+
+# Screen 5 — Submit Confirmation
+
+When user presses:
+
+```text
+Submit Test
+```
+
+from summary page.
+
+Show confirmation.
+
+---
+
+Message
+
+```text
+Are you sure you want to submit your test?
+```
+
+```text
+You won't be able to change answers after submitting.
+```
+
+---
+
+Buttons
+
+```text
+Yes, Submit Test
+Cancel
+```
+
+---
+
+Navigation
+
+```text
+Submit
+ ↓
+Result Screen
+```
+
+---
+
+# Screen 6 — Result Screen (PASS)
+
+When score >= pass mark.
+
+Example:
+
+```text
+18 / 20
+```
+
+Pass mark:
+
+```text
+14 / 20
+```
+
+(70%)
+
+---
+
+Display:
+
+```text
+Congratulations!
+You Passed
+```
+
+---
+
+Circular score indicator:
+
+```text
+18 / 20
+
+75%
+```
+
+---
+
+Statistics
+
+```text
+Pass Mark
+14 / 20
+
+Correct
+18
+
+Wrong
+2
+```
+
+---
+
+Buttons
+
+```text
+Review Answers
+Back Home
+```
+
+---
+
+# Screen 7 — Result Screen (FAIL)
+
+Same screen.
+
+Different styling:
+
+Red.
+
+---
+
+Message
+
+```text
+Sorry, You Didn't Pass
+```
+
+---
+
+Example:
+
+```text
+13 / 20
+65%
+```
+
+---
+
+Buttons identical.
+
+---
+
+# Screen 8 — Review Answers
+
+Good news:
+
+This screen already exists.
+
+We built:
+
+```text
+review_screen.dart
+```
+
+under Practice.
+
+That screen is almost identical to the mock design.
+
+We should reuse it.
+
+---
+
+Minor change
+
+Current:
+
+```text
+Question 1
+Question 2
+...
+```
+
+Need support for:
+
+```text
+Mock Question 1
+```
+
+or
+
+```text
+Question 1 of 20
+```
+
+if desired.
+
+---
+
+# Screen 9–11 — Question Detail Screens
+
+These also already exist.
+
+We already created:
+
+```text
+review_question_detail_screen.dart
+```
+
+for Practice.
+
+And it supports:
+
+### Correct
+
+Green state
+
+---
+
+### Wrong
+
+Red state
+
+---
+
+### Flagged
+
+Amber state
+
+Exactly matching the screenshots.
+
+---
+
+Therefore:
+
+```text
+REUSE COMPLETELY
+```
+
+No duplication needed.
+
+---
+
+# Biggest Architectural Revelation
+
+The mock feature should NOT have its own review implementation.
+
+Reuse:
+
+```text
+practice/presentation/screens/review_screen.dart
+
+practice/presentation/screens/review_question_detail_screen.dart
+```
+
+because:
+
+* identical UI
+* identical logic
+* identical filters
+* identical navigation
+
+This keeps maintenance low.
+
+---
+
+# New Files Required
+
+Based on current tree 
+
+I would add:
+
+```text
+features/mock/
+│
+├── domain
+│   └── services
+│       └── mock_session_controller.dart
+│
+├── presentation
+│   ├── screens
+│   │
+│   ├── mock_exam_screen.dart
+│   ├── mock_summary_screen.dart
+│   ├── mock_submit_screen.dart
+│   ├── mock_result_screen.dart
+│
+│   └── widgets
+│
+│       ├── mock_timer_card.dart
+│       ├── mock_question_counter.dart
+│       ├── mock_summary_card.dart
+│       ├── mock_result_card.dart
+│       └── mock_stat_tile.dart
+```
+
+---
+
+# Reuse Opportunities
+
+Already built and reusable:
+
+### Practice
+
+```text
+practice_answer_option_tile.dart
+practice_progress_card.dart
+```
+
+---
+
+### Review
+
+```text
+review_screen.dart
+review_question_detail_screen.dart
+review_filter_chip.dart
+review_question_tile.dart
+review_option_tile.dart
+review_status_badge.dart
+review_explanation_card.dart
+```
+
+---
+
+### Navigation
+
+```text
+AppBottomNavigation
+```
+
+---
+
+### Theme
+
+```text
+Theme.of(context).colorScheme
+```
+
+No new theme code needed.
+
+---
+
+# Recommended Session Model
+
+Create:
+
+```dart
+class MockSessionController {
+  List<QuestionModel> questions;
+
+  Map<int, String> answers;
+
+  Set<int> flagged;
+
+  int currentIndex;
+
+  Duration remainingTime;
+
+  bool submitted;
+}
+```
+
+This mirrors the production-grade structure we introduced for Practice and gives Mock a completely independent state lifecycle.
+
+The biggest win is that roughly **60–70% of the review and question-detail infrastructure is already built in Practice and should be shared instead of duplicated**, while Mock-specific work focuses mainly on **timer management, submission flow, pass/fail calculation, and result reporting**. 

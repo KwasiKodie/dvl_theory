@@ -24,7 +24,7 @@ class NavigationItems {
       label: 'Mock',
       icon: Icons.school_outlined,
       selectedIcon: Icons.school,
-      route: RouteNames.mockExam,
+      route: RouteNames.mockIntro,
     ),
     NavigationItem(
       label: 'Progress',
