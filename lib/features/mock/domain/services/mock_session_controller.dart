@@ -1,5 +1,7 @@
 import '../../../practice/data/models/question_model.dart';
 import '../../../practice/domain/services/practice_session_controller.dart';
+import '../../../profile/domain/services/study_preferences_controller.dart';
+import '../../data/models/mock_configuration.dart';
 
 class MockSessionController {
   MockSessionController._();
@@ -10,6 +12,7 @@ class MockSessionController {
   int currentIndex = 0;
   bool initialized = false;
   bool submitted = false;
+  bool inProgress = false;
 
   Duration totalTime = const Duration(minutes: 30);
   Duration remainingTime = const Duration(minutes: 30);
@@ -48,6 +51,14 @@ class MockSessionController {
 
   int get passingScore => (totalQuestions * 0.70).ceil();
 
+  void applyPreferences() {
+    final prefs = StudyPreferencesController.instance.preferences;
+
+    totalTime = Duration(minutes: prefs.mockDurationMinutes);
+
+    remainingTime = totalTime;
+  }
+
   void selectAnswer(String answer) {
     selectedAnswers[currentQuestion.id] = answer;
   }
@@ -62,10 +73,31 @@ class MockSessionController {
     }
   }
 
+  void startSession() {
+    inProgress = true;
+  }
+
+  void finishSession() {
+    inProgress = false;
+    reset();
+  }
+
   void moveNext() {
     if (currentIndex < questions.length - 1) {
       currentIndex++;
     }
+  }
+
+  void reset() {
+    questions.clear();
+    selectedAnswers.clear();
+    flaggedQuestions.clear();
+
+    currentIndex = 0;
+    remainingTime = totalTime;
+
+    inProgress = false;
+    initialized = false;
   }
 
   void movePrevious() {
@@ -93,13 +125,14 @@ class MockSessionController {
     }).toList();
   }
 
-  void reset() {
-    questions = [];
-    currentIndex = 0;
-    initialized = false;
-    submitted = false;
-    remainingTime = totalTime;
-    selectedAnswers.clear();
-    flaggedQuestions.clear();
+  MockConfiguration buildConfiguration() {
+    final prefs = StudyPreferencesController.instance.preferences;
+
+    return MockConfiguration(
+      questionCount: prefs.practiceQuestionCount,
+      timed: true,
+      randomQuestions: prefs.randomizeQuestions,
+      passingScore: (prefs.practiceQuestionCount * 0.70).ceil(),
+    );
   }
 }

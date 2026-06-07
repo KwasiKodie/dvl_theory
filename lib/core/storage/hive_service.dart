@@ -4,8 +4,10 @@ import 'hive_boxes.dart';
 class HiveService {
   static Future<void> init() async {
     await Hive.initFlutter();
-
     await Hive.openBox(HiveBoxes.profile);
+    await Hive.openBox(HiveBoxes.studyPreferences);
+    await Hive.openBox(HiveBoxes.notificationPreferences);
+    await Hive.openBox(HiveBoxes.notifications);
 
     // Open all boxes BEFORE app starts
     await Future.wait([

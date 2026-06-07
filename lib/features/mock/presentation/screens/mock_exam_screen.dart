@@ -57,13 +57,18 @@ class _MockExamScreenState extends State<MockExamScreen> {
 
       if (!mounted) return;
 
+      final config = _session.buildConfiguration();
+
+      _session.applyPreferences();
+
       _session.questions = _adaptiveService.generateSession(
         questions,
-        sessionSize: 20,
+        sessionSize: config.questionCount,
       );
 
       _session.currentIndex = 0;
       _session.initialized = true;
+      _session.startSession();
 
       setState(() {
         _loading = false;

@@ -1,0 +1,355 @@
+For this version of the application, I would treat the **Notifications screen as preference management**, not as a full notification-delivery system yet.
+
+The key principle is:
+
+```text
+Notification Screen
+        ↓
+Stores user preferences in Hive
+        ↓
+Other parts of the app consult those preferences
+        ↓
+Future notification engine can use them later
+```
+
+This aligns perfectly with how you've already implemented:
+
+* Study Preferences
+* Profile Settings
+* Theme Settings
+
+using Hive-backed controllers.
+
+---
+
+# Recommended Architecture
+
+Add:
+
+```text
+features/profile
+├── data
+│   └── models
+│       └── notification_preferences.dart
+│
+└── domain
+    └── services
+        └── notification_preferences_controller.dart
+```
+
+Similar to:
+
+```text
+study_preferences.dart
+study_preferences_controller.dart
+```
+
+---
+
+# Notification Preferences Model
+
+```dart
+class NotificationPreferences {
+  final bool studyReminders;
+  final bool testReminders;
+  final bool newFeatures;
+  final bool tipsAndAdvice;
+  final bool promotions;
+
+  const NotificationPreferences({
+    required this.studyReminders,
+    required this.testReminders,
+    required this.newFeatures,
+    required this.tipsAndAdvice,
+    required this.promotions,
+  });
+
+  factory NotificationPreferences.defaults() {
+    return const NotificationPreferences(
+      studyReminders: true,
+      testReminders: true,
+      newFeatures: true,
+      tipsAndAdvice: true,
+      promotions: false,
+    );
+  }
+
+  NotificationPreferences copyWith({
+    bool? studyReminders,
+    bool? testReminders,
+    bool? newFeatures,
+    bool? tipsAndAdvice,
+    bool? promotions,
+  }) {
+    return NotificationPreferences(
+      studyReminders:
+          studyReminders ?? this.studyReminders,
+      testReminders:
+          testReminders ?? this.testReminders,
+      newFeatures:
+          newFeatures ?? this.newFeatures,
+      tipsAndAdvice:
+          tipsAndAdvice ?? this.tipsAndAdvice,
+      promotions:
+          promotions ?? this.promotions,
+    );
+  }
+}
+```
+
+---
+
+# Hive Storage
+
+Add to:
+
+```text
+core/storage/hive_boxes.dart
+```
+
+```dart
+static const notificationPreferences =
+    'notificationPreferences';
+```
+
+---
+
+# Controller
+
+Similar to StudyPreferencesController:
+
+```dart
+class NotificationPreferencesController
+    extends ChangeNotifier {
+```
+
+Responsibilities:
+
+```text
+Load
+Save
+Update
+Reset
+Notify Listeners
+```
+
+---
+
+# Meaning of Each Switch
+
+## Study Reminders
+
+Future:
+
+```text
+"Don't forget today's study session."
+```
+
+Current version:
+
+```text
+Stores user preference only.
+```
+
+---
+
+## Test Reminders
+
+Future:
+
+```text
+"Take a mock test today."
+```
+
+Current version:
+
+```text
+Stores preference only.
+```
+
+---
+
+## New Features
+
+Future:
+
+```text
+New practice mode added
+New mock exam added
+```
+
+Current version:
+
+```text
+Stores preference only.
+```
+
+---
+
+## Tips & Advice
+
+Future:
+
+```text
+Daily driving tip
+Road safety advice
+Highway code reminder
+```
+
+Current version:
+
+```text
+Stores preference only.
+```
+
+---
+
+## Promotions
+
+Since this is a DVL theory application:
+
+```text
+Premium plans
+Bundles
+Partner offers
+```
+
+Default:
+
+```dart
+false
+```
+
+which matches your current UI.
+
+---
+
+# Future Integration with Home Screen
+
+Later you can use:
+
+```dart
+NotificationPreferencesController
+```
+
+to drive:
+
+### Study Reminder Card
+
+```text
+Home
+↓
+You haven't practiced today
+```
+
+Only show if:
+
+```dart
+studyReminders == true
+```
+
+---
+
+### Mock Reminder
+
+```text
+Home
+↓
+Your readiness is 85%
+Take a mock test
+```
+
+Only show if:
+
+```dart
+testReminders == true
+```
+
+---
+
+# Future Integration with ProgressEngine
+
+This is where things get interesting.
+
+You already track:
+
+```text
+totalAnswered
+totalCorrect
+totalIncorrect
+accuracy
+readiness
+```
+
+through ProgressEngine.
+
+Later:
+
+```text
+Accuracy < 60%
+```
+
+can trigger:
+
+```text
+Review Hazard Awareness today
+```
+
+Only if:
+
+```dart
+tipsAndAdvice == true
+```
+
+---
+
+# UX Improvement
+
+I would add one more tile at the bottom:
+
+```text
+Notification Time
+```
+
+Example:
+
+```text
+09:00 AM
+```
+
+Stored in Hive.
+
+Future:
+
+```text
+Study Reminder
+→ every day at 9 AM
+```
+
+This gives you a clean path to local notifications later without redesigning the screen.
+
+---
+
+# For Version 1
+
+Implement only:
+
+✅ NotificationPreferences model
+
+✅ NotificationPreferencesController
+
+✅ Hive persistence
+
+✅ Toggle switches update Hive instantly
+
+✅ Settings restored after app restart
+
+❌ No Firebase
+
+❌ No push notifications
+
+❌ No background scheduling
+
+❌ No local notification engine yet
+
+This keeps the implementation consistent with the rest of your architecture while making the screen fully functional and future-ready.

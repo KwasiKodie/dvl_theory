@@ -71,6 +71,7 @@ flutter:
     - assets/images/shared/logo.png
     - assets/images/questions/
     - assets/data/questions.json
+    - assets/data/driving_tips.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -67,17 +67,49 @@ class HomeScreen extends StatelessWidget {
                 isTablet ? 32 : 22,
                 24,
               ),
-              itemCount: _defaultCategories.length + 1,
+              itemCount: _defaultCategories.length + 2,
               separatorBuilder: (_, index) {
-                if (index == 0) return const SizedBox(height: 22);
+                if (index == 0) {
+                  return const SizedBox(height: 22);
+                }
+
                 return const SizedBox(height: 4);
               },
               itemBuilder: (context, index) {
+                // Logo
                 if (index == 0) {
                   return const HomeLogoHeader();
                 }
 
-                final category = _defaultCategories[index - 1];
+                // Section title
+                if (index == 1) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 12, bottom: 8),
+                    child: Text(
+                      'ALL TOPICS',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  );
+                }
+
+                if (index == 0) return const HomeLogoHeader();
+
+                if (index == 1) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 12, bottom: 8),
+                    child: Text(
+                      'ALL TOPICS',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  );
+                }
+
+                final category = _defaultCategories[index - 2];
+
                 final progress = progressMap[category.toLowerCase()] ?? 0.0;
 
                 return HomeCategoryTile(

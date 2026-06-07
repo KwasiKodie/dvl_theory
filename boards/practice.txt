@@ -3,6 +3,7 @@
 // ===========================
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:async';
 
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/navigation/app_bottom_navigation.dart';
@@ -14,6 +15,9 @@ import '../../domain/services/adaptive_practice_service.dart';
 import '../widgets/practice_answer_option_tile.dart';
 import '../widgets/practice_explanation_card.dart';
 import '../widgets/practice_progress_card.dart';
+import '../../../../core/navigation/route_names.dart';
+import '../../../profile/domain/services/study_preferences_controller.dart';
+import '../../../profile/data/models/study_preferences.dart';
 
 class PracticeScreen extends StatefulWidget {
   const PracticeScreen({super.key});
@@ -30,6 +34,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   final _session = PracticeSessionController.instance;
   final _adaptiveService = AdaptivePracticeService();
+
   bool _loading = true;
   String? _error;
 
@@ -38,6 +43,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
   String? get _selectedAnswer => _session.selectedAnswers[_question.id];
 
   bool get _showResult => _session.answeredQuestions[_question.id] ?? false;
+  Timer? _autoAdvanceTimer;
 
   @override
   void initState() {
@@ -47,13 +53,14 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   @override
   void dispose() {
+    _autoAdvanceTimer?.cancel();
     _stopwatch.stop();
     super.dispose();
   }
 
   Future<void> _initializePracticeSession() async {
     try {
-      if (_session.initialized && _session.questions.isNotEmpty) {
+      if (_session.inProgress && _session.questions.isNotEmpty) {
         if (!mounted) return;
 
         setState(() => _loading = false);
@@ -69,28 +76,44 @@ class _PracticeScreenState extends State<PracticeScreen> {
       final selectedCategory =
           ModalRoute.of(context)?.settings.arguments as String?;
 
+      final prefs = StudyPreferencesController.instance.preferences;
+      final questionCount = prefs.practiceQuestionCount;
+
       final selectedQuestions = selectedCategory == null
-          ? _adaptiveService.generateSession(data, sessionSize: 10)
-          : (data
-                    .where(
-                      (question) =>
-                          question.category.toLowerCase() ==
-                          selectedCategory.toLowerCase(),
-                    )
-                    .toList()
-                  ..shuffle())
-                .take(10)
+          ? _adaptiveService.generateSession(data, sessionSize: questionCount)
+          : data
+                .where(
+                  (question) =>
+                      question.category.toLowerCase() ==
+                      selectedCategory.toLowerCase(),
+                )
                 .toList();
 
-      _session.questions = selectedQuestions;
+      if (prefs.randomizeQuestions) {
+        selectedQuestions.shuffle();
+      }
+
+      switch (prefs.questionMode) {
+        case QuestionMode.multipleChoice:
+          break;
+
+        case QuestionMode.mixed:
+          break;
+      }
+
+      _session.questions = selectedQuestions.take(questionCount).toList();
       _session.currentIndex = 0;
       _session.selectedAnswers.clear();
       _session.answeredQuestions.clear();
       _session.initialized = true;
 
+      _session.startSession();
+
       setState(() => _loading = false);
 
-      _restartTimer();
+      if (prefs.practiceTimerEnabled) {
+        _restartTimer();
+      }
     } catch (e, stackTrace) {
       debugPrint('Question loading failed: $e');
       debugPrintStack(stackTrace: stackTrace);
@@ -126,6 +149,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
     _stopwatch.stop();
 
     final isCorrect = _selectedAnswer == _question.correctAnswer;
+    final prefs = StudyPreferencesController.instance.preferences;
 
     _engine.recordAttempt({
       'id': _uuid.v4(),
@@ -134,14 +158,27 @@ class _PracticeScreenState extends State<PracticeScreen> {
       'selectedAnswer': _selectedAnswer,
       'correctAnswer': _question.correctAnswer,
       'isCorrect': isCorrect,
-      'timeTaken': _stopwatch.elapsed.inSeconds,
+      'timeTaken': prefs.practiceTimerEnabled
+          ? _stopwatch.elapsed.inSeconds
+          : 0,
       'date': DateTime.now(),
       'testType': 'practice',
     });
 
     setState(() {
       _session.answeredQuestions[_question.id] = true;
+      _session.questionResults[_question.id] = isCorrect;
     });
+
+    if (prefs.autoAdvance && _selectedAnswer != null) {
+      _autoAdvanceTimer?.cancel();
+
+      _autoAdvanceTimer = Timer(const Duration(seconds: 2), () {
+        if (mounted) {
+          _next();
+        }
+      });
+    }
   }
 
   void _previous() {
@@ -151,13 +188,26 @@ class _PracticeScreenState extends State<PracticeScreen> {
       _session.currentIndex--;
     });
 
-    if (!_showResult) _restartTimer();
+    final prefs = StudyPreferencesController.instance.preferences;
+    if (!_showResult && prefs.practiceTimerEnabled) _restartTimer();
   }
 
   void _next() {
+    final prefs = StudyPreferencesController.instance.preferences;
+
     if (_session.currentIndex >= _session.questions.length - 1) {
-      _session.reset();
-      Navigator.pop(context);
+      final reviewData = _session.buildReviewData();
+
+      _autoAdvanceTimer?.cancel();
+      _stopwatch.stop();
+
+      _session.finishSession();
+
+      Navigator.pushReplacementNamed(
+        context,
+        RouteNames.review,
+        arguments: reviewData,
+      );
       return;
     }
 
@@ -165,7 +215,9 @@ class _PracticeScreenState extends State<PracticeScreen> {
       _session.currentIndex++;
     });
 
-    if (!_showResult) _restartTimer();
+    if (!_showResult && prefs.practiceTimerEnabled) {
+      _restartTimer();
+    }
   }
 
   @override
@@ -198,6 +250,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
     final progress = (_session.currentIndex + 1) / _session.questions.length;
     final isLastQuestion =
         _session.currentIndex == _session.questions.length - 1;
+    final prefs = StudyPreferencesController.instance.preferences;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -259,7 +312,9 @@ class _PracticeScreenState extends State<PracticeScreen> {
                       ),
                     ),
                     const SizedBox(height: AppSpacing.md),
-                    if (_showResult)
+                    if (_showResult &&
+                        prefs.explanationMode ==
+                            ExplanationMode.afterEveryAnswer)
                       PracticeExplanationCard(
                         isCorrect: _selectedAnswer == _question.correctAnswer,
                         explanation: _safeExplanation(_question),
@@ -662,18 +717,83 @@ class PracticeSessionController {
   List<QuestionModel> questions = [];
   int currentIndex = 0;
   bool initialized = false;
+  bool inProgress = false;
 
   final Map<int, String> selectedAnswers = {};
   final Map<int, bool> answeredQuestions = {};
+  final Map<int, bool> questionResults = {};
+  final Set<int> flaggedQuestions = {};
+
+  void startSession() {
+    inProgress = true;
+  }
+
+  void finishSession() {
+    inProgress = false;
+    reset();
+  }
+
+  void toggleFlag(int questionId) {
+    if (flaggedQuestions.contains(questionId)) {
+      flaggedQuestions.remove(questionId);
+    } else {
+      flaggedQuestions.add(questionId);
+    }
+  }
+
+  List<ReviewQuestionData> buildReviewData() {
+    return questions.asMap().entries.map((entry) {
+      final index = entry.key;
+      final question = entry.value;
+      final selectedAnswer = selectedAnswers[question.id];
+
+      final isAnswered = answeredQuestions[question.id] ?? false;
+      final isCorrect = isAnswered && selectedAnswer == question.correctAnswer;
+
+      return ReviewQuestionData(
+        question: question,
+        questionNumber: index + 1,
+        selectedAnswer: selectedAnswer,
+        isCorrect: isCorrect,
+        isAnswered: isAnswered,
+        isFlagged: flaggedQuestions.contains(question.id),
+      );
+    }).toList();
+  }
 
   void reset() {
     questions = [];
     currentIndex = 0;
+    initialized = false;
     selectedAnswers.clear();
     answeredQuestions.clear();
+    questionResults.clear();
+    flaggedQuestions.clear();
+
     initialized = false;
   }
 }
+
+class ReviewQuestionData {
+  final QuestionModel question;
+  final int questionNumber;
+  final String? selectedAnswer;
+  final bool isCorrect;
+  final bool isAnswered;
+  final bool isFlagged;
+
+  const ReviewQuestionData({
+    required this.question,
+    required this.questionNumber,
+    required this.selectedAnswer,
+    required this.isCorrect,
+    required this.isAnswered,
+    required this.isFlagged,
+  });
+
+  bool get isWrong => isAnswered && !isCorrect;
+}
+
 // ===========================
 // features/practice/data/models/question_model.dart
 // ===========================
@@ -1109,6 +1229,188 @@ class AppBottomNavigation extends StatelessWidget {
 }
 
 // ===========================
+// features/profile/domain/services/study_preferences_controller.dart
+// ===========================
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+
+import '../../../../core/storage/hive_boxes.dart';
+import '../../data/models/study_preferences.dart';
+
+class StudyPreferencesController extends ChangeNotifier {
+  StudyPreferencesController._();
+
+  static final StudyPreferencesController instance =
+      StudyPreferencesController._();
+
+  static const _key = 'studyPreferences';
+
+  StudyPreferences preferences = StudyPreferences.defaults();
+
+  Future<void> load() async {
+    final box = Hive.box(HiveBoxes.studyPreferences);
+    final raw = box.get(_key);
+
+    preferences = StudyPreferences.fromMap(
+      raw == null ? null : Map<dynamic, dynamic>.from(raw),
+    );
+
+    notifyListeners();
+  }
+
+  Future<void> update(StudyPreferences value) async {
+    preferences = value;
+
+    final box = Hive.box(HiveBoxes.studyPreferences);
+    await box.put(_key, value.toMap());
+
+    notifyListeners();
+  }
+
+  Future<void> setPracticeTimerEnabled(bool value) {
+    return update(preferences.copyWith(practiceTimerEnabled: value));
+  }
+
+  Future<void> setSaveWrongAnswers(bool value) {
+    return update(preferences.copyWith(saveWrongAnswers: value));
+  }
+
+  Future<void> setAutoAdvance(bool value) {
+    return update(preferences.copyWith(autoAdvance: value));
+  }
+
+  Future<void> setPracticeQuestionCount(int value) {
+    return update(preferences.copyWith(practiceQuestionCount: value));
+  }
+
+  Future<void> setMockDurationMinutes(int value) {
+    return update(preferences.copyWith(mockDurationMinutes: value));
+  }
+
+  Future<void> setExplanationMode(ExplanationMode value) {
+    return update(preferences.copyWith(explanationMode: value));
+  }
+
+  Future<void> setQuestionMode(QuestionMode value) {
+    return update(preferences.copyWith(questionMode: value));
+  }
+
+  Future<void> setRandomizeQuestions(bool value) {
+    return update(preferences.copyWith(randomizeQuestions: value));
+  }
+
+  Future<void> setRandomizeAnswers(bool value) {
+    return update(preferences.copyWith(randomizeAnswers: value));
+  }
+}
+
+// ===========================
+// features/profile/data/models/study_preferences.dart
+// ===========================
+enum QuestionMode { multipleChoice, mixed }
+
+enum ExplanationMode { afterEveryAnswer, endOfTest, never }
+
+class StudyPreferences {
+  final QuestionMode questionMode;
+  final int practiceQuestionCount;
+  final bool practiceTimerEnabled;
+  final ExplanationMode explanationMode;
+  final bool saveWrongAnswers;
+  final bool autoAdvance;
+  final int mockDurationMinutes;
+  final bool randomizeQuestions;
+  final bool randomizeAnswers;
+
+  const StudyPreferences({
+    required this.questionMode,
+    required this.practiceQuestionCount,
+    required this.practiceTimerEnabled,
+    required this.explanationMode,
+    required this.saveWrongAnswers,
+    required this.autoAdvance,
+    required this.mockDurationMinutes,
+    required this.randomizeQuestions,
+    required this.randomizeAnswers,
+  });
+
+  factory StudyPreferences.defaults() {
+    return const StudyPreferences(
+      questionMode: QuestionMode.multipleChoice,
+      practiceQuestionCount: 20,
+      practiceTimerEnabled: true,
+      explanationMode: ExplanationMode.afterEveryAnswer,
+      saveWrongAnswers: true,
+      autoAdvance: false,
+      mockDurationMinutes: 30,
+      randomizeQuestions: true,
+      randomizeAnswers: false,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'questionMode': questionMode.name,
+      'practiceQuestionCount': practiceQuestionCount,
+      'practiceTimerEnabled': practiceTimerEnabled,
+      'explanationMode': explanationMode.name,
+      'saveWrongAnswers': saveWrongAnswers,
+      'autoAdvance': autoAdvance,
+      'mockDurationMinutes': mockDurationMinutes,
+      'randomizeQuestions': randomizeQuestions,
+      'randomizeAnswers': randomizeAnswers,
+    };
+  }
+
+  factory StudyPreferences.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return StudyPreferences.defaults();
+
+    return StudyPreferences(
+      questionMode: QuestionMode.values.firstWhere(
+        (e) => e.name == map['questionMode'],
+        orElse: () => QuestionMode.multipleChoice,
+      ),
+      practiceQuestionCount: (map['practiceQuestionCount'] ?? 20) as int,
+      practiceTimerEnabled: map['practiceTimerEnabled'] ?? true,
+      explanationMode: ExplanationMode.values.firstWhere(
+        (e) => e.name == map['explanationMode'],
+        orElse: () => ExplanationMode.afterEveryAnswer,
+      ),
+      saveWrongAnswers: map['saveWrongAnswers'] ?? true,
+      autoAdvance: map['autoAdvance'] ?? false,
+      mockDurationMinutes: (map['mockDurationMinutes'] ?? 30) as int,
+      randomizeQuestions: map['randomizeQuestions'] ?? true,
+      randomizeAnswers: map['randomizeAnswers'] ?? false,
+    );
+  }
+
+  StudyPreferences copyWith({
+    QuestionMode? questionMode,
+    int? practiceQuestionCount,
+    bool? practiceTimerEnabled,
+    ExplanationMode? explanationMode,
+    bool? saveWrongAnswers,
+    bool? autoAdvance,
+    int? mockDurationMinutes,
+    bool? randomizeQuestions,
+    bool? randomizeAnswers,
+  }) {
+    return StudyPreferences(
+      questionMode: questionMode ?? this.questionMode,
+      practiceQuestionCount:
+          practiceQuestionCount ?? this.practiceQuestionCount,
+      practiceTimerEnabled: practiceTimerEnabled ?? this.practiceTimerEnabled,
+      explanationMode: explanationMode ?? this.explanationMode,
+      saveWrongAnswers: saveWrongAnswers ?? this.saveWrongAnswers,
+      autoAdvance: autoAdvance ?? this.autoAdvance,
+      mockDurationMinutes: mockDurationMinutes ?? this.mockDurationMinutes,
+      randomizeQuestions: randomizeQuestions ?? this.randomizeQuestions,
+      randomizeAnswers: randomizeAnswers ?? this.randomizeAnswers,
+    );
+  }
+}
+
+// ===========================
 // core/theme/app_spacing.dart
 // ===========================
 class AppSpacing {
@@ -1117,4 +1419,31 @@ class AppSpacing {
   static const md = 16.0;
   static const lg = 24.0;
   static const xl = 32.0;
+}
+
+// ===========================
+// core/navigation/route_names.dart
+// ===========================
+class RouteNames {
+  static const splash = '/';
+  static const home = '/home';
+  static const practice = '/practice';
+  static const mockExam = '/mock-exam';
+  static const mockSummary = '/mock-summary';
+  static const mockSubmit = '/mock-submit';
+  static const mockResult = '/mock-result';
+  static const mockIntro = '/mock-intro';
+  static const mockInstructions = '/mock-instructions';
+  static const progress = '/progress';
+  static const review = '/review';
+  static const reviewQuestion = '/review-question';
+  static const profile = '/profile';
+  static const settings = '/settings';
+  static const account = '/account';
+  static const studyPreferences = '/study-preferences';
+  static const notifications = '/notifications';
+  static const language = '/language';
+  static const privacySecurity = '/privacy-security';
+  static const helpSupport = '/help-support';
+  static const about = '/about';
 }

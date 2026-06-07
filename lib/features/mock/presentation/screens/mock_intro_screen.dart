@@ -5,6 +5,8 @@ import '../widgets/mock_configuration_tile.dart';
 import '../widgets/mock_exam_header.dart';
 import '../widgets/mock_info_card.dart';
 import '../../../../core/navigation/route_names.dart';
+import '../../domain/services/mock_session_controller.dart';
+import '../../../profile/domain/services/study_preferences_controller.dart';
 
 class MockIntroScreen extends StatelessWidget {
   const MockIntroScreen({super.key});
@@ -12,6 +14,10 @@ class MockIntroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final config = MockSessionController.instance.buildConfiguration();
+
+    final duration =
+        StudyPreferencesController.instance.preferences.mockDurationMinutes;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -40,14 +46,14 @@ class MockIntroScreen extends StatelessWidget {
 
                       const SizedBox(height: 28),
 
-                      const MockConfigurationTile(
+                      MockConfigurationTile(
                         title: 'Number of Questions',
-                        value: '20 Questions',
+                        value: '${config.questionCount} Questions',
                       ),
 
-                      const MockConfigurationTile(
+                      MockConfigurationTile(
                         title: 'Test Mode',
-                        value: 'Timed',
+                        value: '$duration Minutes',
                       ),
 
                       const MockConfigurationTile(
@@ -55,9 +61,10 @@ class MockIntroScreen extends StatelessWidget {
                         value: 'Enabled',
                       ),
 
-                      const MockConfigurationTile(
+                      MockConfigurationTile(
                         title: 'Passing Score',
-                        value: '15 / 20 (70%)',
+                        value:
+                            '${config.passingScore} / ${config.questionCount}',
                       ),
 
                       const SizedBox(height: 30),

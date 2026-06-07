@@ -8,4 +8,7 @@ class HiveBoxes {
   static const readiness = 'readiness_box';
   static const streak = 'streak_box';
   static const profile = 'profile';
+  static const studyPreferences = 'study_preferences';
+  static const notifications = 'notifications';
+  static const notificationPreferences = 'notification_preferences';
 }

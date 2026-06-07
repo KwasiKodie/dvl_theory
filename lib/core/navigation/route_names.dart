@@ -16,6 +16,7 @@ class RouteNames {
   static const account = '/account';
   static const studyPreferences = '/study-preferences';
   static const notifications = '/notifications';
+  static const notificationCenter = '/notification-center';
   static const language = '/language';
   static const privacySecurity = '/privacy-security';
   static const helpSupport = '/help-support';

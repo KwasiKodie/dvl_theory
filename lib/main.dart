@@ -7,6 +7,8 @@ import 'core/theme/theme_controller.dart';
 import 'core/theme/theme_mode_storage.dart';
 import 'core/storage/hive_service.dart';
 import 'features/profile/domain/services/user_profile_controller.dart';
+import 'features/profile/domain/services/study_preferences_controller.dart';
+import 'features/profile/domain/services/notification_preferences_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,8 @@ Future<void> main() async {
   await HiveService.init();
 
   await UserProfileController.instance.loadProfile();
+  await StudyPreferencesController.instance.load();
+  await NotificationPreferencesController.instance.load();
 
   AppRouter.themeController = themeController;
 

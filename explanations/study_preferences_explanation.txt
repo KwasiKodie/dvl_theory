@@ -1,0 +1,505 @@
+For long-term scalability, I would treat **Study Preferences** as actual application configuration stored in Hive and consumed by both the Practice and Mock modules, rather than as UI-only switches.
+
+Looking at your current architecture, the best approach is to create a dedicated settings model and controller under Profile (or Shared Settings), then have Practice, Mock, Progress, and Analytics read from it.
+
+## 1. Create a StudyPreferences model
+
+```text
+features/profile/data/models/
+└── study_preferences.dart
+```
+
+```dart
+class StudyPreferences {
+  final String questionMode;
+  final int practiceQuestionCount;
+  final bool practiceTimerEnabled;
+  final String explanationMode;
+  final bool saveWrongAnswers;
+  final bool autoAdvance;
+  final int mockDurationMinutes;
+
+  const StudyPreferences({
+    required this.questionMode,
+    required this.practiceQuestionCount,
+    required this.practiceTimerEnabled,
+    required this.explanationMode,
+    required this.saveWrongAnswers,
+    required this.autoAdvance,
+    required this.mockDurationMinutes,
+  });
+}
+```
+
+---
+
+# 2. Create a StudyPreferencesController
+
+```text
+features/profile/domain/services/
+└── study_preferences_controller.dart
+```
+
+Similar to:
+
+```dart
+UserProfileController
+```
+
+This controller:
+
+* Loads settings from Hive
+* Saves settings to Hive
+* Notifies listeners
+
+```dart
+StudyPreferencesController.instance
+```
+
+This keeps the same architecture pattern you already use for:
+
+```dart
+ThemeController
+UserProfileController
+PracticeSessionController
+MockSessionController
+```
+
+---
+
+# 3. What each preference should actually do
+
+---
+
+## Default Question Mode
+
+Current value:
+
+```text
+Multiple Choice
+```
+
+Future values:
+
+```text
+Multiple Choice
+True / False
+Road Signs Only
+Mixed
+```
+
+Used by:
+
+```text
+Practice Test
+Mock Test
+```
+
+Example:
+
+```dart
+switch(preferences.questionMode)
+```
+
+to filter questions before loading them.
+
+---
+
+## Questions per Practice Test
+
+Current:
+
+```text
+20 Questions
+```
+
+Options:
+
+```text
+10
+20
+30
+50
+All Questions
+```
+
+Used in:
+
+```dart
+PracticeSessionController
+```
+
+Instead of:
+
+```dart
+questions.take(20)
+```
+
+use:
+
+```dart
+questions.take(
+  preferences.practiceQuestionCount,
+)
+```
+
+---
+
+## Timer for Practice Test
+
+Current:
+
+```text
+Enabled
+```
+
+Used by:
+
+```dart
+PracticeScreen
+```
+
+If disabled:
+
+```dart
+_showTimer = false;
+```
+
+and
+
+```dart
+_restartTimer()
+```
+
+never starts.
+
+This is one of the most useful settings.
+
+---
+
+## Show Explanations
+
+Current:
+
+```text
+After Every Answer
+```
+
+Recommended options:
+
+```text
+After Every Answer
+End Of Test
+Never
+```
+
+### After Every Answer
+
+Current behaviour.
+
+User answers.
+
+Explanation immediately appears.
+
+---
+
+### End Of Test
+
+No explanation during test.
+
+Explanations only appear in:
+
+```text
+Review Screen
+Question Detail Screen
+```
+
+---
+
+### Never
+
+No explanation card shown anywhere.
+
+Good for exam simulation.
+
+---
+
+## Save Wrong Answers
+
+Current:
+
+```text
+Enabled
+```
+
+This should integrate with Progress.
+
+When user gets a question wrong:
+
+```dart
+WrongAnswerRepository.save(
+  questionId,
+)
+```
+
+Store:
+
+```dart
+questionId
+category
+date
+attempts
+```
+
+Hive box:
+
+```text
+wrong_answers
+```
+
+Later add:
+
+```text
+Practice Weak Areas
+Retry Wrong Questions
+```
+
+which becomes a huge learning feature.
+
+---
+
+## Auto Advance To Next Question
+
+Current:
+
+```text
+Disabled
+```
+
+Used by:
+
+```dart
+PracticeScreen
+```
+
+Current flow:
+
+```text
+Select Answer
+See Explanation
+Press Next
+```
+
+If enabled:
+
+```text
+Select Answer
+Wait 2 seconds
+Auto move to next question
+```
+
+Example:
+
+```dart
+if(preferences.autoAdvance){
+   Future.delayed(
+      const Duration(seconds:2),
+      _next,
+   );
+}
+```
+
+---
+
+## Default Mock Test Time
+
+Current:
+
+```text
+30 Minutes
+```
+
+Options:
+
+```text
+15
+20
+30
+45
+60
+```
+
+Used by:
+
+```dart
+MockSessionController
+```
+
+Instead of:
+
+```dart
+1800
+```
+
+seconds hardcoded:
+
+```dart
+preferences.mockDurationMinutes * 60
+```
+
+---
+
+# 4. Additional preferences I would add
+
+These are extremely useful for a theory-test application.
+
+---
+
+## Randomize Question Order
+
+```text
+Enabled
+Disabled
+```
+
+Used in:
+
+```dart
+questions.shuffle();
+```
+
+---
+
+## Randomize Answer Order
+
+```text
+Enabled
+Disabled
+```
+
+Used before rendering options.
+
+Prevents memorizing option positions.
+
+---
+
+## Sound Effects
+
+```text
+Enabled
+Disabled
+```
+
+Correct:
+
+```text
+✓ Ding
+```
+
+Wrong:
+
+```text
+✗ Buzz
+```
+
+---
+
+## Haptic Feedback
+
+```text
+Enabled
+Disabled
+```
+
+Mobile only.
+
+---
+
+## Daily Goal
+
+```text
+10 Questions
+20 Questions
+50 Questions
+```
+
+Feeds into Progress.
+
+---
+
+## Review Incorrect Answers Automatically
+
+```text
+Enabled
+Disabled
+```
+
+After Practice:
+
+```text
+Review Screen
+↓
+Show Wrong Answers First
+```
+
+---
+
+# 5. Integration with Progress Module
+
+You already have:
+
+```text
+features/progress/
+```
+
+and:
+
+```text
+ProgressEngine
+CategoryService
+```
+
+
+
+Study preferences should influence analytics.
+
+Example:
+
+```dart
+Overall Progress
+Tests Taken
+Best Score
+```
+
+should respect:
+
+```text
+Question count preference
+Timer preference
+Wrong answer saving
+```
+
+This makes the Profile statistics genuinely useful rather than cosmetic.
+
+---
+
+# Recommended implementation order
+
+1. Create `StudyPreferences` model.
+2. Create `StudyPreferencesController`.
+3. Save/load all preferences with Hive.
+4. Connect:
+
+   * PracticeSessionController
+   * MockSessionController
+5. Connect:
+
+   * ProgressEngine
+6. Add advanced settings:
+
+   * Randomize questions
+   * Randomize answers
+   * Daily goals
+   * Wrong-answer bank
+
+This gives you a production-grade preference system where every setting directly changes application behaviour rather than simply changing text on the screen.

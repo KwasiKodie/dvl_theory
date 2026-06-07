@@ -9,11 +9,21 @@ class PracticeSessionController {
   List<QuestionModel> questions = [];
   int currentIndex = 0;
   bool initialized = false;
+  bool inProgress = false;
 
   final Map<int, String> selectedAnswers = {};
   final Map<int, bool> answeredQuestions = {};
   final Map<int, bool> questionResults = {};
   final Set<int> flaggedQuestions = {};
+
+  void startSession() {
+    inProgress = true;
+  }
+
+  void finishSession() {
+    inProgress = false;
+    reset();
+  }
 
   void toggleFlag(int questionId) {
     if (flaggedQuestions.contains(questionId)) {
@@ -51,6 +61,8 @@ class PracticeSessionController {
     answeredQuestions.clear();
     questionResults.clear();
     flaggedQuestions.clear();
+
+    initialized = false;
   }
 }
 

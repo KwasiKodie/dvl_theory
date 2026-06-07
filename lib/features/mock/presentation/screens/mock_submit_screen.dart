@@ -81,6 +81,7 @@ class MockSubmitScreen extends StatelessWidget {
                         child: FilledButton(
                           onPressed: () {
                             session.submitted = true;
+                            session.inProgress = false;
 
                             Navigator.pushReplacementNamed(
                               context,

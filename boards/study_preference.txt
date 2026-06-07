@@ -1,0 +1,229 @@
+// ===========================
+// features/profile/presentation/screens/study_preferences_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/study_preference_card.dart';
+
+class StudyPreferencesScreen extends StatelessWidget {
+  const StudyPreferencesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isTablet = Responsive.isTablet(context);
+    final width = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+        foregroundColor: theme.colorScheme.onBackground,
+        title: Text(
+          'Study Preferences',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isTablet ? 720 : width),
+            child: const SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+              child: StudyPreferenceCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/study_preference_card.dart
+// ===========================
+
+import 'package:flutter/material.dart';
+
+import 'study_preference_tile.dart';
+
+class StudyPreferenceCard extends StatefulWidget {
+  const StudyPreferenceCard({super.key});
+
+  @override
+  State<StudyPreferenceCard> createState() => _StudyPreferenceCardState();
+}
+
+class _StudyPreferenceCardState extends State<StudyPreferenceCard> {
+  bool timerEnabled = true;
+  bool saveWrongAnswers = true;
+  bool autoAdvance = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withOpacity(0.6),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        child: Column(
+          children: [
+            StudyPreferenceTile(
+              title: 'Default Question Mode',
+              value: 'Multiple Choice',
+              onTap: () {},
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Question per Practice Test',
+              value: '20 Questions',
+              onTap: () {},
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Timer for Practice Test',
+              trailing: Switch(
+                value: timerEnabled,
+                onChanged: (value) {
+                  setState(() => timerEnabled = value);
+                },
+              ),
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Show Explanations',
+              value: 'After Every Answer',
+              onTap: () {},
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Save Wrong Answers',
+              trailing: Switch(
+                value: saveWrongAnswers,
+                onChanged: (value) {
+                  setState(() => saveWrongAnswers = value);
+                },
+              ),
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Auto Advance to Next Question',
+              value: autoAdvance ? 'Enabled' : 'Disabled',
+              valueMuted: !autoAdvance,
+              trailing: Switch(
+                value: autoAdvance,
+                onChanged: (value) {
+                  setState(() => autoAdvance = value);
+                },
+              ),
+            ),
+            const _PreferenceDivider(),
+
+            StudyPreferenceTile(
+              title: 'Default Mock Test Time',
+              value: '30 Minutes',
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PreferenceDivider extends StatelessWidget {
+  const _PreferenceDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 1,
+      color: Theme.of(context).colorScheme.outlineVariant,
+    );
+  }
+}
+
+// ===========================
+// shared/navigation/app_bottom_navigation.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../core/navigation/navigation_items.dart';
+import '../../../core/utils/responsive.dart';
+
+class AppBottomNavigation extends StatelessWidget {
+  final int currentIndex;
+
+  const AppBottomNavigation({super.key, required this.currentIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    final isSmallPhone = Responsive.isSmallPhone(context);
+    final isTablet = Responsive.isTablet(context);
+
+    final items = NavigationItems.items;
+
+    return NavigationBar(
+      selectedIndex: currentIndex,
+      height: isTablet ? 82 : 72,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
+      indicatorColor: Theme.of(context).colorScheme.primary.withOpacity(0.14),
+      labelBehavior: isSmallPhone
+          ? NavigationDestinationLabelBehavior.onlyShowSelected
+          : NavigationDestinationLabelBehavior.alwaysShow,
+      onDestinationSelected: (index) {
+        final selectedRoute = items[index].route;
+        final currentRoute = ModalRoute.of(context)?.settings.name;
+
+        if (currentRoute == selectedRoute) return;
+
+        Navigator.pushNamed(context, selectedRoute);
+      },
+      destinations: items.map((item) {
+        return NavigationDestination(
+          icon: Tooltip(message: item.label, child: Icon(item.icon)),
+          selectedIcon: Tooltip(
+            message: item.label,
+            child: Icon(item.selectedIcon),
+          ),
+          label: item.label,
+        );
+      }).toList(),
+    );
+  }
+}
+
+// ===========================
+// core/utils/responsive.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class Responsive {
+  static bool isTablet(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 700;
+
+  static bool isSmallPhone(BuildContext context) =>
+      MediaQuery.of(context).size.width < 360;
+}

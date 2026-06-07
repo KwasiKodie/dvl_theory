@@ -52,12 +52,12 @@ class ProfileScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
 
               sliver: SliverList(
-                delegate: SliverChildListDelegate(const [
-                  ProfileHeader(),
+                delegate: SliverChildListDelegate([
+                  const ProfileHeader(),
 
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                  ProfileStatsCard(),
+                  const ProfileStatsCard(),
 
                   SizedBox(height: 24),
 
@@ -316,7 +316,11 @@ class AppBottomNavigation extends StatelessWidget {
 
         if (currentRoute == selectedRoute) return;
 
-        Navigator.pushNamed(context, selectedRoute);
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          selectedRoute,
+          (route) => false,
+        );
       },
       destinations: items.map((item) {
         return NavigationDestination(
@@ -2015,6 +2019,98 @@ class StudyPreferencesScreen extends StatelessWidget {
 }
 
 // ===========================
+// features/profile/domain/services/study_preference_controller.dart
+// ===========================
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+
+import '../../../../core/storage/hive_boxes.dart';
+import '../../data/models/study_preferences.dart';
+import '../../../practice/domain/services/practice_session_controller.dart';
+import '../../../mock/domain/services/mock_session_controller.dart';
+
+class StudyPreferencesController extends ChangeNotifier {
+  StudyPreferencesController._();
+
+  static final StudyPreferencesController instance =
+      StudyPreferencesController._();
+
+  static const _key = 'studyPreferences';
+
+  StudyPreferences preferences = StudyPreferences.defaults();
+
+  Future<void> load() async {
+    final box = Hive.box(HiveBoxes.studyPreferences);
+
+    final raw = box.get(_key);
+
+    if (raw == null) {
+      preferences = StudyPreferences.defaults();
+
+      await box.put(_key, preferences.toMap());
+    } else {
+      preferences = StudyPreferences.fromMap(Map<dynamic, dynamic>.from(raw));
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> update(StudyPreferences value) async {
+    preferences = value;
+
+    final box = Hive.box(HiveBoxes.studyPreferences);
+    await box.put(_key, value.toMap());
+
+    if (!PracticeSessionController.instance.inProgress) {
+      PracticeSessionController.instance.reset();
+    }
+
+    if (!MockSessionController.instance.inProgress) {
+      MockSessionController.instance.reset();
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> setPracticeTimerEnabled(bool value) {
+    return update(preferences.copyWith(practiceTimerEnabled: value));
+  }
+
+  Future<void> setSaveWrongAnswers(bool value) {
+    return update(preferences.copyWith(saveWrongAnswers: value));
+  }
+
+  Future<void> setAutoAdvance(bool value) {
+    return update(preferences.copyWith(autoAdvance: value));
+  }
+
+  Future<void> setPracticeQuestionCount(int value) {
+    return update(preferences.copyWith(practiceQuestionCount: value));
+  }
+
+  Future<void> setMockDurationMinutes(int value) {
+    return update(preferences.copyWith(mockDurationMinutes: value));
+  }
+
+  Future<void> setExplanationMode(ExplanationMode value) {
+    return update(preferences.copyWith(explanationMode: value));
+  }
+
+  Future<void> setQuestionMode(QuestionMode value) {
+    return update(preferences.copyWith(questionMode: value));
+  }
+
+  Future<void> setRandomizeQuestions(bool value) {
+    return update(preferences.copyWith(randomizeQuestions: value));
+  }
+
+  Future<void> setRandomizeAnswers(bool value) {
+    return update(preferences.copyWith(randomizeAnswers: value));
+  }
+}
+
+
+// ===========================
 // features/profile/presentation/screens/profile_screen.dart
 // ===========================
 import 'package:flutter/material.dart';
@@ -2484,3 +2580,110 @@ class _CopyrightSection extends StatelessWidget {
     );
   }
 }
+
+// ===========================
+// features/profile/data/models/study_preferences.dart
+// ===========================
+enum QuestionMode { multipleChoice, mixed }
+
+enum ExplanationMode { afterEveryAnswer, endOfTest, never }
+
+class StudyPreferences {
+  final QuestionMode questionMode;
+  final int practiceQuestionCount;
+  final bool practiceTimerEnabled;
+  final ExplanationMode explanationMode;
+  final bool saveWrongAnswers;
+  final bool autoAdvance;
+  final int mockDurationMinutes;
+  final bool randomizeQuestions;
+  final bool randomizeAnswers;
+
+  const StudyPreferences({
+    required this.questionMode,
+    required this.practiceQuestionCount,
+    required this.practiceTimerEnabled,
+    required this.explanationMode,
+    required this.saveWrongAnswers,
+    required this.autoAdvance,
+    required this.mockDurationMinutes,
+    required this.randomizeQuestions,
+    required this.randomizeAnswers,
+  });
+
+  factory StudyPreferences.defaults() {
+    return const StudyPreferences(
+      questionMode: QuestionMode.multipleChoice,
+      practiceQuestionCount: 20,
+      practiceTimerEnabled: true,
+      explanationMode: ExplanationMode.afterEveryAnswer,
+      saveWrongAnswers: true,
+      autoAdvance: false,
+      mockDurationMinutes: 30,
+      randomizeQuestions: true,
+      randomizeAnswers: false,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'questionMode': questionMode.name,
+      'practiceQuestionCount': practiceQuestionCount,
+      'practiceTimerEnabled': practiceTimerEnabled,
+      'explanationMode': explanationMode.name,
+      'saveWrongAnswers': saveWrongAnswers,
+      'autoAdvance': autoAdvance,
+      'mockDurationMinutes': mockDurationMinutes,
+      'randomizeQuestions': randomizeQuestions,
+      'randomizeAnswers': randomizeAnswers,
+    };
+  }
+
+  factory StudyPreferences.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return StudyPreferences.defaults();
+
+    return StudyPreferences(
+      questionMode: QuestionMode.values.firstWhere(
+        (e) => e.name == map['questionMode'],
+        orElse: () => QuestionMode.multipleChoice,
+      ),
+      practiceQuestionCount: (map['practiceQuestionCount'] ?? 20) as int,
+      practiceTimerEnabled: map['practiceTimerEnabled'] ?? true,
+      explanationMode: ExplanationMode.values.firstWhere(
+        (e) => e.name == map['explanationMode'],
+        orElse: () => ExplanationMode.afterEveryAnswer,
+      ),
+      saveWrongAnswers: map['saveWrongAnswers'] ?? true,
+      autoAdvance: map['autoAdvance'] ?? false,
+      mockDurationMinutes: (map['mockDurationMinutes'] ?? 30) as int,
+      randomizeQuestions: map['randomizeQuestions'] ?? true,
+      randomizeAnswers: map['randomizeAnswers'] ?? false,
+    );
+  }
+
+  StudyPreferences copyWith({
+    QuestionMode? questionMode,
+    int? practiceQuestionCount,
+    bool? practiceTimerEnabled,
+    ExplanationMode? explanationMode,
+    bool? saveWrongAnswers,
+    bool? autoAdvance,
+    int? mockDurationMinutes,
+    bool? randomizeQuestions,
+    bool? randomizeAnswers,
+  }) {
+    return StudyPreferences(
+      questionMode: questionMode ?? this.questionMode,
+      practiceQuestionCount:
+          practiceQuestionCount ?? this.practiceQuestionCount,
+      practiceTimerEnabled: practiceTimerEnabled ?? this.practiceTimerEnabled,
+      explanationMode: explanationMode ?? this.explanationMode,
+      saveWrongAnswers: saveWrongAnswers ?? this.saveWrongAnswers,
+      autoAdvance: autoAdvance ?? this.autoAdvance,
+      mockDurationMinutes: mockDurationMinutes ?? this.mockDurationMinutes,
+      randomizeQuestions: randomizeQuestions ?? this.randomizeQuestions,
+      randomizeAnswers: randomizeAnswers ?? this.randomizeAnswers,
+    );
+  }
+}
+

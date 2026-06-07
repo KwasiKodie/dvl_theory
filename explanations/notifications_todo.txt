@@ -1,0 +1,254 @@
+No. Based on everything we've implemented so far, **none of those five capabilities have been implemented yet**.
+
+Current state:
+
+| Feature                                | Status | Implemented?    |
+| -------------------------------------- | ------ | --------------- |
+| Store notification preferences in Hive | ✅ Yes  | Implemented     |
+| Notification settings screen           | ✅ Yes  | Implemented     |
+| NotificationPreferencesController      | ✅ Yes  | Implemented     |
+| Home reminder cards                    | ✅ Yes  | Implemented     |
+| Driving tip system                     | ✅ Yes  | Implemented     |
+| Schedule local notifications           | ❌ No   | Not implemented |
+| Request notification permissions       | ❌ No   | Not implemented |
+| Trigger reminders at a selected time   | ❌ No   | Not implemented |
+| Send push notifications                | ❌ No   | Not implemented |
+| Run background reminder jobs           | ❌ No   | Not implemented |
+
+---
+
+## What the current implementation actually does
+
+When a user enables:
+
+```text
+Study Reminders = ON
+```
+
+the app currently:
+
+```text
+Saves value in Hive
+↓
+HomeScreen checks preference
+↓
+StudyReminderCard is displayed
+```
+
+It does **not**:
+
+```text
+8:00 PM
+↓
+Phone shows notification
+↓
+"Time to study"
+```
+
+---
+
+## What is required for actual reminders
+
+### 1. Local Notifications
+
+Packages:
+
+```yaml
+flutter_local_notifications
+timezone
+```
+
+This enables:
+
+```text
+Daily Study Reminder
+Mock Test Reminder
+Driving Tip Reminder
+```
+
+while the app is closed.
+
+---
+
+### 2. Notification Permissions
+
+Android:
+
+```xml
+POST_NOTIFICATIONS
+```
+
+iOS:
+
+```swift
+UNUserNotificationCenter
+```
+
+and runtime permission requests.
+
+Example:
+
+```dart
+await notificationService.requestPermission();
+```
+
+---
+
+### 3. Reminder Time Selection
+
+Currently the user cannot choose:
+
+```text
+9:00 AM
+6:00 PM
+8:30 PM
+```
+
+A future screen would need:
+
+```text
+Notification Time
+```
+
+inside:
+
+```text
+Notifications Screen
+```
+
+stored in Hive.
+
+Example:
+
+```dart
+TimeOfDay reminderTime;
+```
+
+---
+
+### 4. Scheduling
+
+Example:
+
+```text
+Study Reminders = ON
+Reminder Time = 7:00 PM
+```
+
+App schedules:
+
+```text
+Every Day 7:00 PM
+↓
+"Continue today's practice."
+```
+
+---
+
+### 5. Background Jobs
+
+Needed for:
+
+```text
+Adaptive reminders
+Readiness-based reminders
+Weak-topic reminders
+```
+
+Examples:
+
+```text
+Accuracy < 60%
+↓
+Send Hazard Awareness reminder
+```
+
+These require background scheduling.
+
+---
+
+### 6. Push Notifications
+
+Completely separate from local notifications.
+
+Requires:
+
+```text
+Firebase Cloud Messaging (FCM)
+```
+
+This would allow:
+
+```text
+New Question Bank Available
+New Mock Exam Released
+Feature Updates
+```
+
+from a server.
+
+Nothing in the current architecture supports this yet.
+
+---
+
+# What I would recommend next
+
+For your driving theory application, the next logical phase is:
+
+### Phase 1
+
+Implement:
+
+```text
+flutter_local_notifications
+timezone
+```
+
+and support:
+
+* Study Reminders
+* Mock Test Reminders
+* Driving Tip Reminder
+
+with a user-selected time.
+
+### Phase 2
+
+Add:
+
+```text
+Notification Time
+```
+
+to the Notifications screen.
+
+### Phase 3
+
+Connect:
+
+```text
+ProgressEngine
+ReadinessService
+NotificationPreferences
+```
+
+so reminders become intelligent:
+
+```text
+Weakest Topic = Hazard Awareness
+↓
+Reminder:
+"Review Hazard Awareness today."
+```
+
+### Phase 4
+
+Only then consider:
+
+```text
+Firebase Cloud Messaging
+```
+
+for feature updates and promotional notifications.
+
+So currently your notification system is **preference-driven UI + persistence**, not an actual notification delivery system yet.

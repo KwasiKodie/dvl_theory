@@ -5,6 +5,9 @@ import '../widgets/profile_header.dart';
 import '../widgets/profile_stats_card.dart';
 import '../widgets/profile_menu_section.dart';
 import '../widgets/logout_tile.dart';
+import '../../../../core/navigation/route_names.dart';
+import '../../../notifications/domain/services/notification_center_service.dart';
+import '../../../notifications/presentation/widgets/notification_badge.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -38,9 +41,25 @@ class ProfileScreen extends StatelessWidget {
               ),
 
               actions: [
-                IconButton(
-                  icon: const Icon(Icons.notifications),
-                  onPressed: () {},
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: AnimatedBuilder(
+                    animation: NotificationCenterService.instance,
+                    builder: (context, _) {
+                      return NotificationBadge(
+                        count: NotificationCenterService.instance.unreadCount,
+                        child: IconButton(
+                          icon: const Icon(Icons.notifications_outlined),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.notificationCenter,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

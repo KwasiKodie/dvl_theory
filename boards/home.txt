@@ -2,156 +2,217 @@
 // features/home/presentation/screens/home_screen.dart
 // ===========================
 import 'package:flutter/material.dart';
-import '../../widgets/home_header_section.dart';
-import '../../../../shared/widgets/action_card.dart';
-import '../../../../shared/navigation/app_bottom_navigation.dart';
+
 import '../../../../core/navigation/route_names.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../../../progress/domain/services/category_service.dart';
+import '../widgets/home_category_mapper.dart';
+import '../widgets/home_category_tile.dart';
+import '../widgets/home_logo_header.dart';
+import '../widgets/study_reminder_card.dart';
+import '../widgets/feature_update_banner.dart';
+import '../widgets/driving_tip_card.dart';
+import '../widgets/mock_reminder_card.dart';
+import '../../../profile/domain/services/notification_preferences_controller.dart';
+import '../../../analytics/domain/services/readiness_service.dart';
+import '../../domain/services/driving_tip_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  static const List<String> _defaultCategories = [
+    'Road signs',
+    'Road markings',
+    'Traffic rules',
+    'Speed limits',
+    'Hazard awareness',
+    'Safe driving',
+    'Vehicle handling',
+    'Motorway rules',
+    'Pedestrian crossings',
+    'Emergency procedures',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final media = MediaQuery.of(context);
-
-    final width = media.size.width;
-    final height = media.size.height;
     final isTablet = Responsive.isTablet(context);
+    final width = MediaQuery.of(context).size.width;
+
+    final categoryService = CategoryService();
+    final trackedCategories = categoryService.getCategoryStats();
+
+    final progressMap = {
+      for (final item in trackedCategories)
+        item['category'].toString().toLowerCase(): (item['accuracy'] as num)
+            .toDouble(),
+    };
+
+    final notifications = NotificationPreferencesController.instance;
+
+    final readinessReport = ReadinessService().generateReport();
+
+    if (notifications.canShowFeatureUpdates) {
+      const FeatureUpdateBanner(
+        title: 'New Feature',
+        description: 'Mock Tests are now available.',
+      );
+    }
+    if (notifications.canShowStudyReminders) {
+      StudyReminderCard(
+        onTap: () {
+          Navigator.pushNamed(context, RouteNames.practice);
+        },
+      );
+    }
+    if (notifications.canShowTestReminders) {
+      MockReminderCard(
+        readinessScore: readinessReport.readinessScore.round(),
+        onTap: () {
+          Navigator.pushNamed(context, RouteNames.mockIntro);
+        },
+      );
+    }
+    if (notifications.canShowTipsAndAdvice) {
+      const DrivingTipCard(tip: 'Always check mirrors before changing lanes.');
+    }
+
+    final reminderWidgets = <Widget>[];
+
+    if (notifications.canShowFeatureUpdates) {
+      reminderWidgets.add(
+        const FeatureUpdateBanner(
+          title: 'New Feature',
+          description: 'Mock Tests are now available.',
+        ),
+      );
+    }
+
+    if (notifications.canShowStudyReminders) {
+      reminderWidgets.add(
+        StudyReminderCard(
+          onTap: () {
+            Navigator.pushNamed(context, RouteNames.practice);
+          },
+        ),
+      );
+    }
+
+    if (notifications.canShowTestReminders &&
+        readinessReport.readinessScore >= 60) {
+      reminderWidgets.add(
+        MockReminderCard(
+          readinessScore: readinessReport.readinessScore.round(),
+          onTap: () {
+            Navigator.pushNamed(context, RouteNames.mockIntro);
+          },
+        ),
+      );
+    }
+
+    if (notifications.canShowTipsAndAdvice) {
+      reminderWidgets.add(
+        FutureBuilder<String>(
+          future: DrivingTipService.instance.getTipOfTheDay(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const SizedBox.shrink();
+            }
+
+            return DrivingTipCard(tip: snapshot.data!);
+          },
+        ),
+      );
+    }
+
+    final headerCount = 1 + reminderWidgets.length + 1;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 0),
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.background,
+        foregroundColor: theme.colorScheme.onBackground,
+        title: Text(
+          'Home',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ),
       body: SafeArea(
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverAppBar(
-              backgroundColor: theme.colorScheme.background,
-              foregroundColor: theme.colorScheme.onBackground,
-              surfaceTintColor: Colors.transparent,
-              elevation: 0,
-              pinned: true,
-              floating: false,
-              stretch: true,
-              automaticallyImplyLeading: false,
-              expandedHeight: isTablet ? 260 : 220,
-              collapsedHeight: 80,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.parallax,
-                stretchModes: const [
-                  StretchMode.zoomBackground,
-                  StretchMode.fadeTitle,
-                ],
-                background: Padding(
-                  padding: EdgeInsets.only(top: height * 0.03),
-                  child: const HomeHeaderSection(userName: 'Kwasi'),
-                ),
-                titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
-                title: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final collapsed = constraints.biggest.height <= 120;
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isTablet ? 720 : width),
+            child: ListView.separated(
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.fromLTRB(
+                isTablet ? 32 : 22,
+                14,
+                isTablet ? 32 : 22,
+                24,
+              ),
+              itemCount: headerCount + _defaultCategories.length,
+              separatorBuilder: (_, index) {
+                if (index == 0) return const SizedBox(height: 22);
+                return const SizedBox(height: 4);
+              },
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return const HomeLogoHeader();
+                }
 
-                    return AnimatedOpacity(
-                      duration: const Duration(milliseconds: 250),
-                      opacity: collapsed ? 1 : 0,
-                      child: AnimatedSlide(
-                        duration: const Duration(milliseconds: 250),
-                        offset: collapsed ? Offset.zero : const Offset(0, 0.5),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/shared/logo.png',
-                              width: 30,
-                            ),
-                            const SizedBox(width: 10),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'DVL',
-                                    style: TextStyle(
-                                      color: theme.colorScheme.onBackground,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  const TextSpan(
-                                    text: 'THEORY',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(249, 52, 26, 0.965),
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                final reminderStart = 1;
+                final reminderEnd = reminderStart + reminderWidgets.length;
+
+                if (index >= reminderStart && index < reminderEnd) {
+                  return reminderWidgets[index - reminderStart];
+                }
+
+                if (index == reminderEnd) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 12, bottom: 8),
+                    child: Text(
+                      'ALL TOPICS',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
                       ),
+                    ),
+                  );
+                }
+
+                final categoryIndex = index - reminderEnd - 1;
+
+                final category = _defaultCategories[categoryIndex];
+
+                final progress = progressMap[category.toLowerCase()] ?? 0.0;
+
+                return HomeCategoryTile(
+                  category: category,
+                  progress: progress,
+                  icon: HomeCategoryMapper.iconFor(category),
+                  color: HomeCategoryMapper.colorFor(category),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RouteNames.practice,
+                      arguments: category,
                     );
                   },
-                ),
-              ),
+                );
+              },
             ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(
-                horizontal: isTablet ? width * 0.08 : 16,
-                vertical: 18,
-              ),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  HomeActionCard(
-                    title: "Start Practice Test",
-                    subtitle: "Quick practice to sharpen your knowledge",
-                    color: Colors.blue,
-                    icon: Icons.assignment,
-                    onTap: () =>
-                        Navigator.pushNamed(context, RouteNames.practice),
-                  ),
-                  HomeActionCard(
-                    title: "Start Mock Exam",
-                    subtitle: "Real exam simulation just like the real test",
-                    color: Colors.green,
-                    icon: Icons.school,
-                    onTap: () =>
-                        Navigator.pushNamed(context, RouteNames.mockExam),
-                  ),
-                  HomeActionCard(
-                    title: "Continue Learning",
-                    subtitle: "Pick up where you left off",
-                    color: Colors.orange,
-                    icon: Icons.menu_book,
-                    onTap: () {},
-                  ),
-                  HomeActionCard(
-                    title: "View Progress",
-                    subtitle: "Track your performance and improvement",
-                    color: Colors.purple,
-                    icon: Icons.bar_chart,
-                    onTap: () =>
-                        Navigator.pushNamed(context, RouteNames.progress),
-                  ),
-                  HomeActionCard(
-                    title: "Review Wrong Answers",
-                    subtitle: "Learn from your mistakes and get better",
-                    color: Colors.red,
-                    icon: Icons.assignment_turned_in,
-                    onTap: () =>
-                        Navigator.pushNamed(context, RouteNames.review),
-                  ),
-                  SizedBox(height: height * 0.03),
-                ]),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
+
 
 // ===========================
 // features/home/presentation/widgets/home_logo_header.dart
@@ -376,113 +437,28 @@ class HomeCategoryMapper {
 }
 
 // ===========================
-features/home/presentation/screens/home_screen.dart
+features/progress/domain/services/category_service.dart
 // ===========================
-import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import '../../../../core/storage/hive_boxes.dart';
 
-import '../../../../core/navigation/route_names.dart';
-import '../../../../core/utils/responsive.dart';
-import '../../../../shared/navigation/app_bottom_navigation.dart';
-import '../../../progress/domain/services/category_service.dart';
-import '../widgets/home_category_mapper.dart';
-import '../widgets/home_category_tile.dart';
-import '../widgets/home_logo_header.dart';
+class CategoryService {
+  final Box categoryBox = Hive.box(HiveBoxes.category);
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  List<Map<String, dynamic>> getCategoryStats() {
+    return categoryBox.keys.map((key) {
+      final data = categoryBox.get(key);
 
-  static const List<String> _defaultCategories = [
-    'Road signs',
-    'Road markings',
-    'Traffic rules',
-    'Speed limits',
-    'Hazard awareness',
-    'Safe driving',
-    'Vehicle handling',
-    'Motorway rules',
-    'Pedestrian crossings',
-    'Emergency procedures',
-  ];
+      int attempted = data["attempted"];
+      int correct = data["correct"];
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isTablet = Responsive.isTablet(context);
-    final width = MediaQuery.of(context).size.width;
+      double accuracy = (correct / attempted) * 100;
 
-    final categoryService = CategoryService();
-    final trackedCategories = categoryService.getCategoryStats();
-
-    final progressMap = {
-      for (final item in trackedCategories)
-        item['category'].toString().toLowerCase():
-            (item['accuracy'] as num).toDouble(),
-    };
-
-    return Scaffold(
-      backgroundColor: theme.colorScheme.background,
-      bottomNavigationBar: const AppBottomNavigation(currentIndex: 0),
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: theme.colorScheme.background,
-        foregroundColor: theme.colorScheme.onBackground,
-        title: Text(
-          'Home',
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: isTablet ? 720 : width,
-            ),
-            child: ListView.separated(
-              physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.fromLTRB(
-                isTablet ? 32 : 22,
-                14,
-                isTablet ? 32 : 22,
-                24,
-              ),
-              itemCount: _defaultCategories.length + 1,
-              separatorBuilder: (_, index) {
-                if (index == 0) return const SizedBox(height: 22);
-                return const SizedBox(height: 4);
-              },
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return const HomeLogoHeader();
-                }
-
-                final category = _defaultCategories[index - 1];
-                final progress = progressMap[category.toLowerCase()] ?? 0.0;
-
-                return HomeCategoryTile(
-                  category: category,
-                  progress: progress,
-                  icon: HomeCategoryMapper.iconFor(category),
-                  color: HomeCategoryMapper.colorFor(category),
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      RouteNames.practice,
-                      arguments: category,
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ),
-      ),
-    );
+      return {"category": key, "accuracy": accuracy};
+    }).toList();
   }
 }
+
 
 // ===========================
 core/utils/responsive.dart
@@ -928,4 +904,438 @@ class NavigationItem {
     required this.selectedIcon,
     required this.route,
   });
+}
+
+// ===========================
+// features/home/domain/services/driving_tip_service.dart
+// ===========================
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:flutter/services.dart';
+
+class DrivingTipService {
+  DrivingTipService._();
+
+  static final DrivingTipService instance = DrivingTipService._();
+
+  List<String>? _cachedTips;
+
+  Future<List<String>> _loadTips() async {
+    if (_cachedTips != null) {
+      return _cachedTips!;
+    }
+
+    final jsonString = await rootBundle.loadString(
+      'assets/data/driving_tips.json',
+    );
+
+    final List<dynamic> data = json.decode(jsonString) as List<dynamic>;
+
+    _cachedTips = data.map((e) => e.toString()).toList();
+
+    return _cachedTips!;
+  }
+
+  Future<String> getRandomTip() async {
+    final tips = await _loadTips();
+
+    if (tips.isEmpty) {
+      return 'Always stay alert and obey road signs.';
+    }
+
+    return tips[Random().nextInt(tips.length)];
+  }
+
+  Future<String> getTipOfTheDay() async {
+    final tips = await _loadTips();
+
+    if (tips.isEmpty) {
+      return 'Always stay alert and obey road signs.';
+    }
+
+    final today = DateTime.now();
+
+    final seed = today.year * 10000 + today.month * 100 + today.day;
+
+    return tips[seed % tips.length];
+  }
+}
+
+// ===========================
+// features/analytics/domain/services/readiness_service.dart
+// ===========================
+import '../../../progress/domain/services/category_service.dart';
+
+class ReadinessReport {
+  final double readinessScore;
+  final String confidenceLevel;
+  final String strongestTopic;
+  final String weakestTopic;
+
+  const ReadinessReport({
+    required this.readinessScore,
+    required this.confidenceLevel,
+    required this.strongestTopic,
+    required this.weakestTopic,
+  });
+}
+
+class ReadinessService {
+  final CategoryService _categoryService = CategoryService();
+
+  ReadinessReport generateReport() {
+    final categories = _categoryService.getCategoryStats();
+
+    if (categories.isEmpty) {
+      return const ReadinessReport(
+        readinessScore: 0,
+        confidenceLevel: 'Low',
+        strongestTopic: '-',
+        weakestTopic: '-',
+      );
+    }
+
+    categories.sort(
+      (a, b) => (a['accuracy'] as double).compareTo(b['accuracy'] as double),
+    );
+
+    final weakest = categories.first;
+    final strongest = categories.last;
+
+    final average =
+        categories.map((e) => e['accuracy'] as double).reduce((a, b) => a + b) /
+        categories.length;
+
+    String confidence;
+
+    if (average >= 85) {
+      confidence = 'Very High';
+    } else if (average >= 70) {
+      confidence = 'High';
+    } else if (average >= 55) {
+      confidence = 'Moderate';
+    } else {
+      confidence = 'Low';
+    }
+
+    return ReadinessReport(
+      readinessScore: average,
+      confidenceLevel: confidence,
+      strongestTopic: strongest['category'],
+      weakestTopic: weakest['category'],
+    );
+  }
+}
+
+// ===========================
+// features/profile/domain/services/notification_preferences_controller.dart
+// ===========================
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+
+import '../../../../core/storage/hive_boxes.dart';
+import '../../data/models/notification_preferences.dart';
+
+class NotificationPreferencesController extends ChangeNotifier {
+  NotificationPreferencesController._();
+
+  static final NotificationPreferencesController instance =
+      NotificationPreferencesController._();
+
+  static const _key = 'notificationPreferences';
+
+  NotificationPreferences preferences = NotificationPreferences.defaults();
+
+  bool get canShowStudyReminders => preferences.studyReminders;
+
+  bool get canShowTestReminders => preferences.testReminders;
+
+  bool get canShowFeatureUpdates => preferences.newFeatures;
+
+  bool get canShowTipsAndAdvice => preferences.tipsAndAdvice;
+
+  bool get canShowPromotions => preferences.promotions;
+
+  Future<void> load() async {
+    final box = Hive.box(HiveBoxes.notificationPreferences);
+    final raw = box.get(_key);
+
+    if (raw == null) {
+      preferences = NotificationPreferences.defaults();
+      await box.put(_key, preferences.toMap());
+    } else {
+      preferences = NotificationPreferences.fromMap(
+        Map<dynamic, dynamic>.from(raw),
+      );
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> update(NotificationPreferences value) async {
+    preferences = value;
+
+    final box = Hive.box(HiveBoxes.notificationPreferences);
+    await box.put(_key, value.toMap());
+
+    notifyListeners();
+  }
+
+  Future<void> setStudyReminders(bool value) {
+    return update(preferences.copyWith(studyReminders: value));
+  }
+
+  Future<void> setTestReminders(bool value) {
+    return update(preferences.copyWith(testReminders: value));
+  }
+
+  Future<void> setNewFeatures(bool value) {
+    return update(preferences.copyWith(newFeatures: value));
+  }
+
+  Future<void> setTipsAndAdvice(bool value) {
+    return update(preferences.copyWith(tipsAndAdvice: value));
+  }
+
+  Future<void> setPromotions(bool value) {
+    return update(preferences.copyWith(promotions: value));
+  }
+
+  Future<void> resetToDefaults() {
+    return update(NotificationPreferences.defaults());
+  }
+}
+
+// ===========================
+// features/home/presentation/widgets/mock_reminder_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class MockReminderCard extends StatelessWidget {
+  final int readinessScore;
+  final VoidCallback? onTap;
+
+  const MockReminderCard({super.key, required this.readinessScore, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: Colors.green.withOpacity(.12),
+                child: const Icon(
+                  Icons.assignment_turned_in,
+                  color: Colors.green,
+                ),
+              ),
+
+              const SizedBox(width: 14),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Mock Test Recommended',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    Text(
+                      'Your readiness score is $readinessScore%. Take a mock test.',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+
+              const Icon(Icons.chevron_right),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/home/presentation/widgets/driving_tip_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class DrivingTipCard extends StatelessWidget {
+  final String tip;
+
+  const DrivingTipCard({super.key, required this.tip});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.lightbulb_outline, color: Colors.amber.shade700),
+
+            const SizedBox(width: 12),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Driving Tip',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  Text(tip, style: theme.textTheme.bodyMedium),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/home/presentation/widgets/feature_update_banner.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class FeatureUpdateBanner extends StatelessWidget {
+  final String title;
+  final String description;
+
+  const FeatureUpdateBanner({
+    super.key,
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withOpacity(.10),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.new_releases_rounded, color: theme.colorScheme.primary),
+
+          const SizedBox(width: 12),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                Text(description, style: theme.textTheme.bodySmall),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/home/presentation/widgets/study_reminder_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class StudyReminderCard extends StatelessWidget {
+  final VoidCallback? onTap;
+
+  const StudyReminderCard({super.key, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: theme.colorScheme.primary.withOpacity(.12),
+                child: Icon(
+                  Icons.menu_book_rounded,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+
+              const SizedBox(width: 14),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Study Reminder',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    Text(
+                      'Continue your practice today to improve your readiness score.',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+
+              const Icon(Icons.chevron_right),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

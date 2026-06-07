@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:async';
 
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/navigation/app_bottom_navigation.dart';
@@ -12,6 +13,8 @@ import '../widgets/practice_answer_option_tile.dart';
 import '../widgets/practice_explanation_card.dart';
 import '../widgets/practice_progress_card.dart';
 import '../../../../core/navigation/route_names.dart';
+import '../../../profile/domain/services/study_preferences_controller.dart';
+import '../../../profile/data/models/study_preferences.dart';
 
 class PracticeScreen extends StatefulWidget {
   const PracticeScreen({super.key});
@@ -28,6 +31,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   final _session = PracticeSessionController.instance;
   final _adaptiveService = AdaptivePracticeService();
+
   bool _loading = true;
   String? _error;
 
@@ -36,6 +40,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
   String? get _selectedAnswer => _session.selectedAnswers[_question.id];
 
   bool get _showResult => _session.answeredQuestions[_question.id] ?? false;
+  Timer? _autoAdvanceTimer;
 
   @override
   void initState() {
@@ -45,13 +50,14 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   @override
   void dispose() {
+    _autoAdvanceTimer?.cancel();
     _stopwatch.stop();
     super.dispose();
   }
 
   Future<void> _initializePracticeSession() async {
     try {
-      if (_session.initialized && _session.questions.isNotEmpty) {
+      if (_session.inProgress && _session.questions.isNotEmpty) {
         if (!mounted) return;
 
         setState(() => _loading = false);
@@ -67,28 +73,44 @@ class _PracticeScreenState extends State<PracticeScreen> {
       final selectedCategory =
           ModalRoute.of(context)?.settings.arguments as String?;
 
+      final prefs = StudyPreferencesController.instance.preferences;
+      final questionCount = prefs.practiceQuestionCount;
+
       final selectedQuestions = selectedCategory == null
-          ? _adaptiveService.generateSession(data, sessionSize: 10)
-          : (data
-                    .where(
-                      (question) =>
-                          question.category.toLowerCase() ==
-                          selectedCategory.toLowerCase(),
-                    )
-                    .toList()
-                  ..shuffle())
-                .take(10)
+          ? _adaptiveService.generateSession(data, sessionSize: questionCount)
+          : data
+                .where(
+                  (question) =>
+                      question.category.toLowerCase() ==
+                      selectedCategory.toLowerCase(),
+                )
                 .toList();
 
-      _session.questions = selectedQuestions;
+      if (prefs.randomizeQuestions) {
+        selectedQuestions.shuffle();
+      }
+
+      switch (prefs.questionMode) {
+        case QuestionMode.multipleChoice:
+          break;
+
+        case QuestionMode.mixed:
+          break;
+      }
+
+      _session.questions = selectedQuestions.take(questionCount).toList();
       _session.currentIndex = 0;
       _session.selectedAnswers.clear();
       _session.answeredQuestions.clear();
       _session.initialized = true;
 
+      _session.startSession();
+
       setState(() => _loading = false);
 
-      _restartTimer();
+      if (prefs.practiceTimerEnabled) {
+        _restartTimer();
+      }
     } catch (e, stackTrace) {
       debugPrint('Question loading failed: $e');
       debugPrintStack(stackTrace: stackTrace);
@@ -124,6 +146,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
     _stopwatch.stop();
 
     final isCorrect = _selectedAnswer == _question.correctAnswer;
+    final prefs = StudyPreferencesController.instance.preferences;
 
     _engine.recordAttempt({
       'id': _uuid.v4(),
@@ -132,7 +155,9 @@ class _PracticeScreenState extends State<PracticeScreen> {
       'selectedAnswer': _selectedAnswer,
       'correctAnswer': _question.correctAnswer,
       'isCorrect': isCorrect,
-      'timeTaken': _stopwatch.elapsed.inSeconds,
+      'timeTaken': prefs.practiceTimerEnabled
+          ? _stopwatch.elapsed.inSeconds
+          : 0,
       'date': DateTime.now(),
       'testType': 'practice',
     });
@@ -141,6 +166,16 @@ class _PracticeScreenState extends State<PracticeScreen> {
       _session.answeredQuestions[_question.id] = true;
       _session.questionResults[_question.id] = isCorrect;
     });
+
+    if (prefs.autoAdvance && _selectedAnswer != null) {
+      _autoAdvanceTimer?.cancel();
+
+      _autoAdvanceTimer = Timer(const Duration(seconds: 2), () {
+        if (mounted) {
+          _next();
+        }
+      });
+    }
   }
 
   void _previous() {
@@ -150,13 +185,21 @@ class _PracticeScreenState extends State<PracticeScreen> {
       _session.currentIndex--;
     });
 
-    if (!_showResult) _restartTimer();
+    final prefs = StudyPreferencesController.instance.preferences;
+    if (!_showResult && prefs.practiceTimerEnabled) _restartTimer();
   }
 
   void _next() {
-    final reviewData = _session.buildReviewData();
+    final prefs = StudyPreferencesController.instance.preferences;
 
     if (_session.currentIndex >= _session.questions.length - 1) {
+      final reviewData = _session.buildReviewData();
+
+      _autoAdvanceTimer?.cancel();
+      _stopwatch.stop();
+
+      _session.finishSession();
+
       Navigator.pushReplacementNamed(
         context,
         RouteNames.review,
@@ -169,7 +212,9 @@ class _PracticeScreenState extends State<PracticeScreen> {
       _session.currentIndex++;
     });
 
-    if (!_showResult) _restartTimer();
+    if (!_showResult && prefs.practiceTimerEnabled) {
+      _restartTimer();
+    }
   }
 
   @override
@@ -202,6 +247,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
     final progress = (_session.currentIndex + 1) / _session.questions.length;
     final isLastQuestion =
         _session.currentIndex == _session.questions.length - 1;
+    final prefs = StudyPreferencesController.instance.preferences;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -263,7 +309,9 @@ class _PracticeScreenState extends State<PracticeScreen> {
                       ),
                     ),
                     const SizedBox(height: AppSpacing.md),
-                    if (_showResult)
+                    if (_showResult &&
+                        prefs.explanationMode ==
+                            ExplanationMode.afterEveryAnswer)
                       PracticeExplanationCard(
                         isCorrect: _selectedAnswer == _question.correctAnswer,
                         explanation: _safeExplanation(_question),

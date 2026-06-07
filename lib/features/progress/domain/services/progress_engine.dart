@@ -4,6 +4,7 @@
 import 'package:hive/hive.dart';
 
 import '../../../../core/storage/hive_boxes.dart';
+import '../../../profile/domain/services/study_preferences_controller.dart';
 
 class ProgressEngine {
   final Box attemptsBox = Hive.box(HiveBoxes.attempts);
@@ -15,13 +16,24 @@ class ProgressEngine {
   final Box streakBox = Hive.box(HiveBoxes.streak);
 
   void recordAttempt(Map<String, dynamic> attempt) {
-    attemptsBox.add(Map<String, dynamic>.from(attempt));
+    final preferences = StudyPreferencesController.instance.preferences;
+    final enrichedAttempt = Map<String, dynamic>.from(attempt)
+      ..['saveWrongAnswersEnabled'] = preferences.saveWrongAnswers
+      ..['practiceQuestionCount'] = preferences.practiceQuestionCount
+      ..['explanationMode'] = preferences.explanationMode.name
+      ..['questionMode'] = preferences.questionMode.name;
 
-    _updateStats(attempt);
-    _updateCategory(attempt);
-    _updateWrongAnswers(attempt);
-    _updateMastery(attempt);
-    _updateSpacedRepetition(attempt);
+    attemptsBox.add(enrichedAttempt);
+
+    _updateStats(enrichedAttempt);
+    _updateCategory(enrichedAttempt);
+
+    if (preferences.saveWrongAnswers) {
+      _updateWrongAnswers(enrichedAttempt);
+    }
+
+    _updateMastery(enrichedAttempt);
+    _updateSpacedRepetition(enrichedAttempt);
     _updateStreak();
   }
 

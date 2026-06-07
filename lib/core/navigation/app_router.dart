@@ -26,6 +26,7 @@ import '../../features/mock/presentation/screens/mock_exam_screen.dart';
 import '../../features/mock/presentation/screens/mock_summary_screen.dart';
 import '../../features/mock/presentation/screens/mock_submit_screen.dart';
 import '../../features/mock/presentation/screens/mock_result_screen.dart';
+import '../../features/notifications/presentation/screens/notification_center_screen.dart';
 import '../theme/theme_controller.dart';
 
 class AppRouter {
@@ -72,6 +73,9 @@ class AppRouter {
         return RouteTransitions.fadeSlide(
           SettingsScreen(themeController: controller),
         );
+
+      case RouteNames.notificationCenter:
+        return RouteTransitions.fadeSlide(const NotificationCenterScreen());
 
       case RouteNames.profile:
         return RouteTransitions.fadeSlide(const ProfileScreen());

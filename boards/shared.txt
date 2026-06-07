@@ -35,14 +35,20 @@
 │   │   ├── domain
 │   │   │   ├── entities
 │   │   │   ├── repositories
+│   │   │   ├── services
+│   │   │   │   └── driving_tip_service.dart
 │   │   │   └── usecases
 │   │   ├── presentation
 │   │   │   ├── screens
 │   │   │   │   └── home_screen.dart
 │   │   │   └── widgets
+│   │   │       ├── driving_tip_card.dart
+│   │   │       ├── feature_update_banner.dart
 │   │   │       ├── home_category_mapper.dart
 │   │   │       ├── home_category_tile.dart
-│   │   │       └── home_logo_header.dart
+│   │   │       ├── home_logo_header.dart
+│   │   │       ├── mock_reminder_card.dart
+│   │   │       └── study_reminder_card.dart
 │   │   └── widgets
 │   │       ├── home_header_section.dart
 │   │       └── home_theme.dart
@@ -68,6 +74,19 @@
 │   │           ├── mock_configuration_tile.dart
 │   │           ├── mock_exam_header.dart
 │   │           └── mock_info_card.dart
+│   ├── notifications
+│   │   ├── data
+│   │   │   └── models
+│   │   │       └── app_notification.dart
+│   │   ├── domain
+│   │   │   └── services
+│   │   │       └── notification_center_service.dart
+│   │   └── presentation
+│   │       ├── screens
+│   │       │   └── notification_center_screen.dart
+│   │       └── widgets
+│   │           ├── notification_badge.dart
+│   │           └── notification_tile.dart
 │   ├── practice
 │   │   ├── data
 │   │   │   ├── datasources
@@ -96,9 +115,16 @@
 │   │           ├── review_question_tile.dart
 │   │           └── review_status_badge.dart
 │   ├── profile
+│   │   ├── data
+│   │   │   └── models
+│   │   │       ├── notification_preferences.dart
+│   │   │       └── study_preferences.dart
 │   │   ├── domain
 │   │   │   └── services
+│   │   │       ├── notification_intent_service.dart
+│   │   │       ├── notification_preferences_controller.dart
 │   │   │       ├── profile_photo_service.dart
+│   │   │       ├── study_preferences_controller.dart
 │   │   │       └── user_profile_controller.dart
 │   │   └── presentation
 │   │       ├── screens
@@ -176,4 +202,4 @@
     └── widgets
         └── action_card.dart
 
-67 directories, 110 files
+78 directories, 125 files
