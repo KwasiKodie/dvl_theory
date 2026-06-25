@@ -36,7 +36,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     final flagged = reviewData.where((e) => e.isFlagged).length;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 1),
 
@@ -44,7 +44,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
         centerTitle: true,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         title: const Text('Review Answers'),
       ),
 

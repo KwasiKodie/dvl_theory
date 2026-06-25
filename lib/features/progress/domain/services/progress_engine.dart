@@ -15,15 +15,19 @@ class ProgressEngine {
   final Box reviewBox = Hive.box(HiveBoxes.review);
   final Box streakBox = Hive.box(HiveBoxes.streak);
 
-  void recordAttempt(Map<String, dynamic> attempt) {
+  Future<void> recordAttempt(Map<String, dynamic> attempt) async {
     final preferences = StudyPreferencesController.instance.preferences;
     final enrichedAttempt = Map<String, dynamic>.from(attempt)
+      ..['uploaded'] = false
       ..['saveWrongAnswersEnabled'] = preferences.saveWrongAnswers
       ..['practiceQuestionCount'] = preferences.practiceQuestionCount
       ..['explanationMode'] = preferences.explanationMode.name
       ..['questionMode'] = preferences.questionMode.name;
 
-    attemptsBox.add(enrichedAttempt);
+    attemptsBox.put(
+  enrichedAttempt['id'],
+  enrichedAttempt,
+);
 
     _updateStats(enrichedAttempt);
     _updateCategory(enrichedAttempt);

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'theme_mode_storage.dart';
 
 class ThemeController extends ChangeNotifier {
-  final ThemeModeStorage _storage;
+  final ThemeModeStorage storage;
 
-  ThemeController({required ThemeModeStorage storage}) : _storage = storage;
+  ThemeController({required this.storage});
 
   ThemeMode _themeMode = ThemeMode.system;
   bool _initialized = false;
@@ -13,7 +13,7 @@ class ThemeController extends ChangeNotifier {
   bool get initialized => _initialized;
 
   Future<void> initialize() async {
-    _themeMode = await _storage.loadThemeMode();
+    _themeMode = await storage.loadThemeMode();
     _initialized = true;
     notifyListeners();
   }
@@ -24,6 +24,6 @@ class ThemeController extends ChangeNotifier {
     _themeMode = mode;
     notifyListeners();
 
-    await _storage.saveThemeMode(mode);
+    await storage.saveThemeMode(mode);
   }
 }

@@ -29,14 +29,14 @@ class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: theme.colorScheme.background,
-        foregroundColor: theme.colorScheme.onBackground,
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
         title: const Text('Notifications'),
         actions: [
           TextButton(
@@ -69,7 +69,7 @@ class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
                   itemCount: notifications.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  separatorBuilder: (_, _) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     return NotificationTile(
                       notification: notifications[index],

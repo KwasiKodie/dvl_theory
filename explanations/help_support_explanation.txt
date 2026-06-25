@@ -1,0 +1,435 @@
+Given the current evolution of DVL Theory, I would treat **Help & Support** as a hybrid of:
+
+1. **Offline-first support experience**
+2. **Online synchronization when available**
+3. **User feedback collection**
+4. **Issue reporting and diagnostics**
+5. **Knowledge base / FAQs**
+
+This aligns with your existing architecture where:
+
+```text
+User Profile
+Study Preferences
+Notification Preferences
+Progress Engine
+Hive Storage
+```
+
+are already offline-first.
+
+---
+
+# My Recommendation
+
+Do NOT send reported problems directly to the server.
+
+Instead:
+
+```text
+User submits issue
+      ↓
+Store locally in Hive
+      ↓
+Mark as "Pending Upload"
+      ↓
+When internet available
+      ↓
+Sync to server
+      ↓
+Mark as "Submitted"
+```
+
+This follows the same philosophy as:
+
+```text
+Progress Data
+User Profile
+Study Preferences
+```
+
+and prevents losing reports when:
+
+```text
+No internet
+Poor network
+App closes unexpectedly
+```
+
+---
+
+# Help & Support Architecture
+
+I would create:
+
+```text
+features/help_support
+│
+├── data
+│   ├── models
+│   │   ├── faq_item.dart
+│   │   ├── support_ticket.dart
+│   │   └── support_message.dart
+│
+├── domain
+│   ├── services
+│   │   ├── faq_service.dart
+│   │   ├── support_service.dart
+│   │   ├── support_sync_service.dart
+│   │   └── diagnostics_service.dart
+│
+├── presentation
+│   ├── screens
+│   │   ├── faq_screen.dart
+│   │   ├── contact_us_screen.dart
+│   │   ├── report_problem_screen.dart
+│   │   ├── rate_app_screen.dart
+│   │   └── follow_us_screen.dart
+│
+│   └── widgets
+```
+
+---
+
+# 1. FAQs
+
+Most scalable approach:
+
+```text
+assets/json/faqs.json
+```
+
+Example:
+
+```json
+[
+  {
+    "question":"How are mock tests scored?",
+    "answer":"You need 70% or higher to pass."
+  },
+  {
+    "question":"Can I use the app offline?",
+    "answer":"Yes. Practice tests work completely offline."
+  }
+]
+```
+
+Then:
+
+```dart
+FaqService
+```
+
+loads them.
+
+Benefits:
+
+```text
+No server required
+Easy to update later
+Localized later
+Searchable
+```
+
+---
+
+# 2. Contact Us
+
+Screen:
+
+```text
+Name
+Email
+Subject
+Message
+```
+
+Stored as:
+
+```dart
+SupportMessage
+```
+
+in Hive.
+
+When internet exists:
+
+```text
+Sync to API
+```
+
+---
+
+# 3. Report A Problem
+
+This is the most important feature.
+
+Instead of just a text box:
+
+### Collect
+
+```text
+User ID
+App Version
+Theme
+Platform
+Timestamp
+```
+
+Automatically.
+
+Plus:
+
+```text
+Problem Category
+Description
+Screenshot (optional)
+```
+
+---
+
+Example:
+
+```dart
+class SupportTicket {
+  final String id;
+  final String category;
+  final String description;
+  final String screenshotPath;
+  final DateTime createdAt;
+  final bool uploaded;
+}
+```
+
+Stored locally.
+
+---
+
+# Screenshot Support
+
+Allow:
+
+```text
+Take Screenshot
+Choose Screenshot
+```
+
+using the same architecture you already built for:
+
+```text
+Profile Photo
+```
+
+Reuse:
+
+```text
+ProfilePhotoService pattern
+```
+
+for:
+
+```dart
+TicketAttachmentService
+```
+
+---
+
+# 4. Rate Our App
+
+For now:
+
+### Offline
+
+Store:
+
+```text
+1-5 stars
+feedback
+```
+
+locally.
+
+Later:
+
+```text
+Google Play review
+Apple App Store review
+```
+
+integration.
+
+---
+
+Model:
+
+```dart
+class AppRating {
+  final int stars;
+  final String feedback;
+}
+```
+
+---
+
+# 5. Follow Us
+
+This should NOT be hardcoded.
+
+Store:
+
+```text
+Facebook
+Instagram
+TikTok
+X
+YouTube
+Website
+```
+
+in:
+
+```text
+assets/json/social_links.json
+```
+
+Example:
+
+```json
+{
+  "facebook":"https://facebook.com/dvltheory",
+  "instagram":"https://instagram.com/dvltheory"
+}
+```
+
+---
+
+# Support Synchronization
+
+Create:
+
+```dart
+SupportSyncService
+```
+
+Responsibilities:
+
+```text
+Upload pending tickets
+Upload contact messages
+Upload ratings
+Retry failed uploads
+```
+
+---
+
+# Hive Boxes
+
+Add:
+
+```dart
+static const supportTickets = 'support_tickets';
+static const supportMessages = 'support_messages';
+static const appRatings = 'app_ratings';
+```
+
+---
+
+# Server API
+
+Since you've now decided to store reported problems:
+
+I would add a dedicated endpoint.
+
+Example:
+
+```text
+POST /support/ticket
+```
+
+Payload:
+
+```json
+{
+  "ticket_id":"...",
+  "user_id":"...",
+  "category":"Mock Test",
+  "description":"Timer froze at question 14",
+  "app_version":"1.0.0",
+  "platform":"android"
+}
+```
+
+---
+
+# Future Analytics
+
+Reported problems become extremely valuable.
+
+You can generate:
+
+```text
+Most reported issue
+Most problematic screen
+Most common crash
+Most requested feature
+```
+
+without needing a third-party analytics platform.
+
+---
+
+# My Recommended Implementation Order
+
+### Phase 1
+
+Implement:
+
+```text
+FAQ Screen
+Report Problem Screen
+Hive Storage
+SupportTicket Model
+```
+
+### Phase 2
+
+Implement:
+
+```text
+Contact Us
+Ratings
+Social Links
+```
+
+### Phase 3
+
+Implement:
+
+```text
+Support Sync Service
+Server Upload
+Retry Queue
+```
+
+### Phase 4
+
+Implement:
+
+```text
+Diagnostics Collection
+Screenshot Attachments
+Developer Issue Dashboard
+```
+
+This approach stays consistent with the rest of your architecture:
+
+```text
+Offline-first
+Hive-backed
+Sync when online
+Restore after reinstall
+Reusable services
+Scalable for future backend integration
+```
+
+and fits naturally alongside your existing Profile, Progress, Notifications, Practice, and Mock systems.

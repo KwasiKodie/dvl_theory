@@ -29,7 +29,9 @@ class AppBottomNavigation extends StatelessWidget {
       height: isTablet ? 82 : 72,
       backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
-      indicatorColor: Theme.of(context).colorScheme.primary.withOpacity(0.14),
+      indicatorColor: Theme.of(
+        context,
+      ).colorScheme.primary.withValues(alpha: 0.14),
       labelBehavior: isSmallPhone
           ? NavigationDestinationLabelBehavior.onlyShowSelected
           : NavigationDestinationLabelBehavior.alwaysShow,
@@ -66,7 +68,7 @@ class AppBottomNavigation extends StatelessWidget {
             child: index == 4
                 ? AnimatedBuilder(
                     animation: NotificationCenterService.instance,
-                    builder: (_, __) {
+                    builder: (context, child) {
                       return NotificationBadge(
                         count: NotificationCenterService.instance.unreadCount,
                         child: SizedBox(
@@ -84,7 +86,7 @@ class AppBottomNavigation extends StatelessWidget {
             child: index == 4
                 ? AnimatedBuilder(
                     animation: NotificationCenterService.instance,
-                    builder: (_, __) {
+                    builder: (context, child) {
                       return NotificationBadge(
                         count: NotificationCenterService.instance.unreadCount,
                         child: Icon(item.selectedIcon),

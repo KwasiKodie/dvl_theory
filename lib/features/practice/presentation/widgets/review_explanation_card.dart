@@ -27,9 +27,9 @@ class ReviewExplanationCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: color.withOpacity(.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(.75)),
+        border: Border.all(color: color.withValues(alpha: 0.75)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

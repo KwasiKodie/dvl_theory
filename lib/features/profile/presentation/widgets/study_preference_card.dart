@@ -24,7 +24,7 @@ class StudyPreferenceCard extends StatelessWidget {
             side: BorderSide(
               color: Theme.of(
                 context,
-              ).colorScheme.outlineVariant.withOpacity(0.6),
+              ).colorScheme.outlineVariant.withValues(alpha: 0.6),
             ),
           ),
           child: Padding(
@@ -138,17 +138,25 @@ class StudyPreferenceCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RadioListTile<QuestionMode>(
-                value: QuestionMode.multipleChoice,
+              RadioGroup<QuestionMode>(
                 groupValue: controller.preferences.questionMode,
-                title: const Text('Multiple Choice'),
-                onChanged: (value) => Navigator.pop(context, value),
-              ),
-              RadioListTile<QuestionMode>(
-                value: QuestionMode.mixed,
-                groupValue: controller.preferences.questionMode,
-                title: const Text('Mixed'),
-                onChanged: (value) => Navigator.pop(context, value),
+                onChanged: (QuestionMode? value) {
+                  if (value != null) {
+                    Navigator.pop(context, value);
+                  }
+                },
+                child: const Column(
+                  children: [
+                    RadioListTile<QuestionMode>(
+                      value: QuestionMode.multipleChoice,
+                      title: Text('Multiple Choice'),
+                    ),
+                    RadioListTile<QuestionMode>(
+                      value: QuestionMode.mixed,
+                      title: Text('Mixed'),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 16),
             ],
@@ -207,23 +215,29 @@ class StudyPreferenceCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RadioListTile<ExplanationMode>(
-                value: ExplanationMode.afterEveryAnswer,
+              RadioGroup<ExplanationMode>(
                 groupValue: controller.preferences.explanationMode,
-                title: const Text('After Every Answer'),
-                onChanged: (value) => Navigator.pop(context, value),
-              ),
-              RadioListTile<ExplanationMode>(
-                value: ExplanationMode.endOfTest,
-                groupValue: controller.preferences.explanationMode,
-                title: const Text('End Of Test'),
-                onChanged: (value) => Navigator.pop(context, value),
-              ),
-              RadioListTile<ExplanationMode>(
-                value: ExplanationMode.never,
-                groupValue: controller.preferences.explanationMode,
-                title: const Text('Never'),
-                onChanged: (value) => Navigator.pop(context, value),
+                onChanged: (ExplanationMode? value) {
+                  if (value != null) {
+                    Navigator.pop(context, value);
+                  }
+                },
+                child: Column(
+                  children: const [
+                    RadioListTile<ExplanationMode>(
+                      value: ExplanationMode.afterEveryAnswer,
+                      title: Text('After Every Answer'),
+                    ),
+                    RadioListTile<ExplanationMode>(
+                      value: ExplanationMode.endOfTest,
+                      title: Text('End Of Test'),
+                    ),
+                    RadioListTile<ExplanationMode>(
+                      value: ExplanationMode.never,
+                      title: Text('Never'),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 16),
             ],
@@ -269,12 +283,21 @@ class StudyPreferenceCard extends StatelessWidget {
                   ),
                 ),
 
-                ...values.map(
-                  (value) => RadioListTile<int>(
-                    value: value,
-                    groupValue: current,
-                    title: Text('$value $suffix'),
-                    onChanged: (value) => Navigator.pop(context, value),
+                RadioGroup<int>(
+                  groupValue: current,
+                  onChanged: (int? value) {
+                    Navigator.pop(context, value);
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: values
+                        .map(
+                          (value) => RadioListTile<int>(
+                            value: value,
+                            title: Text('$value $suffix'),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
 

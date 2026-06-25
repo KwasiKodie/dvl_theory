@@ -10,9 +10,9 @@ class InstructionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(.08),
+        color: Colors.green.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.green.withOpacity(.35)),
+        border: Border.all(color: Colors.green.withValues(alpha: 0.35)),
       ),
       child: const Column(
         children: [

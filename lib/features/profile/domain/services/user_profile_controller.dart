@@ -7,10 +7,10 @@ class UserProfileController extends ChangeNotifier {
 
   static final UserProfileController instance = UserProfileController._();
 
-  String fullName = 'John Doe';
-  String email = 'john.doe@email.com';
+  String fullName = 'Edit Name';
+  String email = 'edit.name@email.com';
   DateTime dateOfBirth = DateTime(1998, 5, 15);
-  String phoneNumber = '+233 599 206 754';
+  String phoneNumber = '+233 (0) XXX XXX XXX';
   String? profileImagePath;
 
   Future<void> updateProfile({
@@ -37,11 +37,11 @@ class UserProfileController extends ChangeNotifier {
   Future<void> loadProfile() async {
     final box = Hive.box(HiveBoxes.profile);
 
-    fullName = box.get('fullName', defaultValue: 'John Doe');
+    fullName = box.get('fullName', defaultValue: 'Your Name');
 
-    email = box.get('email', defaultValue: 'john.doe@email.com');
+    email = box.get('email', defaultValue: 'your.name@email.com');
 
-    phoneNumber = box.get('phoneNumber', defaultValue: '+233 599 206 754');
+    phoneNumber = box.get('phoneNumber', defaultValue: '+233 (0) XXX XXX XXX');
 
     profileImagePath = box.get('profileImagePath');
 

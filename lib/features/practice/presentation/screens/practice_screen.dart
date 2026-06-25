@@ -15,6 +15,7 @@ import '../widgets/practice_progress_card.dart';
 import '../../../../core/navigation/route_names.dart';
 import '../../../profile/domain/services/study_preferences_controller.dart';
 import '../../../profile/data/models/study_preferences.dart';
+import '../../../progress/domain/services/progress_sync_service.dart';
 
 class PracticeScreen extends StatefulWidget {
   const PracticeScreen({super.key});
@@ -140,7 +141,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
     });
   }
 
-  void _submitAnswer() {
+  Future<void> _submitAnswer() async{
     if (_selectedAnswer == null || _showResult) return;
 
     _stopwatch.stop();
@@ -148,7 +149,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
     final isCorrect = _selectedAnswer == _question.correctAnswer;
     final prefs = StudyPreferencesController.instance.preferences;
 
-    _engine.recordAttempt({
+    await _engine.recordAttempt({
       'id': _uuid.v4(),
       'questionId': _question.id,
       'category': _question.category,
@@ -189,33 +190,38 @@ class _PracticeScreenState extends State<PracticeScreen> {
     if (!_showResult && prefs.practiceTimerEnabled) _restartTimer();
   }
 
-  void _next() {
-    final prefs = StudyPreferencesController.instance.preferences;
+  Future<void> _next() async {
+  final prefs = StudyPreferencesController.instance.preferences;
 
-    if (_session.currentIndex >= _session.questions.length - 1) {
-      final reviewData = _session.buildReviewData();
+  if (_session.currentIndex >= _session.questions.length - 1) {
+  final reviewData = _session.buildReviewData();
 
-      _autoAdvanceTimer?.cancel();
-      _stopwatch.stop();
+  _autoAdvanceTimer?.cancel();
+  _stopwatch.stop();
 
-      _session.finishSession();
+  _session.finishSession();
 
-      Navigator.pushReplacementNamed(
-        context,
-        RouteNames.review,
-        arguments: reviewData,
-      );
-      return;
-    }
+  await ProgressSyncService.instance.uploadProgress();
 
-    setState(() {
-      _session.currentIndex++;
-    });
+  if (!mounted) return;
 
-    if (!_showResult && prefs.practiceTimerEnabled) {
-      _restartTimer();
-    }
+  Navigator.pushReplacementNamed(
+    context,
+    RouteNames.review,
+    arguments: reviewData,
+  );
+
+  return;
+}
+
+  setState(() {
+    _session.currentIndex++;
+  });
+
+  if (!_showResult && prefs.practiceTimerEnabled) {
+    _restartTimer();
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -223,14 +229,14 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
     if (_loading) {
       return Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     if (_error != null || _session.questions.isEmpty) {
       return Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         appBar: AppBar(
           title: const Text('Practice Question'),
           centerTitle: true,
@@ -250,14 +256,14 @@ class _PracticeScreenState extends State<PracticeScreen> {
     final prefs = StudyPreferencesController.instance.preferences;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 1),
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: theme.colorScheme.background,
-        foregroundColor: theme.colorScheme.onBackground,
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
         title: Text(
           'Practice Question',
           style: theme.textTheme.titleLarge?.copyWith(
@@ -285,7 +291,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                       _question.question,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w800,
-                        color: theme.colorScheme.onBackground,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: AppSpacing.md),

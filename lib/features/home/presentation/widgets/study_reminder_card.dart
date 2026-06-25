@@ -20,7 +20,9 @@ class StudyReminderCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 24,
-                backgroundColor: theme.colorScheme.primary.withOpacity(.12),
+                backgroundColor: theme.colorScheme.primary.withValues(
+                  alpha: 0.12,
+                ),
                 child: Icon(
                   Icons.menu_book_rounded,
                   color: theme.colorScheme.primary,

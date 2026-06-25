@@ -12,12 +12,12 @@ class MockInstructionsScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         surfaceTintColor: Colors.transparent,
         title: const Text('Instructions'),
       ),

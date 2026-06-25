@@ -24,15 +24,15 @@ class AccountCard extends StatelessWidget {
 
             Divider(color: theme.colorScheme.outlineVariant),
 
-            const AccountInfoTile(title: 'Full Name', value: 'John Doe'),
+            const AccountInfoTile(title: 'Full Name', value: 'Your Name'),
 
-            const AccountInfoTile(title: 'Email', value: 'john.doe@email.com'),
+            const AccountInfoTile(title: 'Email', value: 'your.name@email.com'),
 
             const AccountInfoTile(title: 'Date of Birth', value: '15 May 1998'),
 
             const AccountInfoTile(
               title: 'Phone Number',
-              value: '+233 599 206 754',
+              value: '+233 (0) XX XXX XXX',
             ),
 
             Divider(color: theme.colorScheme.outlineVariant),

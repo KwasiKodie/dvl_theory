@@ -15,7 +15,7 @@ class ReviewQuestionList extends StatelessWidget {
     return ListView.separated(
       physics: const BouncingScrollPhysics(),
       itemCount: questions.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 6),
+      separatorBuilder: (_, _) => const SizedBox(height: 6),
       itemBuilder: (_, index) {
         final item = questions[index];
 

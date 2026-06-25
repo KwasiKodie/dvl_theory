@@ -3,6 +3,8 @@ import 'package:hive/hive.dart';
 
 import '../../../../core/storage/hive_boxes.dart';
 import '../../data/models/notification_preferences.dart';
+import '../../../notifications/domain/services/notification_scheduler.dart';
+import '../../../notifications/domain/services/notification_center_service.dart';
 
 class NotificationPreferencesController extends ChangeNotifier {
   NotificationPreferencesController._();
@@ -45,6 +47,8 @@ class NotificationPreferencesController extends ChangeNotifier {
 
     final box = Hive.box(HiveBoxes.notificationPreferences);
     await box.put(_key, value.toMap());
+    await NotificationCenterService.instance.refresh();
+    await NotificationScheduler.instance.rescheduleAll();
 
     notifyListeners();
   }

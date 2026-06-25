@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/navigation/route_names.dart';
 import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../../../progress/domain/services/progress_sync_service.dart';
 
 import '../../domain/services/mock_session_controller.dart';
 
@@ -28,14 +29,14 @@ class MockResultScreen extends StatelessWidget {
     final percentage = session.scorePercent.round();
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
 
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         surfaceTintColor: Colors.transparent,
         title: const Text('Results'),
       ),
@@ -102,8 +103,12 @@ class MockResultScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 56,
                         child: FilledButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            await ProgressSyncService.instance.uploadProgress();
+
                             session.reset();
+
+                            if (!context.mounted) return;
 
                             Navigator.pushNamedAndRemoveUntil(
                               context,
@@ -147,9 +152,9 @@ class _ResultHeader extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
       decoration: BoxDecoration(
-        color: color.withOpacity(.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(.35)),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
       ),
       child: Column(
         children: [
@@ -383,7 +388,7 @@ class _StatTile extends StatelessWidget {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(.12),
+                  color: color.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(

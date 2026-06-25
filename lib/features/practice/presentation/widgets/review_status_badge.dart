@@ -17,7 +17,7 @@ class ReviewStatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
-        color: status.color.withOpacity(.16),
+        color: status.color.withValues(alpha: 0.16),
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(

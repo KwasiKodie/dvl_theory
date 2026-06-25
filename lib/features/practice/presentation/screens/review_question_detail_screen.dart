@@ -60,14 +60,14 @@ class _ReviewQuestionDetailScreenState
     final question = _data.question;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 1),
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: theme.colorScheme.background,
-        foregroundColor: theme.colorScheme.onBackground,
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
         title: Text(
           'Question ${_data.questionNumber} of ${_items.length}',
           style: theme.textTheme.titleLarge?.copyWith(
@@ -111,7 +111,7 @@ class _ReviewQuestionDetailScreenState
                         question.question,
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w800,
-                          color: theme.colorScheme.onBackground,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                       if (question.image != null) ...[

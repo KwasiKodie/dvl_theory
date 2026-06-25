@@ -20,12 +20,12 @@ class MockIntroScreen extends StatelessWidget {
         StudyPreferencesController.instance.preferences.mockDurationMinutes;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         title: const Text('Mock Exam'),
       ),
       body: SafeArea(

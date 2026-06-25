@@ -8,22 +8,33 @@ class RouteAnimations {
     return PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 400),
 
-      pageBuilder: (_, animation, __) => page,
+      pageBuilder:
+          (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> _,
+          ) => page,
 
-      transitionsBuilder: (_, animation, __, child) {
-        return FadeTransition(
-          opacity: animation,
+      transitionsBuilder:
+          (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> _,
+            child,
+          ) {
+            return FadeTransition(
+              opacity: animation,
 
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.05),
-              end: Offset.zero,
-            ).animate(animation),
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 0.05),
+                  end: Offset.zero,
+                ).animate(animation),
 
-            child: child,
-          ),
-        );
-      },
+                child: child,
+              ),
+            );
+          },
     );
   }
 
@@ -31,9 +42,14 @@ class RouteAnimations {
     return PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 350),
 
-      pageBuilder: (_, animation, __) => page,
+      pageBuilder:
+          (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> _,
+          ) => page,
 
-      transitionsBuilder: (_, animation, __, child) {
+      transitionsBuilder: (_, animation, _, child) {
         return FadeTransition(opacity: animation, child: child);
       },
     );

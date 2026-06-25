@@ -165,14 +165,14 @@ class _MockExamScreenState extends State<MockExamScreen> {
 
     if (_loading) {
       return Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     if (_error != null) {
       return Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         appBar: AppBar(title: const Text('Mock Exam')),
         body: Center(child: Text(_error!)),
       );
@@ -185,14 +185,14 @@ class _MockExamScreenState extends State<MockExamScreen> {
     final isFlagged = _session.isFlagged(_question.id);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
 
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         surfaceTintColor: Colors.transparent,
         title: const Text('Mock Exam'),
       ),
@@ -205,9 +205,9 @@ class _MockExamScreenState extends State<MockExamScreen> {
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: timerColor.withOpacity(.10),
+                  color: timerColor.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: timerColor.withOpacity(.4)),
+                  border: Border.all(color: timerColor.withValues(alpha: 0.4)),
                 ),
                 child: Row(
                   children: [

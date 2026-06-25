@@ -8,7 +8,7 @@ class MockInfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(.12),
+        color: Colors.green.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: Colors.green),
       ),
@@ -16,7 +16,7 @@ class MockInfoCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 22,
-            backgroundColor: Colors.green.withOpacity(.12),
+            backgroundColor: Colors.green.withValues(alpha: 0.12),
             child: const Icon(Icons.timer_outlined, color: Colors.green),
           ),
 

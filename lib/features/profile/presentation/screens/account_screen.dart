@@ -61,6 +61,9 @@ class _AccountScreenState extends State<AccountScreen> {
   Future<void> _saveProfile() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
     await _profile.updateProfile(
       fullName: _nameController.text,
       email: _emailController.text,
@@ -68,11 +71,13 @@ class _AccountScreenState extends State<AccountScreen> {
       phoneNumber: _phoneController.text,
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(
+    if (!mounted) return;
+
+    messenger.showSnackBar(
       const SnackBar(content: Text('Profile updated successfully')),
     );
 
-    Navigator.pop(context);
+    navigator.pop();
   }
 
   @override
@@ -82,13 +87,13 @@ class _AccountScreenState extends State<AccountScreen> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         title: Text(
           'Account',
           style: theme.textTheme.titleLarge?.copyWith(

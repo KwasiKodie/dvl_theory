@@ -168,14 +168,14 @@ class _MockExamScreenState extends State<MockExamScreen> {
 
     if (_loading) {
       return Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     if (_error != null) {
       return Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         appBar: AppBar(title: const Text('Mock Exam')),
         body: Center(child: Text(_error!)),
       );
@@ -188,14 +188,14 @@ class _MockExamScreenState extends State<MockExamScreen> {
     final isFlagged = _session.isFlagged(_question.id);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
 
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         surfaceTintColor: Colors.transparent,
         title: const Text('Mock Exam'),
       ),
@@ -208,9 +208,9 @@ class _MockExamScreenState extends State<MockExamScreen> {
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: timerColor.withOpacity(.10),
+                  color: timerColor.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: timerColor.withOpacity(.4)),
+                  border: Border.all(color: timerColor.withValues(alpha: 0.4)),
                 ),
                 child: Row(
                   children: [
@@ -367,6 +367,45 @@ class _MockExamScreenState extends State<MockExamScreen> {
   }
 }
 
+// ===========================
+// features/mock/presentation/widgets/mock_action_button.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class MockActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onPressed;
+  final Color? color;
+
+  const MockActionButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: color),
+            const SizedBox(height: 4),
+            Text(label, overflow: TextOverflow.ellipsis),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
 // // ===========================
 // features/mock/domain/services/mock_session_controller.dart
 // ===========================
@@ -422,6 +461,14 @@ class MockSessionController {
   bool get passed => correctCount >= passingScore;
 
   int get passingScore => (totalQuestions * 0.70).ceil();
+
+  void applyPreferences() {
+    final prefs = StudyPreferencesController.instance.preferences;
+
+    totalTime = Duration(minutes: prefs.mockDurationMinutes);
+
+    remainingTime = totalTime;
+  }
 
   void selectAnswer(String answer) {
     selectedAnswers[currentQuestion.id] = answer;
@@ -492,13 +539,11 @@ class MockSessionController {
   MockConfiguration buildConfiguration() {
     final prefs = StudyPreferencesController.instance.preferences;
 
-    final questionCount = prefs.practiceQuestionCount;
-
     return MockConfiguration(
-      questionCount: questionCount,
+      questionCount: prefs.practiceQuestionCount,
       timed: true,
       randomQuestions: prefs.randomizeQuestions,
-      passingScore: (questionCount * 0.70).ceil(),
+      passingScore: (prefs.practiceQuestionCount * 0.70).ceil(),
     );
   }
 }
@@ -653,6 +698,8 @@ import '../../../core/navigation/navigation_items.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/navigation/route_names.dart';
 import '../../../features/mock/domain/services/mock_session_controller.dart';
+import '../../../features/notifications/domain/services/notification_center_service.dart';
+import '../../../features/notifications/presentation/widgets/notification_badge.dart';
 
 class AppBottomNavigation extends StatelessWidget {
   final int currentIndex;
@@ -666,12 +713,16 @@ class AppBottomNavigation extends StatelessWidget {
 
     final items = NavigationItems.items;
 
+    NotificationCenterService.instance.refresh();
+
     return NavigationBar(
       selectedIndex: currentIndex,
       height: isTablet ? 82 : 72,
       backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
-      indicatorColor: Theme.of(context).colorScheme.primary.withOpacity(0.14),
+      indicatorColor: Theme.of(
+        context,
+      ).colorScheme.primary.withValues(alpha: 0.14),
       labelBehavior: isSmallPhone
           ? NavigationDestinationLabelBehavior.onlyShowSelected
           : NavigationDestinationLabelBehavior.alwaysShow,
@@ -698,12 +749,42 @@ class AppBottomNavigation extends StatelessWidget {
           (route) => false,
         );
       },
-      destinations: items.map((item) {
+      destinations: items.asMap().entries.map((entry) {
+        final index = entry.key;
+        final item = entry.value;
+
         return NavigationDestination(
-          icon: Tooltip(message: item.label, child: Icon(item.icon)),
+          icon: Tooltip(
+            message: item.label,
+            child: index == 4
+                ? AnimatedBuilder(
+                    animation: NotificationCenterService.instance,
+                    builder: (context, child) {
+                      return NotificationBadge(
+                        count: NotificationCenterService.instance.unreadCount,
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: Icon(item.icon),
+                        ),
+                      );
+                    },
+                  )
+                : Icon(item.icon),
+          ),
           selectedIcon: Tooltip(
             message: item.label,
-            child: Icon(item.selectedIcon),
+            child: index == 4
+                ? AnimatedBuilder(
+                    animation: NotificationCenterService.instance,
+                    builder: (context, child) {
+                      return NotificationBadge(
+                        count: NotificationCenterService.instance.unreadCount,
+                        child: Icon(item.selectedIcon),
+                      );
+                    },
+                  )
+                : Icon(item.selectedIcon),
           ),
           label: item.label,
         );
@@ -711,8 +792,6 @@ class AppBottomNavigation extends StatelessWidget {
     );
   }
 }
-
-
 
 // ===========================
 // core/theme/app_spacing.dart
@@ -725,108 +804,158 @@ class AppSpacing {
   static const xl = 32.0;
 }
 
+
 // ===========================
 // core/navigation/route_names.dart
 // ===========================
-class RouteNames {
-  static const splash = '/';
-  static const home = '/home';
-  static const practice = '/practice';
-  static const mockExam = '/mock-exam';
-  static const mockSummary = '/mock-summary';
-  static const mockSubmit = '/mock-submit';
-  static const mockResult = '/mock-result';
-  static const mockIntro = '/mock-intro';
-  static const mockInstructions = '/mock-instructions';
-  static const progress = '/progress';
-  static const review = '/review';
-  static const reviewQuestion = '/review-question';
-  static const profile = '/profile';
-  static const settings = '/settings';
-  static const account = '/account';
-  static const studyPreferences = '/study-preferences';
-  static const notifications = '/notifications';
-  static const language = '/language';
-  static const privacySecurity = '/privacy-security';
-  static const helpSupport = '/help-support';
-  static const about = '/about';
-}
-
-// ===========================
-// features/mock/presentation/screens/mock_instructions_screen.dart
-// ===========================
 import 'package:flutter/material.dart';
 
-import '../../../../shared/navigation/app_bottom_navigation.dart';
-import '../widgets/instruction_card.dart';
-import '../../../../core/navigation/route_names.dart';
+import 'route_names.dart';
+import 'route_transitions.dart';
 
-class MockInstructionsScreen extends StatelessWidget {
-  const MockInstructionsScreen({super.key});
+import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/profile/presentation/screens/account_screen.dart';
+import '../../features/profile/presentation/screens/study_preferences_screen.dart';
+import '../../features/profile/presentation/screens/notifications_screen.dart';
+import '../../features/profile/presentation/screens/language_screen.dart';
+import '../../features/profile/presentation/screens/privacy_security_screen.dart';
+import '../../features/profile/presentation/screens/help_support_screen.dart';
+import '../../features/profile/presentation/screens/about_screen.dart';
+import '../../features/splash/presentation/screens/splash_screen_controller.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/progress/presentation/screens/progress_screen.dart';
+import '../../features/practice/presentation/screens/practice_screen.dart';
+import '../../features/practice/presentation/screens/review_screen.dart';
+import '../../features/practice/presentation/screens/review_question_detail_screen.dart';
+import '../../features/practice/data/models/review_question_arguments.dart';
+import '../../features/practice/domain/services/practice_session_controller.dart';
+import '../../features/mock/presentation/screens/mock_intro_screen.dart';
+import '../../features/mock/presentation/screens/mock_instructions_screen.dart';
+import '../../features/mock/presentation/screens/mock_exam_screen.dart';
+import '../../features/mock/presentation/screens/mock_summary_screen.dart';
+import '../../features/mock/presentation/screens/mock_submit_screen.dart';
+import '../../features/mock/presentation/screens/mock_result_screen.dart';
+import '../../features/notifications/presentation/screens/notification_center_screen.dart';
+import '../../features/help_support/presentation/screens/faq_screen.dart';
+import '../../features/help_support/presentation/screens/report_problem_screen.dart';
+import '../../features/help_support/presentation/screens/contact_us_screen.dart';
+import '../../features/help_support/presentation/screens/rate_app_screen.dart';
+import '../../features/help_support/presentation/screens/follow_us_screen.dart';
+import '../theme/theme_controller.dart';
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+class AppRouter {
+  const AppRouter._();
 
-    return Scaffold(
-      backgroundColor: theme.colorScheme.background,
-      bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: theme.colorScheme.background,
-        surfaceTintColor: Colors.transparent,
-        title: const Text('Instructions'),
-      ),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final maxWidth = constraints.maxWidth > 700
-                ? 600.0
-                : constraints.maxWidth;
+  static ThemeController? themeController;
 
-            return Center(
-              child: SizedBox(
-                width: maxWidth,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(24, 18, 24, 30),
-                  child: Column(
-                    children: [
-                      const InstructionCard(),
+  static Route onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case RouteNames.splash:
+        return RouteTransitions.fadeSlide(const SplashScreenController());
 
-                      const SizedBox(height: 42),
+      case RouteNames.home:
+        return RouteTransitions.fadeSlide(const HomeScreen());
 
-                      Text(
-                        'Make sure you are ready before\nyou start the test.',
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
+      case RouteNames.practice:
+        return RouteTransitions.fadeSlide(const PracticeScreen());
 
-                      const SizedBox(height: 42),
+      case RouteNames.mockIntro:
+        return RouteTransitions.fadeSlide(const MockIntroScreen());
 
-                      SizedBox(
-                        width: double.infinity,
-                        height: 58,
-                        child: FilledButton(
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              RouteNames.mockExam,
-                            );
-                          },
-                          child: const Text("I'm Ready, Start Test"),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+      case RouteNames.mockInstructions:
+        return RouteTransitions.fadeSlide(const MockInstructionsScreen());
+
+      case RouteNames.mockExam:
+        return RouteTransitions.fadeSlide(const MockExamScreen());
+
+      case RouteNames.mockSummary:
+        return RouteTransitions.fadeSlide(const MockSummaryScreen());
+
+      case RouteNames.mockSubmit:
+        return RouteTransitions.fadeSlide(const MockSubmitScreen());
+
+      case RouteNames.mockResult:
+        return RouteTransitions.fadeSlide(const MockResultScreen());
+
+      case RouteNames.settings:
+        final controller = themeController;
+
+        if (controller == null) {
+          return _errorRoute('ThemeController was not initialized.');
+        }
+
+        return RouteTransitions.fadeSlide(
+          SettingsScreen(themeController: controller),
+        );
+
+      case RouteNames.notificationCenter:
+        return RouteTransitions.fadeSlide(const NotificationCenterScreen());
+
+      case RouteNames.profile:
+        return RouteTransitions.fadeSlide(const ProfileScreen());
+
+      case RouteNames.progress:
+        return RouteTransitions.fadeSlide(const ProgressScreen());
+
+      case RouteNames.account:
+        return RouteTransitions.fadeSlide(const AccountScreen());
+
+      case RouteNames.studyPreferences:
+        return RouteTransitions.fadeSlide(const StudyPreferencesScreen());
+
+      case RouteNames.notifications:
+        return RouteTransitions.fadeSlide(const NotificationsScreen());
+
+      case RouteNames.language:
+        return RouteTransitions.fadeSlide(const LanguageScreen());
+
+      case RouteNames.privacySecurity:
+        return RouteTransitions.fadeSlide(const PrivacySecurityScreen());
+
+      case RouteNames.helpSupport:
+        return RouteTransitions.fadeSlide(const HelpSupportScreen());
+
+      case RouteNames.faq:
+        return RouteTransitions.fadeSlide(const FaqScreen());
+
+      case RouteNames.reportProblem:
+        return RouteTransitions.fadeSlide(const ReportProblemScreen());
+
+      case RouteNames.contactUs:
+        return RouteTransitions.fadeSlide(const ContactUsScreen());
+
+      case RouteNames.rateApp:
+        return RouteTransitions.fadeSlide(const RateAppScreen());
+
+      case RouteNames.followUs:
+        return RouteTransitions.fadeSlide(const FollowUsScreen());
+
+      case RouteNames.about:
+        return RouteTransitions.fadeSlide(const AboutScreen());
+
+      case RouteNames.review:
+        return RouteTransitions.fadeSlide(
+          ReviewScreen(
+            reviewData: settings.arguments as List<ReviewQuestionData>,
+          ),
+        );
+
+      case RouteNames.reviewQuestion:
+        return RouteTransitions.fadeSlide(
+          ReviewQuestionDetailScreen(
+            args: settings.arguments as ReviewQuestionArguments,
+          ),
+        );
+
+      default:
+        return _errorRoute('Route not found: ${settings.name}');
+    }
+  }
+
+  static Route _errorRoute(String message) {
+    return MaterialPageRoute(
+      builder: (_) => Scaffold(body: Center(child: Text(message))),
     );
   }
 }
@@ -841,6 +970,8 @@ import '../widgets/mock_configuration_tile.dart';
 import '../widgets/mock_exam_header.dart';
 import '../widgets/mock_info_card.dart';
 import '../../../../core/navigation/route_names.dart';
+import '../../domain/services/mock_session_controller.dart';
+import '../../../profile/domain/services/study_preferences_controller.dart';
 
 class MockIntroScreen extends StatelessWidget {
   const MockIntroScreen({super.key});
@@ -848,14 +979,18 @@ class MockIntroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final config = MockSessionController.instance.buildConfiguration();
+
+    final duration =
+        StudyPreferencesController.instance.preferences.mockDurationMinutes;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         title: const Text('Mock Exam'),
       ),
       body: SafeArea(
@@ -876,14 +1011,14 @@ class MockIntroScreen extends StatelessWidget {
 
                       const SizedBox(height: 28),
 
-                      const MockConfigurationTile(
+                      MockConfigurationTile(
                         title: 'Number of Questions',
-                        value: '20 Questions',
+                        value: '${config.questionCount} Questions',
                       ),
 
-                      const MockConfigurationTile(
+                      MockConfigurationTile(
                         title: 'Test Mode',
-                        value: 'Timed',
+                        value: '$duration Minutes',
                       ),
 
                       const MockConfigurationTile(
@@ -891,9 +1026,10 @@ class MockIntroScreen extends StatelessWidget {
                         value: 'Enabled',
                       ),
 
-                      const MockConfigurationTile(
+                      MockConfigurationTile(
                         title: 'Passing Score',
-                        value: '15 / 20 (70%)',
+                        value:
+                            '${config.passingScore} / ${config.questionCount}',
                       ),
 
                       const SizedBox(height: 30),
@@ -926,6 +1062,7 @@ class MockIntroScreen extends StatelessWidget {
     );
   }
 }
+
 // ===========================
 // features/mock/presentation/screens/mock_result_screen.dart
 // ===========================
@@ -933,6 +1070,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/navigation/route_names.dart';
 import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../../../progress/domain/services/progress_sync_service.dart';
 
 import '../../domain/services/mock_session_controller.dart';
 
@@ -959,14 +1097,14 @@ class MockResultScreen extends StatelessWidget {
     final percentage = session.scorePercent.round();
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
 
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         surfaceTintColor: Colors.transparent,
         title: const Text('Results'),
       ),
@@ -1015,7 +1153,7 @@ class MockResultScreen extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         height: 56,
-                        child: FilledButton(
+                        child: OutlinedButton(
                           onPressed: () {
                             Navigator.pushNamed(
                               context,
@@ -1032,16 +1170,20 @@ class MockResultScreen extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         height: 56,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            session.reset();
+                        child: FilledButton(
+                          onPressed: () async {
+  await ProgressSyncService.instance.uploadProgress();
 
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              RouteNames.home,
-                              (route) => false,
-                            );
-                          },
+  session.reset();
+
+  if (!context.mounted) return;
+
+  Navigator.pushNamedAndRemoveUntil(
+    context,
+    RouteNames.home,
+    (route) => false,
+  );
+},
                           child: const Text('Back Home'),
                         ),
                       ),
@@ -1072,45 +1214,55 @@ class _ResultHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Column(
-      children: [
-        Container(
-          width: 110,
-          height: 110,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color.withOpacity(.12),
-          ),
-          child: Icon(
-            subtitle.contains('Passed')
-                ? Icons.emoji_events
-                : Icons.sentiment_dissatisfied,
+    final passed = subtitle.contains('Passed');
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            passed ? Icons.emoji_events : Icons.sentiment_dissatisfied,
             color: color,
-            size: 58,
+            size: 60,
           ),
-        ),
 
-        const SizedBox(height: 18),
+          const SizedBox(height: 18),
 
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.w800,
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              color: color,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
 
-        const SizedBox(height: 6),
-
-        Text(
-          subtitle,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.titleLarge?.copyWith(
-            color: color,
-            fontWeight: FontWeight.w700,
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              color: color,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-      ],
+
+          const SizedBox(height: 24),
+
+          Text(
+            passed
+                ? "Well done! You've achieved the passing score."
+                : "Keep practicing and you'll get there next time!",
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyLarge,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1131,7 +1283,6 @@ class _ScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     final progress = total == 0 ? 0.0 : score / total;
 
     return Container(
@@ -1142,43 +1293,57 @@ class _ScoreCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: theme.colorScheme.outlineVariant),
       ),
-      child: Column(
-        children: [
-          SizedBox(
-            width: 130,
-            height: 130,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CircularProgressIndicator(
-                  value: progress,
-                  strokeWidth: 10,
-                  color: color,
-                ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final ringSize = (constraints.maxWidth * 0.34).clamp(120.0, 170.0);
+          final strokeWidth = (ringSize * 0.09).clamp(10.0, 16.0);
 
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '$score / $total',
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+          return Center(
+            child: SizedBox(
+              width: ringSize,
+              height: ringSize,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  SizedBox.expand(
+                    child: CircularProgressIndicator(
+                      value: progress,
+                      strokeWidth: strokeWidth,
+                      backgroundColor: theme.colorScheme.outlineVariant,
+                      color: color,
                     ),
-
-                    Text(
-                      '$percentage%',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        color: color,
-                        fontWeight: FontWeight.w700,
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Your Score',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(height: 4),
+                      Text(
+                        '$score / $total',
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '$percentage%',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: color,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -1213,27 +1378,31 @@ class _StatisticsCard extends StatelessWidget {
         children: [
           _StatTile(
             icon: Icons.flag,
-            label: 'Pass Mark',
-            value: '$passMark / $totalQuestions',
+            label: 'Passing Score',
+            value:
+                '$passMark / $totalQuestions (${((passMark / totalQuestions) * 100).round()}%)',
             color: color,
+            success: correct >= passMark,
           ),
 
           Divider(height: 1, color: theme.dividerColor),
 
           _StatTile(
             icon: Icons.check_circle,
-            label: 'Correct',
+            label: 'Correct Answers',
             value: '$correct',
             color: Colors.green,
+            success: true,
           ),
 
           Divider(height: 1, color: theme.dividerColor),
 
           _StatTile(
             icon: Icons.cancel,
-            label: 'Wrong',
+            label: 'Wrong Answers',
             value: '$wrong',
             color: Colors.red,
+            success: false,
           ),
         ],
       ),
@@ -1246,12 +1415,14 @@ class _StatTile extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
+  final bool success;
 
   const _StatTile({
     required this.icon,
     required this.label,
     required this.value,
     required this.color,
+    required this.success,
   });
 
   @override
@@ -1268,12 +1439,33 @@ class _StatTile extends StatelessWidget {
 
           Expanded(child: Text(label, style: theme.textTheme.titleMedium)),
 
-          Text(
-            value,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w700,
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                value,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  success ? Icons.check : Icons.close,
+                  color: color,
+                  size: 18,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -1301,98 +1493,101 @@ class MockSubmitScreen extends StatelessWidget {
     final session = MockSessionController.instance;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
 
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         surfaceTintColor: Colors.transparent,
         title: const Text('Mock Exam'),
       ),
 
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxWidth = constraints.maxWidth > 700
+                ? 600.0
+                : constraints.maxWidth;
 
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(.12),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.assignment_turned_in_outlined,
-                  size: 62,
-                  color: Colors.green,
-                ),
-              ),
+            return Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxWidth),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(28, 24, 28, 32),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: Colors.green.withValues(alpha: 0.12),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.assignment_turned_in_outlined,
+                          size: 62,
+                          color: Colors.green,
+                        ),
+                      ),
 
-              const SizedBox(height: 40),
+                      const SizedBox(height: 32),
 
-              Text(
-                'Are you sure you want to submit your test?',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+                      Text(
+                        'Are you sure you want to submit your test?',
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
 
-              const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
-              Text(
-                'You won’t be able to change your answers after submitting.',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge,
-              ),
+                      Text(
+                        'You won’t be able to change your answers after submitting.',
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodyLarge,
+                      ),
 
-              const Spacer(),
+                      const SizedBox(height: 48),
 
-              SizedBox(
-                width: double.infinity,
-                height: 58,
-                child: FilledButton(
-                  onPressed: () {
-                    session.submitted = true;
-                    session.inProgress = false;
+                      SizedBox(
+                        width: double.infinity,
+                        height: 58,
+                        child: FilledButton(
+                          onPressed: () {
+                            session.submitted = true;
+                            session.inProgress = false;
 
-                    Navigator.pushReplacementNamed(
-                      context,
-                      RouteNames.mockResult,
-                    );
-                  },
-                  child: const Text(
-                    'Yes, Submit Test',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                            Navigator.pushReplacementNamed(
+                              context,
+                              RouteNames.mockResult,
+                            );
+                          },
+                          child: const Text('Yes, Submit Test'),
+                        ),
+                      ),
+
+                      const SizedBox(height: 14),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 58,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-
-              const SizedBox(height: 14),
-
-              SizedBox(
-                width: double.infinity,
-                height: 58,
-                child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
@@ -1432,7 +1627,7 @@ class MockSummaryScreen extends StatelessWidget {
         '${seconds.toString().padLeft(2, '0')}';
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
 
@@ -1440,7 +1635,7 @@ class MockSummaryScreen extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         title: const Text('Mock Exam'),
       ),
 
@@ -1524,11 +1719,11 @@ class _TimerCard extends StatelessWidget {
       padding: const EdgeInsets.all(18),
 
       decoration: BoxDecoration(
-        color: color.withOpacity(.10),
+        color: color.withValues(alpha: 0.10),
 
         borderRadius: BorderRadius.circular(14),
 
-        border: Border.all(color: color.withOpacity(.35)),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
       ),
 
       child: Row(

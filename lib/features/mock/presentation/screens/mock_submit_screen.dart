@@ -4,6 +4,7 @@ import '../../../../core/navigation/route_names.dart';
 import '../../../../shared/navigation/app_bottom_navigation.dart';
 
 import '../../domain/services/mock_session_controller.dart';
+import '../../../progress/domain/services/progress_sync_service.dart';
 
 class MockSubmitScreen extends StatelessWidget {
   const MockSubmitScreen({super.key});
@@ -15,14 +16,14 @@ class MockSubmitScreen extends StatelessWidget {
     final session = MockSessionController.instance;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
 
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         surfaceTintColor: Colors.transparent,
         title: const Text('Mock Exam'),
       ),
@@ -45,7 +46,7 @@ class MockSubmitScreen extends StatelessWidget {
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(.12),
+                          color: Colors.green.withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -79,9 +80,15 @@ class MockSubmitScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 58,
                         child: FilledButton(
-                          onPressed: () {
+                          onPressed: () async {
                             session.submitted = true;
                             session.inProgress = false;
+
+                            session.recordProgressAttempts();
+
+                            await ProgressSyncService.instance.uploadProgress();
+
+                            if (!context.mounted) return;
 
                             Navigator.pushReplacementNamed(
                               context,

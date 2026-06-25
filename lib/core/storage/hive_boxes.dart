@@ -11,4 +11,10 @@ class HiveBoxes {
   static const studyPreferences = 'study_preferences';
   static const notifications = 'notifications';
   static const notificationPreferences = 'notification_preferences';
+  static const supportTickets = 'support_tickets';
+  static const supportMessages = 'support_messages';
+  static const appRatings = 'app_ratings';
+  static const userIdentity = 'user_identity';
+  static const progressSync = 'progress_sync_box';
+  static const progress = 'progress';
 }

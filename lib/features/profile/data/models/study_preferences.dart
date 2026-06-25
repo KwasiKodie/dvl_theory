@@ -28,12 +28,12 @@ class StudyPreferences {
   factory StudyPreferences.defaults() {
     return const StudyPreferences(
       questionMode: QuestionMode.multipleChoice,
-      practiceQuestionCount: 20,
-      practiceTimerEnabled: true,
+      practiceQuestionCount: 10,
+      practiceTimerEnabled: false,
       explanationMode: ExplanationMode.afterEveryAnswer,
       saveWrongAnswers: true,
       autoAdvance: false,
-      mockDurationMinutes: 30,
+      mockDurationMinutes: 10,
       randomizeQuestions: true,
       randomizeAnswers: false,
     );
@@ -52,6 +52,28 @@ class StudyPreferences {
       'randomizeAnswers': randomizeAnswers,
     };
   }
+
+  Map<String, dynamic> toApiMap() {
+  return {
+    'questionMode': questionMode.name,
+    'practiceQuestionCount':
+        practiceQuestionCount,
+    'practiceTimerEnabled':
+        practiceTimerEnabled,
+    'explanationMode':
+        explanationMode.name,
+    'saveWrongAnswers':
+        saveWrongAnswers,
+    'autoAdvance':
+        autoAdvance,
+    'mockDurationMinutes':
+        mockDurationMinutes,
+    'randomizeQuestions':
+        randomizeQuestions,
+    'randomizeAnswers':
+        randomizeAnswers,
+  };
+}
 
   factory StudyPreferences.fromMap(Map<dynamic, dynamic>? map) {
     if (map == null) return StudyPreferences.defaults();

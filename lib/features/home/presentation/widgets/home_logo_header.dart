@@ -24,7 +24,7 @@ class HomeLogoHeader extends StatelessWidget {
             children: [
               TextSpan(
                 text: 'DVL',
-                style: TextStyle(color: theme.colorScheme.onBackground),
+                style: TextStyle(color: theme.colorScheme.onSurface),
               ),
               const TextSpan(
                 text: 'THEORY',

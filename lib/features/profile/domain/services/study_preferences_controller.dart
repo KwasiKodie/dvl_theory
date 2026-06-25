@@ -5,6 +5,7 @@ import '../../../../core/storage/hive_boxes.dart';
 import '../../data/models/study_preferences.dart';
 import '../../../practice/domain/services/practice_session_controller.dart';
 import '../../../mock/domain/services/mock_session_controller.dart';
+import 'preferences_sync_service.dart';
 
 class StudyPreferencesController extends ChangeNotifier {
   StudyPreferencesController._();
@@ -38,6 +39,8 @@ class StudyPreferencesController extends ChangeNotifier {
     final box = Hive.box(HiveBoxes.studyPreferences);
     await box.put(_key, value.toMap());
 
+    PreferencesSyncService.instance.markDirty();
+
     if (!PracticeSessionController.instance.inProgress) {
       PracticeSessionController.instance.reset();
     }
@@ -45,6 +48,16 @@ class StudyPreferencesController extends ChangeNotifier {
     if (!MockSessionController.instance.inProgress) {
       MockSessionController.instance.reset();
     }
+
+    notifyListeners();
+  }
+
+  Future<void> restore(StudyPreferences value) async {
+    preferences = value;
+
+    final box = Hive.box(HiveBoxes.studyPreferences);
+
+    await box.put(_key, value.toMap());
 
     notifyListeners();
   }

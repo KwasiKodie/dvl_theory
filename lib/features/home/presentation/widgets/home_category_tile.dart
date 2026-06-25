@@ -70,7 +70,7 @@ class HomeCategoryTile extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _badgeColor(percent).withOpacity(.18),
+                  color: _badgeColor(percent).withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Text(

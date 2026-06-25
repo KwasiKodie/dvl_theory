@@ -19,7 +19,7 @@ class ReviewFilterChip extends StatelessWidget {
     return FilterChip(
       selected: selected,
       onSelected: (_) => onTap(),
-      backgroundColor: color.withOpacity(.12),
+      backgroundColor: color.withValues(alpha: 0.12),
       selectedColor: color,
       side: BorderSide.none,
       showCheckmark: false,

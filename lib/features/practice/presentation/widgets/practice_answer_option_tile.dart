@@ -32,17 +32,17 @@ class PracticeAnswerOptionTile extends StatelessWidget {
 
     if (showResult && correct) {
       border = Colors.green;
-      background = Colors.green.withOpacity(0.14);
+      background = Colors.green.withValues(alpha: 0.14);
       badge = Colors.green;
       badgeText = Colors.white;
     } else if (showResult && selected) {
       border = theme.colorScheme.error;
-      background = theme.colorScheme.error.withOpacity(0.12);
+      background = theme.colorScheme.error.withValues(alpha: 0.12);
       badge = theme.colorScheme.error;
       badgeText = theme.colorScheme.onError;
     } else if (selected) {
       border = theme.colorScheme.primary;
-      background = theme.colorScheme.primary.withOpacity(0.08);
+      background = theme.colorScheme.primary.withValues(alpha: 0.08);
       badge = theme.colorScheme.primary;
       badgeText = theme.colorScheme.onPrimary;
     }

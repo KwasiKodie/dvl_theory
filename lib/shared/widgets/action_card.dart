@@ -63,7 +63,7 @@ class HomeActionCard extends StatelessWidget {
             color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(22),
             elevation: theme.brightness == Brightness.dark ? 0 : 1.5,
-            shadowColor: theme.colorScheme.shadow.withOpacity(0.15),
+            shadowColor: theme.colorScheme.shadow.withValues(alpha: 0.15),
             child: InkWell(
               onTap: onTap,
               borderRadius: BorderRadius.circular(22),
@@ -78,8 +78,10 @@ class HomeActionCard extends StatelessWidget {
                       height: avatarRadius * 2,
                       width: avatarRadius * 2,
                       decoration: BoxDecoration(
-                        color: color.withOpacity(
-                          theme.brightness == Brightness.dark ? 0.20 : 0.12,
+                        color: color.withValues(
+                          alpha: theme.brightness == Brightness.dark
+                              ? 0.20
+                              : 0.12,
                         ),
                         shape: BoxShape.circle,
                       ),
@@ -108,8 +110,8 @@ class HomeActionCard extends StatelessWidget {
                             style: theme.textTheme.bodySmall?.copyWith(
                               fontSize: subtitleSize,
                               height: 1.4,
-                              color: theme.colorScheme.onSurface.withOpacity(
-                                0.65,
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.65,
                               ),
                             ),
                           ),
@@ -119,7 +121,9 @@ class HomeActionCard extends StatelessWidget {
                     SizedBox(width: screenWidth * 0.02),
                     Icon(
                       Icons.chevron_right,
-                      color: theme.colorScheme.onSurface.withOpacity(0.35),
+                      color: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.35,
+                      ),
                       size: isTablet ? 30 : 24,
                     ),
                   ],

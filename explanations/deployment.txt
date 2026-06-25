@@ -1,0 +1,135 @@
+You cannot build an iOS `.ipa` directly on Ubuntu. Flutter’s official iOS release flow requires **macOS + Xcode**: “Xcode is required to build and release your app” and Flutter says you must use a macOS device for the iOS guide. ([Flutter Documentation][1])
+
+Your Ubuntu machine can prepare the project, but the actual IPA build must happen on one of these:
+
+1. A Mac you own or can borrow
+2. A rented Mac cloud service
+3. GitHub Actions/macOS runner
+4. Codemagic / Bitrise / other CI with macOS runners
+
+## Recommended path from Ubuntu: use Codemagic or GitHub Actions
+
+### Step 1: Prepare on Ubuntu
+
+Run:
+
+```bash
+flutter clean
+flutter pub get
+flutter analyze
+flutter test
+```
+
+Commit your project to GitHub/GitLab.
+
+---
+
+### Step 2: Get Apple Developer account
+
+For TestFlight, you need the Apple Developer Program. TestFlight is Apple’s official beta testing system. ([Apple Developer][2])
+
+You will need:
+
+```text
+Apple Developer Account
+App Store Connect access
+Bundle ID
+Signing certificate
+Provisioning profile
+```
+
+---
+
+### Step 3: Create app in App Store Connect
+
+In App Store Connect:
+
+```text
+My Apps
+→ New App
+→ iOS
+→ Set app name
+→ Set bundle ID
+→ Create
+```
+
+Apple supports uploading builds using Xcode, Transporter, altool, or App Store Connect API methods. ([Apple Developer][3])
+
+---
+
+### Step 4: Build IPA on macOS CI
+
+On a Mac runner, the build command is:
+
+```bash
+flutter build ipa --release
+```
+
+Output:
+
+```text
+build/ios/ipa/*.ipa
+```
+
+---
+
+### Step 5: Upload to TestFlight
+
+From macOS CI or a Mac:
+
+```text
+Upload IPA
+↓
+App Store Connect
+↓
+TestFlight
+↓
+Add testers
+↓
+Install TestFlight app on iPhone
+↓
+Accept invite
+↓
+Install your app
+```
+
+---
+
+## Apple Configurator and Xcode Organizer
+
+These also require a **Mac**.
+
+Apple Configurator is a Mac app for configuring and deploying iPhone/iPad devices. ([App Store][4])
+
+So from Ubuntu alone, you cannot use:
+
+```text
+Apple Configurator
+Xcode Organizer
+Transporter desktop app
+```
+
+unless you have access to macOS.
+
+## Practical recommendation
+
+Since you are on Ubuntu, use:
+
+```text
+Ubuntu development
+↓
+Push to GitHub
+↓
+Codemagic/GitHub Actions macOS build
+↓
+Upload IPA to TestFlight
+↓
+Install on iPhone through TestFlight
+```
+
+That is the cleanest workflow without owning a Mac.
+
+[1]: https://docs.flutter.dev/deployment/ios?utm_source=chatgpt.com "Build and release an iOS app"
+[2]: https://developer.apple.com/testflight/?utm_source=chatgpt.com "TestFlight"
+[3]: https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/?utm_source=chatgpt.com "Upload builds - Manage builds - App Store Connect - Help"
+[4]: https://apps.apple.com/us/app/apple-configurator/id1037126344?utm_source=chatgpt.com "Apple Configurator - App Store"

@@ -13,7 +13,7 @@ class ProfileAvatar extends StatelessWidget {
 
     return AnimatedBuilder(
       animation: controller,
-      builder: (_, __) {
+      builder: (_, _) {
         final imagePath = controller.profileImagePath;
 
         return CircleAvatar(

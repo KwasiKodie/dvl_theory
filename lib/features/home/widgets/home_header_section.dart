@@ -65,8 +65,8 @@ class HomeHeaderSection extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontSize: subtitleSize,
-                          color: theme.colorScheme.onBackground.withOpacity(
-                            0.65,
+                          color: theme.colorScheme.surface.withValues(
+                            alpha: 0.65,
                           ),
                           fontWeight: FontWeight.w400,
                         ),
@@ -79,7 +79,7 @@ class HomeHeaderSection extends StatelessWidget {
                         style: theme.textTheme.headlineSmall?.copyWith(
                           fontSize: titleSize,
                           fontWeight: FontWeight.w700,
-                          color: theme.colorScheme.onBackground,
+                          color: theme.colorScheme.surface,
                           height: 1.1,
                         ),
                       ),
@@ -90,7 +90,7 @@ class HomeHeaderSection extends StatelessWidget {
                         style: theme.textTheme.headlineSmall?.copyWith(
                           fontSize: titleSize,
                           fontWeight: FontWeight.w700,
-                          color: theme.colorScheme.onBackground,
+                          color: theme.colorScheme.surface,
                           height: 1.1,
                         ),
                       ),

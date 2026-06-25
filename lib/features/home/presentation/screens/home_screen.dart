@@ -40,14 +40,14 @@ class HomeScreen extends StatelessWidget {
     };
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 0),
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: theme.colorScheme.background,
-        foregroundColor: theme.colorScheme.onBackground,
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.surface,
         title: Text(
           'Home',
           style: theme.textTheme.titleLarge?.copyWith(

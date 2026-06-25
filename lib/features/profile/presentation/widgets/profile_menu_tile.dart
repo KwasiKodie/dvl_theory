@@ -21,7 +21,10 @@ class ProfileMenuTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
 
-      leading: Icon(icon, color: theme.colorScheme.onSurface.withOpacity(0.65)),
+      leading: Icon(
+        icon,
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+      ),
 
       title: Text(
         title,

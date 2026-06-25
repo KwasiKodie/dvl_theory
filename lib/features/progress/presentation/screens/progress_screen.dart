@@ -26,7 +26,7 @@ class ProgressScreen extends StatelessWidget {
     final readinessReport = readinessService.generateReport();
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 3),
 
@@ -83,9 +83,10 @@ class ProgressScreen extends StatelessWidget {
 
                         itemCount: categories.length,
 
-                        separatorBuilder: (_, __) => const SizedBox(height: 8),
+                        separatorBuilder: (context, _) =>
+                            const SizedBox(height: 8),
 
-                        itemBuilder: (_, index) {
+                        itemBuilder: (context, index) {
                           final item = categories[index];
 
                           return TopicProgressTile(

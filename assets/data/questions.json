@@ -103,7 +103,7 @@
     "image": "assets/images/questions/page_2_img_3.jpeg",
     "page": 2,
     "category": "Vehicle Handling",
-    "explanation": "The image shows an exterior mirror mounted on the vehicle's side, used to monitor traffic beside and behind.."
+    "explanation": "The image shows an exterior mirror mounted on the vehicle's side, used to monitor traffic beside and behind."
   },
   {
     "question_number": 8,
@@ -152,7 +152,7 @@
   },
   {
     "question_number": 11,
-    "question": "What is the vehicle part shown below use for?",
+    "question": "What is the vehicle part shown below used for?",
     "options": {
       "a": "For holding reserved water",
       "b": "For holding transmission oil",
@@ -167,7 +167,7 @@
   },
   {
     "question_number": 12,
-    "question": "The hand brake is also known as the",
+    "question": "The hand brake is also known as the:",
     "options": {
       "a": "Emergency brake",
       "b": "Service brake",
@@ -332,7 +332,7 @@
   },
   {
     "question_number": 23,
-    "question": "In the process of braking, when you depress the clutch pedal first the vehicle is likely to",
+    "question": "In the process of braking, when you depress the clutch pedal first the vehicle is likely to:",
     "options": {
       "a": "Roll back",
       "b": "Gather speed",
@@ -358,7 +358,7 @@
     "image": "assets/images/questions/page_6_img_4.jpeg",
     "page": 6,
     "category": "Hazard Awareness",
-    "explanation": "Fatigue, drowsiness, and alcohol impair alertness the concentration, increasing the risk of falling asleep while driving."
+    "explanation": "Fatigue, drowsiness, and alcohol impair alertness, and concentration, increasing the risk of falling asleep while driving."
   },
   {
     "question_number": 25,
@@ -388,7 +388,7 @@
     "image": "assets/images/questions/page_7_img_2.jpeg",
     "page": 7,
     "category": "Road Signs",
-    "explanation": "The triangular red-bordered sign (Warning sign) warns drivers of danger ahead, showing a quayside or steep drop near water"
+    "explanation": "The triangular red-bordered sign (Warning sign) warns drivers of danger ahead, showing a quayside or steep drop near water."
   },
   {
     "question_number": 27,
@@ -463,7 +463,7 @@
     "image": "assets/images/questions/page_8_img_3.jpeg",
     "page": 8,
     "category": "Vehicle Handling",
-    "explanation": "The image shows a fan belt (drive belt), which transfers engine power to components such as the alternator and fan"
+    "explanation": "The image shows a fan belt (drive belt), which transfers engine power to components such as the alternator and fan."
   },
   {
     "question_number": 32,
@@ -478,7 +478,7 @@
     "image": "assets/images/questions/page_8_img_4.jpeg",
     "page": 8,
     "category": "Hazard Awareness",
-    "explanation": "Children can behave unpredictably and may suddenly run into the road. They require immediate attention and readiness to stop"
+    "explanation": "Children can behave unpredictably and may suddenly run into the road. They require immediate attention and readiness to stop."
   },
   {
     "question_number": 33,
@@ -524,21 +524,6 @@
     "page": 9,
     "category": "Hazard Awareness",
     "explanation": "The 'Baby on Board' notice reminds following drivers to keep a safe distance and approach the vehicle cautiously."
-  },
-  {
-    "question_number": 36,
-    "question": "Which of these road signs will mean end of dual carriageway?",
-    "options": {
-      "a": "assets/images/questions/page_10_img_1.jpeg",
-      "b": "assets/images/questions/page_10_img_2.jpeg",
-      "c": "assets/images/questions/page_10_img_3.jpeg",
-      "d": "assets/images/questions/page_10_img_4.jpeg"
-    },
-    "correct_answer": "a",
-    "image": "assets/images/questions/page_10_img_1.jpeg",
-    "page": 10,
-    "category": "Road Signs",
-    "explanation": "Sign A shows two carriageways merging into one, warning drivers that the dual carriageway is ending ahead"
   },
   {
     "question_number": 37,
@@ -628,16 +613,16 @@
     "image": "assets/images/questions/page_12_img_1.jpeg",
     "page": 12,
     "category": "Pedestrian Crossings",
-    "explanation": "The signal shows a Puffin crossing display, where sensors detect pedestrians and adjust crossing time for safer movement"
+    "explanation": "The signal shows a Puffin crossing display, where sensors detect pedestrians and adjust crossing time for safer movement."
   },
   {
     "question_number": 43,
     "question": "Which of the following will result in the type of tire worn out shown below?",
     "options": {
-      "a": "Frequent overtaking and speeding.",
-      "b": "The road surface and the make of tire on the vehicle.",
-      "c": "Improper alignment of the tires.",
-      "d": "All the above."
+      "a": "Frequent overtaking and speeding",
+      "b": "The road surface and the make of tire on the vehicle",
+      "c": "Improper alignment of the tires",
+      "d": "All the above"
     },
     "correct_answer": "c",
     "image": "assets/images/questions/page_12_img_2.jpeg",
@@ -679,10 +664,10 @@
     "question_number": 46,
     "question": "A flashing amber light means",
     "options": {
-      "a": "Stop, and wait for the light to turn green.",
+      "a": "Stop, and wait for the light to turn green",
       "b": "Stop, and proceed when it is safe to do so",
-      "c": "The flashing amber light simply indicates an uncontrolled intersection.",
-      "d": "Slow down to check for oncoming traffic and proceed when it is safe."
+      "c": "The flashing amber light simply indicates an uncontrolled intersection",
+      "d": "Slow down to check for oncoming traffic and proceed when it is safe"
     },
     "correct_answer": "c",
     "image": "assets/images/questions/page_13_img_1.jpeg",
@@ -711,7 +696,7 @@
     "options": {
       "a": "The car marked O has the right of way because its on the left",
       "b": "The car marked A has the right of way because its on the right",
-      "c": "None of them has right of way.",
+      "c": "None of them has right of way",
       "d": "The car marked O has the right of way because it arrived at the intersection first"
     },
     "correct_answer": "d",
@@ -724,9 +709,9 @@
     "question_number": 49,
     "question": "In stormy conditions, it is important to:",
     "options": {
-      "a": "Slow down! It takes longer to stop or adjust in wet weather.",
-      "b": "Stay toward the middle lanes - water tends to pool in the outside lanes.",
-      "c": "Drive in the tracks of a car ahead of you.",
+      "a": "Slow down! It takes longer to stop or adjust in wet weather",
+      "b": "Stay toward the middle lanes - water tends to pool in the outside lanes",
+      "c": "Drive in the tracks of a car ahead of you",
       "d": "A,B and C"
     },
     "correct_answer": "d",
@@ -784,7 +769,7 @@
     "question_number": 53,
     "question": "You are driving past a line of parked cars. You notice a ball bouncing into the road ahead. What should you do?",
     "options": {
-      "a": "Stop  and wave  the children across to fetch their ball",
+      "a": "Stop and wave the children across to fetch their ball",
       "b": "Continue driving at the same speed and sound your horn",
       "c": "Continue driving at the same speed and flash your headlight",
       "d": "Slow down and be prepared to stop"
@@ -1232,7 +1217,7 @@
   },
   {
     "question_number": 83,
-    "question": "You are driving on a clear night. There is a steady stream of oncoming traffic. The national speed limit applies. Which lights should you see?",
+    "question": "You are driving on a clear night. There is a steady stream of oncoming traffic. The national speed limit applies. Which lights should you use?",
     "options": {
       "a": "Full beam headlights",
       "b": "Sidelights",
@@ -1292,7 +1277,7 @@
   },
   {
     "question_number": 87,
-    "question": "You are in a one-way street and want to turn right.  You should position yourself;",
+    "question": "You are in a one-way street and want to turn right. You should position yourself;",
     "options": {
       "a": "In the right-hand lane",
       "b": "In the left-hand lane",
@@ -1642,7 +1627,7 @@
       "a": "It reduces your concentration",
       "b": "It increases your awareness",
       "c": "It improves your co-ordination",
-      "d": "It speeds up you reactions."
+      "d": "It speeds up you reactions"
     },
     "correct_answer": "a",
     "image": null,
@@ -1789,8 +1774,8 @@
     "question_number": 120,
     "question": "Your reactions will be much slower when driving;",
     "options": {
-      "a": "Tired.",
-      "b": "In a rainy weather.",
+      "a": "Tired",
+      "b": "In a rainy weather",
       "c": "Too quickly",
       "d": "In poor weather"
     },
@@ -1817,7 +1802,7 @@
   },
   {
     "question_number": 122,
-    "question": "You are about to drive home.  You feel very tired and have a severe headache.  You should;",
+    "question": "You are about to drive home. You feel very tired and have a severe headache. You should;",
     "options": {
       "a": "Wait until you are fit and well before driving",
       "b": "Drive home, but take a tablet for headaches",
@@ -1895,7 +1880,7 @@
     "question": "If your tyre blows out or you have a tyre burst whilst the vehicle is in motion what would you do?",
     "options": {
       "a": "Quickly slam your brakes",
-      "b": "Firmly grip the steering wheel; steer straight to a stop.",
+      "b": "Firmly grip the steering wheel; steer straight to a stop",
       "c": "Switch off ignition",
       "d": "Sound the Horn"
     },
@@ -2089,9 +2074,9 @@
     "question_number": 140,
     "question": "Which of the following should not happen when braking?",
     "options": {
-      "a": "Brakes should not feel spongy or slack.",
+      "a": "Brakes should not feel spongy or slack",
       "b": "Brakes should be wet",
-      "c": "Vehicle should pull to one side.",
+      "c": "Vehicle should pull to one side",
       "d": "All of the above"
     },
     "correct_answer": "d",
@@ -2173,7 +2158,7 @@
     "image": null,
     "page": 26,
     "category": "Hazard Awareness",
-    "explanation": "A green light can change unexpectedly. Reducing speed slightly when approaching allows more time to react safely to changing conditions"
+    "explanation": "A green light can change unexpectedly. Reducing speed slightly when approaching allows more time to react safely to changing conditions."
   },
   {
     "question_number": 146,
@@ -2457,7 +2442,7 @@
     "correct_answer": "d",
     "image": null,
     "page": 29,
-    "category": "Safe Driving",
+    "category": "Hazard awareness",
     "explanation": "Alcohol impairs concentration, judgement, and reaction time, reducing a driver's ability to identify hazards and respond safely."
   },
   {
@@ -2732,7 +2717,7 @@
   },
   {
     "question_number": 183,
-    "question": "Road signs are mounted at vantage points on the road to",
+    "question": "Road signs are mounted at vantage points on the road to;",
     "options": {
       "a": "Beautify the environment",
       "b": "Indicate the end of a motorway",
@@ -2989,10 +2974,10 @@
     "question_number": 200,
     "question": "If your vehicle breaks down in traffic or on the highway what would you do?",
     "options": {
-      "a": "Lock the doors and leave the vehicle till traffic eases up.",
-      "b": "Get your vehicle off the road and place an Advance Warning Triangle at 46 metres to the front and rear.",
-      "c": "Put leaves behind the broken down vehicle.",
-      "d": "Put your hazard lights on and leave the vehicle where the breakdown occurred."
+      "a": "Lock the doors and leave the vehicle till traffic eases up",
+      "b": "Get your vehicle off the road and place an Advance Warning Triangle at 46 metres to the front and rear",
+      "c": "Put leaves behind the broken down vehicle",
+      "d": "Put your hazard lights on and leave the vehicle where the breakdown occurred"
     },
     "correct_answer": "b",
     "image": null,
@@ -3073,7 +3058,7 @@
     "image": null,
     "page": 34,
     "category": "Hazard Awareness",
-    "explanation": "A forgotten indicator can create uncertainty. Sounding the horn alerts the driver before overtaking, helping reduce the risk of misunderstanding"
+    "explanation": "A forgotten indicator can create uncertainty. Sounding the horn alerts the driver before overtaking, helping reduce the risk of misunderstanding."
   },
   {
     "question_number": 206,
@@ -3192,7 +3177,7 @@
     "correct_answer": "c",
     "image": null,
     "page": 35,
-    "category": "Road Markings",
+    "category": "Traffic Rules",
     "explanation": "If you have already crossed the stop line when the signal changes, continue through safely rather than stopping abruptly in the junction."
   },
   {
@@ -3334,7 +3319,7 @@
     "question_number": 223,
     "question": "Before moving off into a road, a driver must observe one of the following:-",
     "options": {
-      "a": "Look around, look into the mirrors and signal.",
+      "a": "Look around, look into the mirrors and signal",
       "b": "Look around, sound your horn and move on",
       "c": "Move to make other road users change direction.",
       "d": "Look around and wear seat belts"
@@ -3692,7 +3677,7 @@
   },
   {
     "question_number": 247,
-    "question": "At an accident scene, if causalities are unconscious and bleeding you should first use the ABC of first aid to check the victim. What does the ABC mean?",
+    "question": "At an accident scene, if casualities are unconscious and bleeding you should first use the ABC of first aid to check the victim. What does the ABC mean?",
     "options": {
       "a": "Airway, Bleeding, Conscious effort",
       "b": "Airway, Breathing, Circulation",

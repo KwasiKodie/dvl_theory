@@ -27,6 +27,14 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
+	<key>NSUserNotificationUsageDescription</key>
+    <string>
+    DVL Theory uses notifications to remind you to study and take mock tests.
+    </string>
+	<key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+    </array>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>

@@ -27,6 +27,11 @@ import '../../features/mock/presentation/screens/mock_summary_screen.dart';
 import '../../features/mock/presentation/screens/mock_submit_screen.dart';
 import '../../features/mock/presentation/screens/mock_result_screen.dart';
 import '../../features/notifications/presentation/screens/notification_center_screen.dart';
+import '../../features/help_support/presentation/screens/faq_screen.dart';
+import '../../features/help_support/presentation/screens/report_problem_screen.dart';
+import '../../features/help_support/presentation/screens/contact_us_screen.dart';
+import '../../features/help_support/presentation/screens/rate_app_screen.dart';
+import '../../features/help_support/presentation/screens/follow_us_screen.dart';
 import '../theme/theme_controller.dart';
 
 class AppRouter {
@@ -100,6 +105,21 @@ class AppRouter {
 
       case RouteNames.helpSupport:
         return RouteTransitions.fadeSlide(const HelpSupportScreen());
+
+      case RouteNames.faq:
+        return RouteTransitions.fadeSlide(const FaqScreen());
+
+      case RouteNames.reportProblem:
+        return RouteTransitions.fadeSlide(const ReportProblemScreen());
+
+      case RouteNames.contactUs:
+        return RouteTransitions.fadeSlide(const ContactUsScreen());
+
+      case RouteNames.rateApp:
+        return RouteTransitions.fadeSlide(const RateAppScreen());
+
+      case RouteNames.followUs:
+        return RouteTransitions.fadeSlide(const FollowUsScreen());
 
       case RouteNames.about:
         return RouteTransitions.fadeSlide(const AboutScreen());

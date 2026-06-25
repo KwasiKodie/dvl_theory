@@ -23,17 +23,11 @@ class LanguageTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
-
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 18),
-
         child: Row(
           children: [
-            Radio<String>(
-              value: code,
-              groupValue: selected ? code : null,
-              onChanged: (_) => onTap(),
-            ),
+            Radio<String>(value: code),
 
             Expanded(
               child: Text(

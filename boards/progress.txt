@@ -45,20 +45,28 @@ import 'package:hive/hive.dart';
 class QuestionAttemptModel {
   @HiveField(0)
   String id;
+
   @HiveField(1)
   int questionId;
+
   @HiveField(2)
   String category;
+
   @HiveField(3)
   String selectedAnswer;
+
   @HiveField(4)
   String correctAnswer;
+
   @HiveField(5)
   bool isCorrect;
+
   @HiveField(6)
   int timeTaken;
+
   @HiveField(7)
   DateTime date;
+
   @HiveField(8)
   String testType;
 
@@ -73,14 +81,67 @@ class QuestionAttemptModel {
     required this.date,
     required this.testType,
   });
-}
 
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'questionId': questionId,
+      'category': category,
+      'selectedAnswer': selectedAnswer,
+      'correctAnswer': correctAnswer,
+      'isCorrect': isCorrect,
+      'timeTaken': timeTaken,
+      'date': date.toIso8601String(),
+      'testType': testType,
+    };
+  }
+
+  factory QuestionAttemptModel.fromMap(Map<dynamic, dynamic> map) {
+    return QuestionAttemptModel(
+      id: map['id']?.toString() ?? '',
+      questionId: (map['questionId'] ?? 0) as int,
+      category: map['category']?.toString() ?? '',
+      selectedAnswer: map['selectedAnswer']?.toString() ?? '',
+      correctAnswer: map['correctAnswer']?.toString() ?? '',
+      isCorrect: map['isCorrect'] == true,
+      timeTaken: (map['timeTaken'] ?? 0) as int,
+      date: DateTime.parse(map['date'].toString()),
+      testType: map['testType']?.toString() ?? '',
+    );
+  }
+
+  QuestionAttemptModel copyWith({
+    String? id,
+    int? questionId,
+    String? category,
+    String? selectedAnswer,
+    String? correctAnswer,
+    bool? isCorrect,
+    int? timeTaken,
+    DateTime? date,
+    String? testType,
+  }) {
+    return QuestionAttemptModel(
+      id: id ?? this.id,
+      questionId: questionId ?? this.questionId,
+      category: category ?? this.category,
+      selectedAnswer: selectedAnswer ?? this.selectedAnswer,
+      correctAnswer: correctAnswer ?? this.correctAnswer,
+      isCorrect: isCorrect ?? this.isCorrect,
+      timeTaken: timeTaken ?? this.timeTaken,
+      date: date ?? this.date,
+      testType: testType ?? this.testType,
+    );
+  }
+}
 
 // ===========================
 // features/progress/domain/services/progress_engine.dart
 // ===========================
-import '../../../../core/storage/hive_boxes.dart';
 import 'package:hive/hive.dart';
+
+import '../../../../core/storage/hive_boxes.dart';
+import '../../../profile/domain/services/study_preferences_controller.dart';
 
 class ProgressEngine {
   final Box attemptsBox = Hive.box(HiveBoxes.attempts);
@@ -91,246 +152,320 @@ class ProgressEngine {
   final Box reviewBox = Hive.box(HiveBoxes.review);
   final Box streakBox = Hive.box(HiveBoxes.streak);
 
-  String _getCategoryStatus(double accuracy) {
-    if (accuracy <= 50) return "Weak";
-    if (accuracy <= 75) return "Improving";
-    if (accuracy <= 90) return "Good";
-    return "Mastered";
-  }
-
   void recordAttempt(Map<String, dynamic> attempt) {
-    attemptsBox.add(attempt);
+    final preferences = StudyPreferencesController.instance.preferences;
+    final enrichedAttempt = Map<String, dynamic>.from(attempt)
+      ..['saveWrongAnswersEnabled'] = preferences.saveWrongAnswers
+      ..['practiceQuestionCount'] = preferences.practiceQuestionCount
+      ..['explanationMode'] = preferences.explanationMode.name
+      ..['questionMode'] = preferences.questionMode.name;
 
-    _updateStats(attempt);
-    _updateCategory(attempt);
-    _updateWrongAnswers(attempt);
-    _updateMastery(attempt);
-    _updateSpacedRepetition(attempt);
+    attemptsBox.add(enrichedAttempt);
+
+    _updateStats(enrichedAttempt);
+    _updateCategory(enrichedAttempt);
+
+    if (preferences.saveWrongAnswers) {
+      _updateWrongAnswers(enrichedAttempt);
+    }
+
+    _updateMastery(enrichedAttempt);
+    _updateSpacedRepetition(enrichedAttempt);
     _updateStreak();
   }
 
-  void _updateStats(Map attempt) {
-    final stats =
-        statsBox.get('stats') ??
-        {
-          "totalQuestionsAnswered": 0,
-          "totalCorrectAnswers": 0,
-          "totalIncorrectAnswers": 0,
-          "totalTime": 0, // for average response time
-        };
+  void _updateStats(Map<String, dynamic> attempt) {
+    final stats = Map<String, dynamic>.from(
+      statsBox.get('stats') ??
+          <String, dynamic>{
+            'totalQuestionsAnswered': 0,
+            'totalCorrectAnswers': 0,
+            'totalIncorrectAnswers': 0,
+            'totalTime': 0,
+            'accuracy': 0.0,
+            'averageResponseTime': 0.0,
+          },
+    );
 
-    stats["totalQuestionsAnswered"] += 1;
+    stats['totalQuestionsAnswered'] =
+        (stats['totalQuestionsAnswered'] as num).toInt() + 1;
 
-    if (attempt["isCorrect"]) {
-      stats["totalCorrectAnswers"] += 1;
+    if (attempt['isCorrect'] == true) {
+      stats['totalCorrectAnswers'] =
+          (stats['totalCorrectAnswers'] as num).toInt() + 1;
     } else {
-      stats["totalIncorrectAnswers"] += 1;
+      stats['totalIncorrectAnswers'] =
+          (stats['totalIncorrectAnswers'] as num).toInt() + 1;
     }
 
-    stats["totalTime"] += attempt["timeTaken"] ?? 0;
+    stats['totalTime'] =
+        (stats['totalTime'] as num).toInt() +
+        ((attempt['timeTaken'] ?? 0) as num).toInt();
 
-    // 🔥 Derived metrics
-    final total = stats["totalQuestionsAnswered"];
-    final correct = stats["totalCorrectAnswers"];
+    final total = (stats['totalQuestionsAnswered'] as num).toInt();
+    final correct = (stats['totalCorrectAnswers'] as num).toInt();
+    final totalTime = (stats['totalTime'] as num).toInt();
 
-    stats["accuracy"] = total > 0 ? (correct / total) * 100 : 0;
-
-    stats["averageResponseTime"] = total > 0 ? stats["totalTime"] / total : 0;
+    stats['accuracy'] = total > 0 ? (correct / total) * 100.0 : 0.0;
+    stats['averageResponseTime'] = total > 0 ? totalTime / total : 0.0;
 
     statsBox.put('stats', stats);
   }
 
-  void _updateCategory(Map attempt) {
-    final String category = attempt["category"];
-    final bool isCorrect = attempt["isCorrect"];
-    final int timeTaken = attempt["timeTaken"] ?? 0;
+  void _updateCategory(Map<String, dynamic> attempt) {
+    final category = attempt['category'].toString();
+    final isCorrect = attempt['isCorrect'] == true;
+    final timeTaken = ((attempt['timeTaken'] ?? 0) as num).toInt();
 
-    final existing =
-        categoryBox.get(category) ??
-        {"attempted": 0, "correct": 0, "incorrect": 0, "totalTime": 0};
+    final existing = Map<String, dynamic>.from(
+      categoryBox.get(category) ??
+          <String, dynamic>{
+            'attempted': 0,
+            'correct': 0,
+            'incorrect': 0,
+            'totalTime': 0,
+            'accuracy': 0.0,
+            'averageTime': 0.0,
+            'status': 'Weak',
+          },
+    );
 
-    existing["attempted"] += 1;
+    existing['attempted'] = (existing['attempted'] as num).toInt() + 1;
 
     if (isCorrect) {
-      existing["correct"] += 1;
+      existing['correct'] = (existing['correct'] as num).toInt() + 1;
     } else {
-      existing["incorrect"] += 1;
+      existing['incorrect'] = (existing['incorrect'] as num).toInt() + 1;
     }
 
-    existing["totalTime"] += timeTaken;
+    existing['totalTime'] = (existing['totalTime'] as num).toInt() + timeTaken;
 
-    // 🔥 Derived metrics
-    int attempted = existing["attempted"];
-    int correct = existing["correct"];
+    final attempted = (existing['attempted'] as num).toInt();
+    final correct = (existing['correct'] as num).toInt();
+    final totalTime = (existing['totalTime'] as num).toInt();
 
-    double accuracy = attempted > 0 ? (correct / attempted) * 100 : 0;
+    final accuracy = attempted > 0 ? (correct / attempted) * 100.0 : 0.0;
 
-    existing["accuracy"] = accuracy;
-
-    existing["averageTime"] = attempted > 0
-        ? existing["totalTime"] / attempted
-        : 0;
-
-    existing["status"] = _getCategoryStatus(accuracy);
+    existing['accuracy'] = accuracy;
+    existing['averageTime'] = attempted > 0 ? totalTime / attempted : 0.0;
+    existing['status'] = _getCategoryStatus(accuracy);
 
     categoryBox.put(category, existing);
   }
 
-  // =====================================================
-  // ❌ WRONG ANSWER SYSTEM
-  // =====================================================
-  void _updateWrongAnswers(Map attempt) {
-    final int questionId = attempt["questionId"];
-    final bool isCorrect = attempt["isCorrect"];
+  void _updateWrongAnswers(Map<String, dynamic> attempt) {
+    final questionId = ((attempt['questionId'] ?? 0) as num).toInt();
+    final isCorrect = attempt['isCorrect'] == true;
 
-    final existing = wrongBox.get(questionId);
+    final existingRaw = wrongBox.get(questionId);
+    final existing = existingRaw == null
+        ? null
+        : Map<String, dynamic>.from(existingRaw);
 
     if (!isCorrect) {
       if (existing == null) {
         wrongBox.put(questionId, {
-          "questionId": questionId,
-          "category": attempt["category"],
-          "wrongCount": 1,
-          "lastAttempt": DateTime.now(),
-          "resolved": false,
+          'questionId': questionId,
+          'category': attempt['category'],
+          'wrongCount': 1,
+          'lastAttempt': DateTime.now(),
+          'resolved': false,
         });
       } else {
-        existing["wrongCount"] += 1;
-        existing["lastAttempt"] = DateTime.now();
-        existing["resolved"] = false;
+        existing['wrongCount'] =
+            ((existing['wrongCount'] ?? 0) as num).toInt() + 1;
+        existing['lastAttempt'] = DateTime.now();
+        existing['resolved'] = false;
         wrongBox.put(questionId, existing);
       }
     } else {
-      // mark resolved if exists
       if (existing != null) {
-        existing["resolved"] = true;
+        existing['resolved'] = true;
         wrongBox.put(questionId, existing);
       }
     }
   }
 
-  // =====================================================
-  // 🧠 MASTERY SYSTEM
-  // =====================================================
-  void _updateMastery(Map attempt) {
-    final int questionId = attempt["questionId"];
-    final bool isCorrect = attempt["isCorrect"];
+  void _updateMastery(Map<String, dynamic> attempt) {
+    final questionId = ((attempt['questionId'] ?? 0) as num).toInt();
+    final isCorrect = attempt['isCorrect'] == true;
 
-    final existing =
-        masteryBox.get(questionId) ??
-        {
-          "correct": 0,
-          "incorrect": 0,
-          "masteryScore": 0.0,
-          "level": "Beginner",
-        };
+    final existing = Map<String, dynamic>.from(
+      masteryBox.get(questionId) ??
+          <String, dynamic>{
+            'correct': 0,
+            'incorrect': 0,
+            'masteryScore': 0.0,
+            'level': 'Beginner',
+          },
+    );
 
     if (isCorrect) {
-      existing["correct"] += 1;
+      existing['correct'] = (existing['correct'] as num).toInt() + 1;
     } else {
-      existing["incorrect"] += 1;
+      existing['incorrect'] = (existing['incorrect'] as num).toInt() + 1;
     }
 
-    int correct = existing["correct"];
-    int incorrect = existing["incorrect"];
+    final correct = (existing['correct'] as num).toInt();
+    final incorrect = (existing['incorrect'] as num).toInt();
+    final total = correct + incorrect;
 
-    double score = correct / (correct + incorrect);
+    final score = total > 0 ? correct / total : 0.0;
 
-    existing["masteryScore"] = score;
-    existing["level"] = _getMasteryLevel(score);
+    existing['masteryScore'] = score;
+    existing['level'] = _getMasteryLevel(score);
 
     masteryBox.put(questionId, existing);
   }
 
-  String _getMasteryLevel(double score) {
-    if (score < 0.3) return "Beginner";
-    if (score < 0.5) return "Learning";
-    if (score < 0.7) return "Improving";
-    if (score < 0.9) return "Proficient";
-    return "Mastered";
-  }
+  void _updateSpacedRepetition(Map<String, dynamic> attempt) {
+    final questionId = ((attempt['questionId'] ?? 0) as num).toInt();
+    final isCorrect = attempt['isCorrect'] == true;
+    final now = DateTime.now();
 
-  // =====================================================
-  // 🔁 SPACED REPETITION ENGINE
-  // =====================================================
-  void _updateSpacedRepetition(Map attempt) {
-    final int questionId = attempt["questionId"];
-    final bool isCorrect = attempt["isCorrect"];
+    final existing = Map<String, dynamic>.from(
+      reviewBox.get(questionId) ??
+          <String, dynamic>{
+            'questionId': questionId,
+            'level': 0,
+            'nextReview': now,
+            'lastReviewed': now,
+          },
+    );
 
-    final existing =
-        reviewBox.get(questionId) ?? {"level": 0, "nextReview": DateTime.now()};
+    int level = ((existing['level'] ?? 0) as num).toInt();
 
-    int level = existing["level"];
+    level = isCorrect ? level + 1 : 0;
 
-    if (!isCorrect) {
-      level = 0;
-    } else {
-      level += 1;
-    }
-
-    DateTime nextReview;
-
-    switch (level) {
-      case 0:
-        nextReview = DateTime.now(); // immediate
-        break;
-      case 1:
-        nextReview = DateTime.now().add(const Duration(days: 1));
-        break;
-      case 2:
-        nextReview = DateTime.now().add(const Duration(days: 3));
-        break;
-      case 3:
-        nextReview = DateTime.now().add(const Duration(days: 7));
-        break;
-      default:
-        nextReview = DateTime.now().add(const Duration(days: 30));
-    }
+    final nextReview = switch (level) {
+      0 => now,
+      1 => now.add(const Duration(days: 1)),
+      2 => now.add(const Duration(days: 3)),
+      3 => now.add(const Duration(days: 7)),
+      _ => now.add(const Duration(days: 30)),
+    };
 
     reviewBox.put(questionId, {
-      "level": level,
-      "nextReview": nextReview,
-      "lastReviewed": DateTime.now(),
+      'questionId': questionId,
+      'level': level,
+      'nextReview': nextReview,
+      'lastReviewed': now,
     });
   }
 
-  // =====================================================
-  // 🔥 STREAK SYSTEM
-  // =====================================================
   void _updateStreak() {
     final today = DateTime.now();
-    final streak =
-        streakBox.get('streak') ??
-        {"current": 0, "longest": 0, "lastDate": null};
 
-    DateTime? lastDate = streak["lastDate"] != null
-        ? DateTime.parse(streak["lastDate"])
-        : null;
+    final streak = Map<String, dynamic>.from(
+      streakBox.get('streak') ??
+          <String, dynamic>{'current': 0, 'longest': 0, 'lastDate': null},
+    );
+
+    DateTime? lastDate;
+
+    final rawLastDate = streak['lastDate'];
+
+    if (rawLastDate is DateTime) {
+      lastDate = rawLastDate;
+    } else if (rawLastDate is String) {
+      lastDate = DateTime.tryParse(rawLastDate);
+    }
 
     if (lastDate == null) {
-      streak["current"] = 1;
+      streak['current'] = 1;
     } else {
-      final difference = today.difference(lastDate).inDays;
+      final todayDate = DateTime(today.year, today.month, today.day);
+      final lastOnlyDate = DateTime(
+        lastDate.year,
+        lastDate.month,
+        lastDate.day,
+      );
 
-      if (difference == 0) {
-        // same day → do nothing
-      } else if (difference == 1) {
-        streak["current"] += 1;
-      } else {
-        streak["current"] = 1; // reset
+      final difference = todayDate.difference(lastOnlyDate).inDays;
+
+      if (difference == 1) {
+        streak['current'] = ((streak['current'] ?? 0) as num).toInt() + 1;
+      } else if (difference > 1) {
+        streak['current'] = 1;
       }
     }
 
-    if (streak["current"] > streak["longest"]) {
-      streak["longest"] = streak["current"];
+    final current = ((streak['current'] ?? 0) as num).toInt();
+    final longest = ((streak['longest'] ?? 0) as num).toInt();
+
+    if (current > longest) {
+      streak['longest'] = current;
     }
 
-    streak["lastDate"] = today.toIso8601String();
+    streak['lastDate'] = today.toIso8601String();
 
     streakBox.put('streak', streak);
   }
-}
 
+  // ===========================
+  // Public Statistics API
+  // ===========================
+
+  Map<String, dynamic> getStats() {
+    return Map<String, dynamic>.from(
+      statsBox.get('stats') ??
+          <String, dynamic>{
+            'totalQuestionsAnswered': 0,
+            'totalCorrectAnswers': 0,
+            'totalIncorrectAnswers': 0,
+            'totalTime': 0,
+            'accuracy': 0.0,
+            'averageResponseTime': 0.0,
+          },
+    );
+  }
+
+  int totalAnswered() {
+    return (getStats()['totalQuestionsAnswered'] as num).toInt();
+  }
+
+  int totalCorrect() {
+    return (getStats()['totalCorrectAnswers'] as num).toInt();
+  }
+
+  int totalIncorrect() {
+    return (getStats()['totalIncorrectAnswers'] as num).toInt();
+  }
+
+  int totalTimeSpent() {
+    return (getStats()['totalTime'] as num).toInt();
+  }
+
+  double overallAccuracy() {
+    return (getStats()['accuracy'] as num).toDouble();
+  }
+
+  double averageResponseTime() {
+    return (getStats()['averageResponseTime'] as num).toDouble();
+  }
+
+  int totalQuestions() {
+    final stats = getStats();
+
+    return (stats['totalCorrectAnswers'] as num).toInt() +
+        (stats['totalIncorrectAnswers'] as num).toInt();
+  }
+
+  String _getCategoryStatus(double accuracy) {
+    if (accuracy <= 50) return 'Weak';
+    if (accuracy <= 75) return 'Improving';
+    if (accuracy <= 90) return 'Good';
+    return 'Mastered';
+  }
+
+  String _getMasteryLevel(double score) {
+    if (score < 0.3) return 'Beginner';
+    if (score < 0.5) return 'Learning';
+    if (score < 0.7) return 'Improving';
+    if (score < 0.9) return 'Proficient';
+    return 'Mastered';
+  }
+}
 
 // ===========================
 // features/progress/domain/services/category_service.dart
@@ -352,6 +487,120 @@ class CategoryService {
 
       return {"category": key, "accuracy": accuracy};
     }).toList();
+  }
+}
+
+// ===========================
+// features/progress/domain/services/progress_api_client.dart
+// ===========================
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
+import '../../../../core/network/api_config.dart';
+import '../../../auth/domain/services/user_identity_service.dart';
+import '../../data/models/question_attempt_model.dart';
+
+class ProgressApiClient {
+  ProgressApiClient._();
+
+  static final instance = ProgressApiClient._();
+
+  Future<bool> uploadAttempts({
+    required List<QuestionAttemptModel> attempts,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${ApiConfig.progressBase}/attempts'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'userId': UserIdentityService.instance.userId,
+          'attempts': attempts.map((e) => e.toMap()).toList(),
+        }),
+      );
+
+      return response.statusCode == 200;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<List<QuestionAttemptModel>> downloadAttempts() async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          '${ApiConfig.progressBase}/attempts/'
+          '${UserIdentityService.instance.userId}',
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        return [];
+      }
+
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+
+      final attempts = json['attempts'] as List<dynamic>;
+
+      return attempts
+          .map(
+            (item) =>
+                QuestionAttemptModel.fromMap(Map<String, dynamic>.from(item)),
+          )
+          .toList();
+    } catch (_) {
+      return [];
+    }
+  }
+}
+
+// ===========================
+// features/progress/domain/services/progress_sync_service.dart
+// ===========================
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+
+import '../../../../core/storage/hive_boxes.dart';
+import 'progress_api_client.dart';
+
+class ProgressSyncService {
+  ProgressSyncService._();
+
+  static final instance = ProgressSyncService._();
+
+  static const _lastSyncKey = 'last_progress_sync';
+
+  Box get _attemptBox => Hive.box(HiveBoxes.attempts);
+  Box get _syncBox => Hive.box(HiveBoxes.progressSync);
+
+  Future<void> uploadProgress() async {
+    final attempts = await ProgressApiClient.instance.downloadAttempts();
+
+    if (attempts.isEmpty) return;
+
+    debugPrint('Uploading ${attempts.length} attempts');
+
+    final success = await ProgressApiClient.instance.uploadAttempts(
+      attempts: attempts,
+    );
+
+    if (success) {
+      await _syncBox.put(_lastSyncKey, DateTime.now().toIso8601String());
+    }
+  }
+
+  Future<void> restoreProgress() async {
+    final attempts = await ProgressApiClient.instance.downloadAttempts();
+
+    if (attempts.isEmpty) return;
+
+    await _attemptBox.clear();
+
+    for (final attempt in attempts) {
+      await _attemptBox.put(attempt.id, attempt.toMap());
+    }
+
+    await _syncBox.put(_lastSyncKey, DateTime.now().toIso8601String());
   }
 }
 
@@ -440,29 +689,261 @@ class ProgressScreen extends StatelessWidget {
 }
 
 // ===========================
-// features/progress/presentation/widgets/category_tile.dart
+// features/progress/presentation/widgets/overall_progress_card.dart
 // ===========================
 import 'package:flutter/material.dart';
 
-class CategoryTile extends StatelessWidget {
-  final String title;
+class OverallProgressCard extends StatelessWidget {
   final double progress;
+  final int answered;
+  final int correct;
+  final int incorrect;
 
-  const CategoryTile({super.key, required this.title, required this.progress});
+  final double accuracy;
+  final double averageTime;
+  final double readinessScore;
+  final String confidenceLevel;
+  final String strongestTopic;
+  final String weakestTopic;
+
+  const OverallProgressCard({
+    super.key,
+    required this.progress,
+    required this.answered,
+    required this.correct,
+    required this.incorrect,
+    required this.accuracy,
+    required this.averageTime,
+    required this.readinessScore,
+    required this.confidenceLevel,
+    required this.strongestTopic,
+    required this.weakestTopic,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final isDark = theme.brightness == Brightness.dark;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isTablet = constraints.maxWidth > 600;
+
+        return Container(
+          padding: EdgeInsets.all(isTablet ? 20 : 16),
+
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+
+            borderRadius: BorderRadius.circular(18),
+
+            border: Border.all(
+              color: theme.dividerColor.withValues(alpha: .15),
+            ),
+
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.15 : 0.04),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Overall Progress',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.12),
+
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+
+                    child: Text(
+                      '${accuracy.round()}%',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              LinearProgressIndicator(
+                value: progress,
+                minHeight: 8,
+
+                borderRadius: BorderRadius.circular(20),
+
+                backgroundColor: theme.colorScheme.primary.withValues(
+                  alpha: 0.12,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: _metric(context, "Accuracy", "${accuracy.round()}%"),
+                  ),
+
+                  Expanded(child: _metric(context, "Answered", "$answered")),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: _metric(
+                      context,
+                      "Avg Time",
+                      "${averageTime.round()} sec",
+                    ),
+                  ),
+
+                  Expanded(
+                    child: _metric(context, "Confidence", confidenceLevel),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+Widget _metric(BuildContext context, String label, String value) {
+  final theme = Theme.of(context);
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(label, style: theme.textTheme.bodySmall),
+
+      const SizedBox(height: 2),
+
+      Text(
+        value,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    ],
+  );
+}
+
+// ===========================
+// features/progress/presentation/widgets/topic_progress_tile.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class TopicProgressTile extends StatelessWidget {
+  final String category;
+  final double progress;
+
+  const TopicProgressTile({
+    super.key,
+    required this.category,
+    required this.progress,
+  });
+
+  IconData _iconForCategory() {
+    switch (category.toLowerCase()) {
+      case 'road signs':
+        return Icons.warning_rounded;
+
+      case 'road markings':
+        return Icons.add_road;
+
+      case 'traffic rules':
+        return Icons.gavel;
+
+      case 'speed limits':
+        return Icons.speed;
+
+      case 'hazard awareness':
+        return Icons.report_problem;
+
+      case 'safe driving':
+        return Icons.directions_car;
+
+      case 'vehicle handling':
+        return Icons.directions_car;
+
+      case 'motorway rules':
+        return Icons.route;
+
+      case 'pedestrian crossings':
+        return Icons.directions_walk;
+
+      case 'emergency procedures':
+        return Icons.sos;
+
+      default:
+        return Icons.school;
+    }
+  }
+
+  Color _badgeColor() {
+    if (progress >= 80) {
+      return Colors.green;
+    }
+
+    if (progress >= 70) {
+      return Colors.blue;
+    }
+
+    return Colors.orange;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final percent = progress.round();
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: .15)),
       ),
       child: Row(
         children: [
-          _buildIcon(),
+          CircleAvatar(
+            backgroundColor: _badgeColor().withValues(alpha: .15),
+            child: Icon(_iconForCategory(), color: _badgeColor()),
+          ),
 
           const SizedBox(width: 12),
 
@@ -471,50 +952,46 @@ class CategoryTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+                  category,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
 
                 const SizedBox(height: 6),
 
                 LinearProgressIndicator(
                   value: progress / 100,
-                  minHeight: 6,
-                  backgroundColor: Colors.grey.shade300,
-                  color: Colors.grey.shade700,
+                  minHeight: 4,
+                  borderRadius: BorderRadius.circular(20),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
 
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: _getColor(progress).withOpacity(0.2),
+              color: _badgeColor().withValues(alpha: .15),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
-              "${progress.toInt()}%",
-              style: TextStyle(color: _getColor(progress)),
+              '$percent%',
+              style: TextStyle(
+                color: _badgeColor(),
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
 
-          const Icon(Icons.chevron_right),
+          const SizedBox(width: 8),
+
+          Icon(Icons.chevron_right, color: theme.colorScheme.outline),
         ],
       ),
     );
-  }
-
-  Widget _buildIcon() {
-    return const CircleAvatar(child: Icon(Icons.traffic));
-  }
-
-  Color _getColor(double p) {
-    if (p < 50) return Colors.red;
-    if (p < 75) return Colors.orange;
-    return Colors.green;
   }
 }
 

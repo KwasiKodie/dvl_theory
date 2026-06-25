@@ -45,11 +45,13 @@ class OverallProgressCard extends StatelessWidget {
 
             borderRadius: BorderRadius.circular(18),
 
-            border: Border.all(color: theme.dividerColor.withOpacity(.15)),
+            border: Border.all(
+              color: theme.dividerColor.withValues(alpha: .15),
+            ),
 
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(isDark ? .15 : .04),
+                color: Colors.black.withValues(alpha: isDark ? 0.15 : 0.04),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -77,7 +79,7 @@ class OverallProgressCard extends StatelessWidget {
                     ),
 
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(.12),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.12),
 
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -101,7 +103,9 @@ class OverallProgressCard extends StatelessWidget {
 
                 borderRadius: BorderRadius.circular(20),
 
-                backgroundColor: theme.colorScheme.primary.withOpacity(.12),
+                backgroundColor: theme.colorScheme.primary.withValues(
+                  alpha: 0.12,
+                ),
               ),
 
               const SizedBox(height: 16),

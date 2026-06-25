@@ -16,7 +16,7 @@ class AboutScreen extends StatelessWidget {
     final isTablet = Responsive.isTablet(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
 
@@ -24,8 +24,8 @@ class AboutScreen extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: theme.colorScheme.background,
-        foregroundColor: theme.colorScheme.onBackground,
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
 
         title: Text(
           'About',

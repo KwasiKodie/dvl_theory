@@ -16,12 +16,12 @@ class NotificationTile extends StatelessWidget {
     return Card(
       elevation: 0,
       color: notification.isRead
-          ? theme.colorScheme.surfaceContainerHighest.withOpacity(.20)
-          : color.withOpacity(.15),
+          ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.20)
+          : color.withValues(alpha: 0.15),
       child: ListTile(
         onTap: onTap,
         leading: CircleAvatar(
-          backgroundColor: color.withOpacity(.14),
+          backgroundColor: color.withValues(alpha: 0.14),
           child: Icon(_iconFor(notification.type), color: color),
         ),
         title: Text(

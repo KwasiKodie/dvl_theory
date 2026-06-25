@@ -28,7 +28,7 @@ class MockSummaryScreen extends StatelessWidget {
         '${seconds.toString().padLeft(2, '0')}';
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
 
       bottomNavigationBar: const AppBottomNavigation(currentIndex: 2),
 
@@ -36,7 +36,7 @@ class MockSummaryScreen extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         title: const Text('Mock Exam'),
       ),
 
@@ -120,11 +120,11 @@ class _TimerCard extends StatelessWidget {
       padding: const EdgeInsets.all(18),
 
       decoration: BoxDecoration(
-        color: color.withOpacity(.10),
+        color: color.withValues(alpha: 0.10),
 
         borderRadius: BorderRadius.circular(14),
 
-        border: Border.all(color: color.withOpacity(.35)),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
       ),
 
       child: Row(

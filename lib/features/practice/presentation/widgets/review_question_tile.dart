@@ -47,7 +47,7 @@ class ReviewQuestionTile extends StatelessWidget {
         onTap: onTap,
         leading: CircleAvatar(
           radius: 16,
-          backgroundColor: color.withOpacity(.15),
+          backgroundColor: color.withValues(alpha: 0.15),
           child: Text(
             '$questionNumber',
             style: TextStyle(color: color, fontWeight: FontWeight.bold),

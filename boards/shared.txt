@@ -9,6 +9,8 @@
 │   │   ├── navigation_service.dart
 │   │   ├── route_names.dart
 │   │   └── route_transitions.dart
+│   ├── network
+│   │   └── api_config.dart
 │   ├── storage
 │   │   ├── hive_boxes.dart
 │   │   └── hive_service.dart
@@ -27,6 +29,33 @@
 │   │   └── domain
 │   │       └── services
 │   │           └── readiness_service.dart
+│   ├── auth
+│   │   └── domain
+│   │       └── services
+│   │           └── user_identity_service.dart
+│   ├── help_support
+│   │   ├── data
+│   │   │   └── models
+│   │   │       ├── app_rating.dart
+│   │   │       ├── faq_item.dart
+│   │   │       ├── support_message.dart
+│   │   │       └── support_ticket.dart
+│   │   ├── domain
+│   │   │   └── services
+│   │   │       ├── connectivity_service.dart
+│   │   │       ├── faq_service.dart
+│   │   │       ├── social_links_service.dart
+│   │   │       ├── support_api_client.dart
+│   │   │       ├── support_lifecycle_service.dart
+│   │   │       ├── support_service.dart
+│   │   │       └── support_sync_service.dart
+│   │   └── presentation
+│   │       └── screens
+│   │           ├── contact_us_screen.dart
+│   │           ├── faq_screen.dart
+│   │           ├── follow_us_screen.dart
+│   │           ├── rate_app_screen.dart
+│   │           └── report_problem_screen.dart
 │   ├── home
 │   │   ├── data
 │   │   │   ├── datasources
@@ -80,7 +109,10 @@
 │   │   │       └── app_notification.dart
 │   │   ├── domain
 │   │   │   └── services
-│   │   │       └── notification_center_service.dart
+│   │   │       ├── local_notification_service.dart
+│   │   │       ├── notification_center_service.dart
+│   │   │       ├── notification_scheduler.dart
+│   │   │       └── reminder_engine.dart
 │   │   └── presentation
 │   │       ├── screens
 │   │       │   └── notification_center_screen.dart
@@ -123,6 +155,9 @@
 │   │   │   └── services
 │   │   │       ├── notification_intent_service.dart
 │   │   │       ├── notification_preferences_controller.dart
+│   │   │       ├── preference_lifecycle_service.dart
+│   │   │       ├── preferences_api_client.dart
+│   │   │       ├── preferences_sync_service.dart
 │   │   │       ├── profile_photo_service.dart
 │   │   │       ├── study_preferences_controller.dart
 │   │   │       └── user_profile_controller.dart
@@ -167,7 +202,10 @@
 │   │   ├── domain
 │   │   │   └── services
 │   │   │       ├── category_service.dart
-│   │   │       └── progress_engine.dart
+│   │   │       ├── progress_api_client.dart
+│   │   │       ├── progress_engine.dart
+│   │   │       ├── progress_lifecycle_service.dart
+│   │   │       └── progress_sync_service.dart
 │   │   └── presentation
 │   │       ├── screens
 │   │       │   └── progress_screen.dart
@@ -202,4 +240,4 @@
     └── widgets
         └── action_card.dart
 
-78 directories, 125 files
+89 directories, 152 files

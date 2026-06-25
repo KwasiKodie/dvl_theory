@@ -20,5 +20,10 @@ class RouteNames {
   static const language = '/language';
   static const privacySecurity = '/privacy-security';
   static const helpSupport = '/help-support';
+  static const faq = '/faq';
+  static const reportProblem = '/report-problem';
+  static const contactUs = '/contact-us';
+  static const rateApp = '/rate-app';
+  static const followUs = '/follow-us';
   static const about = '/about';
 }

@@ -35,13 +35,13 @@ class ReviewOptionTile extends StatelessWidget {
     final bool highlighted = isSelected || isCorrectAnswer;
 
     final background = highlighted
-        ? activeColor.withOpacity(.13)
+        ? activeColor.withValues(alpha: 0.13)
         : theme.colorScheme.surface;
 
     final border = highlighted ? activeColor : theme.colorScheme.outlineVariant;
 
     final badgeBackground = highlighted
-        ? activeColor.withOpacity(.18)
+        ? activeColor.withValues(alpha: 0.18)
         : theme.colorScheme.surfaceContainerHighest;
 
     final badgeTextColor = highlighted

@@ -10,7 +10,6 @@ class DarkTheme {
       brightness: Brightness.dark,
       primary: AppColors.brandYellow,
       surface: AppColors.darkSurface,
-      background: AppColors.darkBackground,
     );
 
     return ThemeData(
@@ -18,22 +17,26 @@ class DarkTheme {
       fontFamily: 'Poppins',
       brightness: Brightness.dark,
       colorScheme: colorScheme,
+
       scaffoldBackgroundColor: AppColors.darkBackground,
+
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.darkBackground,
         foregroundColor: AppColors.darkText,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
       ),
+
       cardTheme: CardThemeData(
         color: AppColors.darkSurface,
         elevation: 1.5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
       ),
+
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.darkSurface,
-        indicatorColor: AppColors.brandYellow.withOpacity(0.16),
-        labelTextStyle: MaterialStateProperty.all(
+        indicatorColor: AppColors.brandYellow.withValues(alpha: 0.16),
+        labelTextStyle: WidgetStateProperty.all(
           const TextStyle(fontWeight: FontWeight.w600),
         ),
       ),

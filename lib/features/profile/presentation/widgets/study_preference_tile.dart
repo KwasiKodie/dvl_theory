@@ -50,10 +50,12 @@ class StudyPreferenceTile extends StatelessWidget {
                 ),
               ),
             ),
-            if (valueWidget != null) valueWidget,
-            if (trailing != null) ...[
+
+            ?valueWidget,
+
+            if (trailing case final trailing?) ...[
               const SizedBox(width: 12),
-              trailing!,
+              trailing,
             ] else if (onTap != null) ...[
               const SizedBox(width: 8),
               Icon(

@@ -4,7 +4,7 @@ class PrivacySecurityTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final String? value;
+  final Widget? valueWidget;
   final bool destructive;
   final VoidCallback? onTap;
 
@@ -13,7 +13,7 @@ class PrivacySecurityTile extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
-    this.value,
+    this.valueWidget,
     this.destructive = false,
     this.onTap,
   });
@@ -58,7 +58,7 @@ class PrivacySecurityTile extends StatelessWidget {
                     subtitle,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: destructive
-                          ? theme.colorScheme.error.withOpacity(0.8)
+                          ? theme.colorScheme.error.withValues(alpha: 0.8)
                           : theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
@@ -66,16 +66,10 @@ class PrivacySecurityTile extends StatelessWidget {
               ),
             ),
 
-            if (value != null)
+            if (valueWidget != null)
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: Text(
-                  value!,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: valueWidget!,
               ),
 
             Icon(

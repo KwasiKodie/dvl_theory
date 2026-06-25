@@ -66,7 +66,7 @@ class _StatItem extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 22,
-            backgroundColor: iconColor.withOpacity(0.12),
+            backgroundColor: iconColor.withValues(alpha: 0.12),
             child: Icon(icon, color: iconColor),
           ),
           const SizedBox(height: 10),

@@ -21,7 +21,7 @@ class MockReminderCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 24,
-                backgroundColor: Colors.green.withOpacity(.12),
+                backgroundColor: Colors.green.withValues(alpha: 0.12),
                 child: const Icon(
                   Icons.assignment_turned_in,
                   color: Colors.green,

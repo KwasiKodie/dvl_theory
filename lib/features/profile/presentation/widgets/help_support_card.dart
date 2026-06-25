@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'help_support_tile.dart';
+import '../../../../core/navigation/route_names.dart';
 
 class HelpSupportCard extends StatelessWidget {
   const HelpSupportCard({super.key});
@@ -17,7 +18,7 @@ class HelpSupportCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
 
         side: BorderSide(
-          color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
         ),
       ),
 
@@ -30,7 +31,9 @@ class HelpSupportCard extends StatelessWidget {
               icon: Icons.help,
               title: 'FAQs',
               subtitle: 'Find answers to common questions',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, RouteNames.faq);
+              },
             ),
 
             const _HelpDivider(),
@@ -39,7 +42,9 @@ class HelpSupportCard extends StatelessWidget {
               icon: Icons.phone,
               title: 'Contact Us',
               subtitle: 'Send us a message',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, RouteNames.contactUs);
+              },
             ),
 
             const _HelpDivider(),
@@ -48,7 +53,9 @@ class HelpSupportCard extends StatelessWidget {
               icon: Icons.report_problem,
               title: 'Report a Problem',
               subtitle: 'Help us improve the app',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, RouteNames.reportProblem);
+              },
             ),
 
             const _HelpDivider(),
@@ -57,7 +64,9 @@ class HelpSupportCard extends StatelessWidget {
               icon: Icons.star_outline,
               title: 'Rate Our App',
               subtitle: 'Share your feedback',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, RouteNames.rateApp);
+              },
             ),
 
             const _HelpDivider(),
@@ -66,7 +75,9 @@ class HelpSupportCard extends StatelessWidget {
               icon: Icons.people_alt_outlined,
               title: 'Follow Us',
               subtitle: 'Stay connected on social media',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, RouteNames.followUs);
+              },
             ),
           ],
         ),

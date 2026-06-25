@@ -8,6 +8,12 @@ class HiveService {
     await Hive.openBox(HiveBoxes.studyPreferences);
     await Hive.openBox(HiveBoxes.notificationPreferences);
     await Hive.openBox(HiveBoxes.notifications);
+    await Hive.openBox(HiveBoxes.supportTickets);
+    await Hive.openBox(HiveBoxes.supportMessages);
+    await Hive.openBox(HiveBoxes.appRatings);
+    await Hive.openBox(HiveBoxes.userIdentity);
+    await Hive.openBox(HiveBoxes.progressSync);
+    await Hive.openBox(HiveBoxes.progress);
 
     // Open all boxes BEFORE app starts
     await Future.wait([
@@ -18,6 +24,7 @@ class HiveService {
       Hive.openBox(HiveBoxes.mastery),
       Hive.openBox(HiveBoxes.review),
       Hive.openBox(HiveBoxes.streak),
+      Hive.openBox(HiveBoxes.progressSync),
     ]);
   }
 }

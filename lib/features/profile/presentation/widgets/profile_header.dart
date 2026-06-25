@@ -33,7 +33,7 @@ class ProfileHeader extends StatelessWidget {
                   Text(
                     'Keep learning, keep driving\nwith confidence!',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                 ],

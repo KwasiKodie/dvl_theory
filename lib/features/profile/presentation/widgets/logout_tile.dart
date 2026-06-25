@@ -10,7 +10,7 @@ class LogoutTile extends StatelessWidget {
         onTap: () {},
 
         leading: CircleAvatar(
-          backgroundColor: Colors.red.withOpacity(0.12),
+          backgroundColor: Colors.red.withValues(alpha: 0.12),
 
           child: const Icon(Icons.logout, color: Colors.red),
         ),

@@ -1,3 +1,6 @@
+import 'package:uuid/uuid.dart';
+import '../../../progress/domain/services/progress_engine.dart';
+
 import '../../../practice/data/models/question_model.dart';
 import '../../../practice/domain/services/practice_session_controller.dart';
 import '../../../profile/domain/services/study_preferences_controller.dart';
@@ -19,6 +22,10 @@ class MockSessionController {
 
   final Map<int, String> selectedAnswers = {};
   final Set<int> flaggedQuestions = {};
+  final _uuid = const Uuid();
+final _progressEngine = ProgressEngine();
+
+bool attemptsRecorded = false;
 
   int get totalQuestions => questions.length;
 
@@ -73,6 +80,41 @@ class MockSessionController {
     }
   }
 
+  void recordProgressAttempts() {
+  if (attemptsRecorded) return;
+
+  final answered = selectedAnswers.length;
+  final elapsedSeconds =
+      totalTime.inSeconds - remainingTime.inSeconds;
+
+  final timePerQuestion = answered == 0
+      ? 0
+      : (elapsedSeconds / answered).round();
+
+  for (final question in questions) {
+    final selectedAnswer = selectedAnswers[question.id];
+
+    if (selectedAnswer == null) continue;
+
+    final isCorrect =
+        selectedAnswer == question.correctAnswer;
+
+    _progressEngine.recordAttempt({
+      'id': _uuid.v4(),
+      'questionId': question.id,
+      'category': question.category,
+      'selectedAnswer': selectedAnswer,
+      'correctAnswer': question.correctAnswer,
+      'isCorrect': isCorrect,
+      'timeTaken': timePerQuestion,
+      'date': DateTime.now(),
+      'testType': 'mock',
+    });
+  }
+
+  attemptsRecorded = true;
+}
+
   void startSession() {
     inProgress = true;
   }
@@ -89,16 +131,18 @@ class MockSessionController {
   }
 
   void reset() {
-    questions.clear();
-    selectedAnswers.clear();
-    flaggedQuestions.clear();
+  questions.clear();
+  selectedAnswers.clear();
+  flaggedQuestions.clear();
 
-    currentIndex = 0;
-    remainingTime = totalTime;
+  currentIndex = 0;
+  remainingTime = totalTime;
 
-    inProgress = false;
-    initialized = false;
-  }
+  inProgress = false;
+  initialized = false;
+  submitted = false;
+  attemptsRecorded = false;
+}
 
   void movePrevious() {
     if (currentIndex > 0) {

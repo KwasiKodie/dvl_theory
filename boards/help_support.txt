@@ -1,0 +1,899 @@
+// ===========================
+// features/profile/presentation/screens/help_support_screen.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../../core/utils/responsive.dart';
+import '../../../../shared/navigation/app_bottom_navigation.dart';
+import '../widgets/help_support_card.dart';
+
+class HelpSupportScreen extends StatelessWidget {
+  const HelpSupportScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final isTablet = Responsive.isTablet(context);
+    final width = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 4),
+
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
+
+        title: Text(
+          'Help & Support',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isTablet ? 720 : width),
+            child: const SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+              child: HelpSupportCard(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===========================
+// features/profile/presentation/widgets/help_support_card.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import 'help_support_tile.dart';
+
+class HelpSupportCard extends StatelessWidget {
+  const HelpSupportCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+        ),
+      ),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+
+        child: Column(
+          children: [
+            HelpSupportTile(
+              icon: Icons.help,
+              title: 'FAQs',
+              subtitle: 'Find answers to common questions',
+              onTap: () {},
+            ),
+
+            const _HelpDivider(),
+
+            HelpSupportTile(
+              icon: Icons.phone,
+              title: 'Contact Us',
+              subtitle: 'Send us a message',
+              onTap: () {},
+            ),
+
+            const _HelpDivider(),
+
+            HelpSupportTile(
+              icon: Icons.report_problem,
+              title: 'Report a Problem',
+              subtitle: 'Help us improve the app',
+              onTap: () {},
+            ),
+
+            const _HelpDivider(),
+
+            HelpSupportTile(
+              icon: Icons.star_outline,
+              title: 'Rate Our App',
+              subtitle: 'Share your feedback',
+              onTap: () {},
+            ),
+
+            const _HelpDivider(),
+
+            HelpSupportTile(
+              icon: Icons.people_alt_outlined,
+              title: 'Follow Us',
+              subtitle: 'Stay connected on social media',
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HelpDivider extends StatelessWidget {
+  const _HelpDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 1,
+      color: Theme.of(context).colorScheme.outlineVariant,
+    );
+  }
+}
+
+// ===========================
+// shared/navigation/app_bottom_navigation.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+import '../../../core/navigation/navigation_items.dart';
+import '../../../core/utils/responsive.dart';
+import '../../../core/navigation/route_names.dart';
+import '../../../features/mock/domain/services/mock_session_controller.dart';
+import '../../../features/notifications/domain/services/notification_center_service.dart';
+import '../../../features/notifications/presentation/widgets/notification_badge.dart';
+
+class AppBottomNavigation extends StatelessWidget {
+  final int currentIndex;
+
+  const AppBottomNavigation({super.key, required this.currentIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    final isSmallPhone = Responsive.isSmallPhone(context);
+    final isTablet = Responsive.isTablet(context);
+
+    final items = NavigationItems.items;
+
+    NotificationCenterService.instance.refresh();
+
+    return NavigationBar(
+      selectedIndex: currentIndex,
+      height: isTablet ? 82 : 72,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
+      indicatorColor: Theme.of(
+        context,
+      ).colorScheme.primary.withValues(alpha: 0.14),
+      labelBehavior: isSmallPhone
+          ? NavigationDestinationLabelBehavior.onlyShowSelected
+          : NavigationDestinationLabelBehavior.alwaysShow,
+      onDestinationSelected: (index) {
+        String selectedRoute = items[index].route;
+
+        if (selectedRoute == RouteNames.mockIntro) {
+          final mockSession = MockSessionController.instance;
+
+          if (mockSession.inProgress &&
+              mockSession.initialized &&
+              mockSession.questions.isNotEmpty) {
+            selectedRoute = RouteNames.mockExam;
+          }
+        }
+
+        final currentRoute = ModalRoute.of(context)?.settings.name;
+
+        if (currentRoute == selectedRoute) return;
+
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          selectedRoute,
+          (route) => false,
+        );
+      },
+      destinations: items.asMap().entries.map((entry) {
+        final index = entry.key;
+        final item = entry.value;
+
+        return NavigationDestination(
+          icon: Tooltip(
+            message: item.label,
+            child: index == 4
+                ? AnimatedBuilder(
+                    animation: NotificationCenterService.instance,
+                    builder: (context, child) {
+                      return NotificationBadge(
+                        count: NotificationCenterService.instance.unreadCount,
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: Icon(item.icon),
+                        ),
+                      );
+                    },
+                  )
+                : Icon(item.icon),
+          ),
+          selectedIcon: Tooltip(
+            message: item.label,
+            child: index == 4
+                ? AnimatedBuilder(
+                    animation: NotificationCenterService.instance,
+                    builder: (context, child) {
+                      return NotificationBadge(
+                        count: NotificationCenterService.instance.unreadCount,
+                        child: Icon(item.selectedIcon),
+                      );
+                    },
+                  )
+                : Icon(item.selectedIcon),
+          ),
+          label: item.label,
+        );
+      }).toList(),
+    );
+  }
+}
+
+// ===========================
+// core/utils/responsive.dart
+// ===========================
+import 'package:flutter/material.dart';
+
+class Responsive {
+  static bool isTablet(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 700;
+
+  static bool isSmallPhone(BuildContext context) =>
+      MediaQuery.of(context).size.width < 360;
+}
+
+// ===========================
+// features/help_support/domain/services/connectivity_service.dart
+// ===========================
+import 'package:connectivity_plus/connectivity_plus.dart';
+
+class ConnectivityService {
+  ConnectivityService._();
+
+  static final instance = ConnectivityService._();
+
+  Future<bool> isConnected() async {
+    final result = await Connectivity().checkConnectivity();
+
+    return !result.contains(ConnectivityResult.none);
+  }
+}
+
+// ===========================
+// features/help_support/domain/services/faq_service.dart
+// ===========================
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+
+import '../../data/models/faq_item.dart';
+
+class FaqService {
+  FaqService._();
+
+  static final FaqService instance = FaqService._();
+
+  List<FaqItem>? _cache;
+
+  Future<List<FaqItem>> loadFaqs() async {
+    if (_cache != null) return _cache!;
+
+    final jsonString = await rootBundle.loadString('assets/data/faqs.json');
+
+    final decoded = json.decode(jsonString);
+
+    final List<dynamic> rawList = decoded is List
+        ? decoded
+        : decoded['faqs'] as List<dynamic>;
+
+    _cache = rawList
+        .map((item) => FaqItem.fromMap(Map<String, dynamic>.from(item)))
+        .toList();
+
+    return _cache!;
+  }
+}
+
+// ===========================
+// features/help_support/domain/services/social_links_service.dart
+// ===========================
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+
+class SocialLinksService {
+  SocialLinksService._();
+
+  static final SocialLinksService instance = SocialLinksService._();
+
+  Map<String, String>? _cache;
+
+  Future<Map<String, String>> loadLinks() async {
+    if (_cache != null) return _cache!;
+
+    final raw = await rootBundle.loadString('assets/data/social_links.json');
+
+    final decoded = Map<String, dynamic>.from(json.decode(raw));
+
+    _cache = decoded.map((key, value) => MapEntry(key, value.toString()));
+
+    return _cache!;
+  }
+}
+
+// ===========================
+// features/help_support/domain/services/support_api_client.dart
+// ===========================
+import '../../data/models/support_ticket.dart';
+import '../../data/models/support_message.dart';
+import '../../data/models/app_rating.dart';
+
+class SupportApiClient {
+  SupportApiClient._();
+
+  static final instance = SupportApiClient._();
+
+  Future<bool> uploadTicket(SupportTicket ticket) async {
+    return true;
+  }
+
+  Future<bool> uploadMessage(SupportMessage message) async {
+    return true;
+  }
+
+  Future<bool> uploadRating(AppRating rating) async {
+    return true;
+  }
+}
+
+// ===========================
+// features/help_support/domain/services/support_lifecycle_service.dart
+// ===========================
+import 'package:flutter/widgets.dart';
+
+import 'support_sync_service.dart';
+
+class SupportLifecycleService with WidgetsBindingObserver {
+  SupportLifecycleService._();
+
+  static final instance = SupportLifecycleService._();
+
+  void initialize() {
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SupportSyncService.instance.syncAll();
+    }
+  }
+}
+
+// ===========================
+// features/help_support/domain/services/support_service.dart
+// ===========================
+import 'dart:io';
+
+import 'package:hive/hive.dart';
+
+import '../../../../core/storage/hive_boxes.dart';
+import '../../data/models/app_rating.dart';
+import '../../data/models/support_message.dart';
+import '../../data/models/support_ticket.dart';
+import 'support_sync_service.dart';
+
+class SupportService {
+  SupportService._();
+
+  static final SupportService instance = SupportService._();
+
+  Box get _ticketBox => Hive.box(HiveBoxes.supportTickets);
+  Box get _messageBox => Hive.box(HiveBoxes.supportMessages);
+  Box get _ratingBox => Hive.box(HiveBoxes.appRatings);
+
+  Future<void> submitTicket({
+    required String category,
+    required String description,
+  }) async {
+    final ticket = SupportTicket(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      category: category.trim(),
+      description: description.trim(),
+      platform: Platform.operatingSystem,
+      appVersion: '1.0.0',
+      uploaded: false,
+      syncAttempts: 0,
+      lastSyncAttempt: null,
+    );
+
+    await _ticketBox.put(ticket.id, ticket.toMap());
+    await SupportSyncService.instance.syncAll();
+  }
+
+  Future<void> submitMessage({
+    required String name,
+    required String email,
+    required String subject,
+    required String message,
+  }) async {
+    final supportMessage = SupportMessage(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      name: name.trim(),
+      email: email.trim(),
+      subject: subject.trim(),
+      message: message.trim(),
+      platform: Platform.operatingSystem,
+      appVersion: '1.0.0',
+      uploaded: false,
+      syncAttempts: 0,
+      lastSyncAttempt: null,
+    );
+
+    await _messageBox.put(supportMessage.id, supportMessage.toMap());
+    await SupportSyncService.instance.syncAll();
+  }
+
+  Future<void> submitRating({
+    required int stars,
+    required String feedback,
+  }) async {
+    final rating = AppRating(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      stars: stars,
+      feedback: feedback.trim(),
+      platform: Platform.operatingSystem,
+      appVersion: '1.0.0',
+      uploaded: false,
+      syncAttempts: 0,
+      lastSyncAttempt: null,
+    );
+
+    await _ratingBox.put(rating.id, rating.toMap());
+    await SupportSyncService.instance.syncAll();
+  }
+
+  Future<void> markTicketUploaded(String id) async {
+    final raw = _ticketBox.get(id);
+
+    if (raw == null) return;
+
+    final ticket = SupportTicket.fromMap(Map<dynamic, dynamic>.from(raw));
+
+    await _ticketBox.put(id, ticket.copyWith(uploaded: true).toMap());
+  }
+
+  Future<void> markMessageUploaded(String id) async {
+    final raw = _messageBox.get(id);
+
+    if (raw == null) return;
+
+    final message = SupportMessage.fromMap(Map<dynamic, dynamic>.from(raw));
+
+    await _messageBox.put(id, message.copyWith(uploaded: true).toMap());
+  }
+
+  Future<void> markRatingUploaded(String id) async {
+    final raw = _ratingBox.get(id);
+
+    if (raw == null) return;
+
+    final rating = AppRating.fromMap(Map<dynamic, dynamic>.from(raw));
+
+    await _ratingBox.put(id, rating.copyWith(uploaded: true).toMap());
+  }
+
+  List<SupportMessage> getMessages() {
+    return _messageBox.values
+        .map((item) => SupportMessage.fromMap(Map<dynamic, dynamic>.from(item)))
+        .toList();
+  }
+
+  List<SupportMessage> getPendingMessages() {
+    return getMessages().where((message) => !message.uploaded).toList();
+  }
+
+  List<AppRating> getRatings() {
+    return _ratingBox.values
+        .map((item) => AppRating.fromMap(Map<dynamic, dynamic>.from(item)))
+        .toList();
+  }
+
+  List<AppRating> getPendingRatings() {
+    return getRatings().where((rating) => !rating.uploaded).toList();
+  }
+
+  List<SupportTicket> getTickets() {
+    return _ticketBox.values
+        .map((item) => SupportTicket.fromMap(Map<dynamic, dynamic>.from(item)))
+        .toList();
+  }
+
+  List<SupportTicket> getPendingTickets() {
+    return getTickets().where((ticket) => !ticket.uploaded).toList();
+  }
+}
+
+// ===========================
+// features/help_support/domain/services/support_sync_service.dart
+// ===========================
+import 'connectivity_service.dart';
+import 'support_api_client.dart';
+import 'support_service.dart';
+
+class SupportSyncService {
+  SupportSyncService._();
+
+  static final instance = SupportSyncService._();
+  final SupportService _supportService = SupportService.instance;
+
+  int pendingCount = 0;
+  int uploadedCount = 0;
+  int failedCount = 0;
+
+  int get pendingUploads {
+    return _supportService.getPendingTickets().length +
+        _supportService.getPendingMessages().length +
+        _supportService.getPendingRatings().length;
+  }
+
+  int get successfulUploads {
+    return _supportService.getTickets().where((e) => e.uploaded).length +
+        _supportService.getMessages().where((e) => e.uploaded).length +
+        _supportService.getRatings().where((e) => e.uploaded).length;
+  }
+
+  int get failedUploads {
+    return _supportService
+            .getTickets()
+            .where((e) => !e.uploaded && e.syncAttempts > 0)
+            .length +
+        _supportService
+            .getMessages()
+            .where((e) => !e.uploaded && e.syncAttempts > 0)
+            .length +
+        _supportService
+            .getRatings()
+            .where((e) => !e.uploaded && e.syncAttempts > 0)
+            .length;
+  }
+
+  Future<void> syncAll() async {
+    final connected = await ConnectivityService.instance.isConnected();
+
+    if (!connected) {
+      return;
+    }
+
+    await _syncTickets();
+    await _syncMessages();
+    await _syncRatings();
+  }
+
+  Future<void> _syncTickets() async {
+    final tickets = SupportService.instance.getPendingTickets();
+
+    pendingCount += tickets.length;
+
+    for (final ticket in tickets) {
+      final success = await SupportApiClient.instance.uploadTicket(ticket);
+
+      if (success) {
+        await SupportService.instance.markTicketUploaded(ticket.id);
+
+        uploadedCount++;
+      } else {
+        failedCount++;
+      }
+    }
+  }
+
+  Future<void> _syncMessages() async {
+    final messages = SupportService.instance.getPendingMessages();
+
+    pendingCount += messages.length;
+
+    for (final message in messages) {
+      final success = await SupportApiClient.instance.uploadMessage(message);
+
+      if (success) {
+        await SupportService.instance.markMessageUploaded(message.id);
+
+        uploadedCount++;
+      } else {
+        failedCount++;
+      }
+    }
+  }
+
+  Future<void> _syncRatings() async {
+    final ratings = SupportService.instance.getPendingRatings();
+
+    pendingCount += ratings.length;
+
+    for (final rating in ratings) {
+      final success = await SupportApiClient.instance.uploadRating(rating);
+
+      if (success) {
+        await SupportService.instance.markRatingUploaded(rating.id);
+
+        uploadedCount++;
+      } else {
+        failedCount++;
+      }
+    }
+  }
+}
+
+// ===========================
+// features/help_support/data/models/app_rating.dart
+// ===========================
+class AppRating {
+  final String id;
+  final int stars;
+  final String feedback;
+  final String platform;
+  final String appVersion;
+  final DateTime? lastSyncAttempt;
+  final bool uploaded;
+  final int syncAttempts;
+
+  const AppRating({
+    required this.id,
+    required this.stars,
+    required this.feedback,
+    required this.platform,
+    required this.appVersion,
+    this.lastSyncAttempt,
+    this.uploaded = false,
+    this.syncAttempts = 0,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'stars': stars,
+      'feedback': feedback,
+      'platform': platform,
+      'appVersion': appVersion,
+      'lastSyncAttempt': lastSyncAttempt?.toIso8601String(),
+      'uploaded': uploaded,
+      'syncAttempts': syncAttempts,
+    };
+  }
+
+  factory AppRating.fromMap(Map<dynamic, dynamic> map) {
+    return AppRating(
+      id: map['id']?.toString() ?? '',
+      stars: (map['stars'] as num?)?.toInt() ?? 0,
+      feedback: map['feedback']?.toString() ?? '',
+      platform: map['platform']?.toString() ?? '',
+      appVersion: map['appVersion']?.toString() ?? '',
+      uploaded: map['uploaded'] == true,
+      syncAttempts: (map['syncAttempts'] as num?)?.toInt() ?? 0,
+      lastSyncAttempt: map['lastSyncAttempt'] != null
+          ? DateTime.tryParse(map['lastSyncAttempt'].toString())
+          : null,
+    );
+  }
+
+  AppRating copyWith({
+    String? id,
+    int? stars,
+    String? feedback,
+    String? platform,
+    String? appVersion,
+    DateTime? lastSyncAttempt,
+    bool? uploaded,
+    int? syncAttempts,
+  }) {
+    return AppRating(
+      id: id ?? this.id,
+      stars: stars ?? this.stars,
+      feedback: feedback ?? this.feedback,
+      platform: platform ?? this.platform,
+      appVersion: appVersion ?? this.appVersion,
+      lastSyncAttempt: lastSyncAttempt ?? this.lastSyncAttempt,
+      uploaded: uploaded ?? this.uploaded,
+      syncAttempts: syncAttempts ?? this.syncAttempts,
+    );
+  }
+}
+
+// ===========================
+// features/help_support/data/models/faq_item.dart
+// ===========================
+class FaqItem {
+  final String question;
+  final String answer;
+
+  const FaqItem({required this.question, required this.answer});
+
+  factory FaqItem.fromMap(Map<String, dynamic> map) {
+    return FaqItem(
+      question: map['question']?.toString() ?? '',
+      answer: map['answer']?.toString() ?? '',
+    );
+  }
+}
+
+// ===========================
+// features/help_support/data/models/support_message.dart
+// ===========================
+class SupportMessage {
+  final String id;
+  final String name;
+  final String email;
+  final String subject;
+  final String message;
+  final String platform;
+  final String appVersion;
+  final int syncAttempts;
+  final DateTime? lastSyncAttempt;
+  final bool uploaded;
+
+  const SupportMessage({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.subject,
+    required this.message,
+    required this.platform,
+    required this.appVersion,
+    this.uploaded = false,
+    this.lastSyncAttempt,
+    this.syncAttempts = 0,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'subject': subject,
+      'message': message,
+      'platform': platform,
+      'appVersion': appVersion,
+      'uploaded': uploaded,
+      'lastSyncAttempt': lastSyncAttempt?.toIso8601String(),
+      'syncAttempts': syncAttempts,
+    };
+  }
+
+  factory SupportMessage.fromMap(Map<dynamic, dynamic> map) {
+    return SupportMessage(
+      id: map['id']?.toString() ?? '',
+      name: map['name']?.toString() ?? '',
+      email: map['email']?.toString() ?? '',
+      subject: map['subject']?.toString() ?? '',
+      message: map['message']?.toString() ?? '',
+      platform: map['platform']?.toString() ?? '',
+      appVersion: map['appVersion']?.toString() ?? '',
+      uploaded: map['uploaded'] == true,
+      syncAttempts: (map['syncAttempts'] as num?)?.toInt() ?? 0,
+      lastSyncAttempt: map['lastSyncAttempt'] != null
+          ? DateTime.tryParse(map['lastSyncAttempt'].toString())
+          : null,
+    );
+  }
+
+  SupportMessage copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? subject,
+    String? message,
+    String? platform,
+    String? appVersion,
+    bool? uploaded,
+    int? syncAttempts,
+    DateTime? lastSyncAttempt,
+  }) {
+    return SupportMessage(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      subject: subject ?? this.subject,
+      message: message ?? this.message,
+      platform: platform ?? this.platform,
+      appVersion: appVersion ?? this.appVersion,
+      uploaded: uploaded ?? this.uploaded,
+      syncAttempts: syncAttempts ?? this.syncAttempts,
+      lastSyncAttempt: lastSyncAttempt ?? this.lastSyncAttempt,
+    );
+  }
+}
+
+// ===========================
+// features/help_support/data/models/support_ticket.dart
+// ===========================
+class SupportTicket {
+  final String id;
+  final String category;
+  final String description;
+  final String platform;
+  final String appVersion;
+  final DateTime? lastSyncAttempt;
+  final bool uploaded;
+  final int syncAttempts;
+
+  const SupportTicket({
+    required this.id,
+    required this.category,
+    required this.description,
+    required this.platform,
+    required this.appVersion,
+    this.lastSyncAttempt,
+    this.uploaded = false,
+    this.syncAttempts = 0,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'category': category,
+      'description': description,
+      'platform': platform,
+      'appVersion': appVersion,
+      'lastSyncAttempt': lastSyncAttempt?.toIso8601String(),
+      'uploaded': uploaded,
+      'syncAttempts': syncAttempts,
+    };
+  }
+
+  factory SupportTicket.fromMap(Map<dynamic, dynamic> map) {
+    return SupportTicket(
+      id: map['id']?.toString() ?? '',
+      category: map['category']?.toString() ?? '',
+      description: map['description']?.toString() ?? '',
+      platform: map['platform']?.toString() ?? '',
+      appVersion: map['appVersion']?.toString() ?? '',
+      uploaded: map['uploaded'] == true,
+      syncAttempts: (map['syncAttempts'] as num?)?.toInt() ?? 0,
+      lastSyncAttempt: map['lastSyncAttempt'] != null
+          ? DateTime.tryParse(map['lastSyncAttempt'].toString())
+          : null,
+    );
+  }
+
+  SupportTicket copyWith({
+    String? id,
+    String? category,
+    String? description,
+    String? platform,
+    String? appVersion,
+    DateTime? lastSyncAttempt,
+    bool? uploaded,
+    int? syncAttempts,
+  }) {
+    return SupportTicket(
+      id: id ?? this.id,
+      category: category ?? this.category,
+      description: description ?? this.description,
+      platform: platform ?? this.platform,
+      appVersion: appVersion ?? this.appVersion,
+      lastSyncAttempt: lastSyncAttempt ?? this.lastSyncAttempt,
+      uploaded: uploaded ?? this.uploaded,
+      syncAttempts: syncAttempts ?? this.syncAttempts,
+    );
+  }
+}
